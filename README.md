@@ -3,6 +3,25 @@
 
 ---
 
+
+The **Parent’s Portal** is a full-stack school management platform designed to strengthen the connection between schools and parents. It provides an easy way for parents to stay updated with their child’s academic life while giving administrators powerful tools to manage attendance, grades, events, and communication.  
+
+## ✨ Features
+
+- **Role-Based Access** – Secure login system with different dashboards for Admin and Parents.  
+- **Attendance Tracking** – Admin can manage and update student attendance; parents can view records anytime.  
+- **Grades Management** – Admin can add, edit, and delete grades, while parents can view results instantly.  
+- **Subjects & Schedules** – Manage subjects and weekly class schedules in an organized table view.  
+- **Calendar & Events** – Interactive calendar for managing events, with Admin controls and parent view access.  
+- **Messaging System** – Direct communication between parents and administrators.  
+- **Help & Complaints** – Parents can submit issues or concerns directly through the portal.  
+- **Announcements** – School-wide updates posted by Admins, visible to all parents.  
+- **PDF Export** – One-click export of grades into downloadable PDF files.  
+- **Profile Management system** – You can change your profile picture.  
+
+---
+
+
 ## Setup Instructions
 
 ### 1. Requirements

@@ -4,7 +4,7 @@
 ---
 
 
-The **Parent’s Portal** is a full-stack school management platform designed to strengthen the connection between schools and parents. It provides an easy way for parents to stay updated with their child’s academic life while giving administrators powerful tools to manage attendance, grades, events, and communication.  
+The **Parent’s Portal** is a full-stack school management platform designed to connect schools and parents. It provides an easy way for parents to stay updated with their child’s academic life while giving administrators powerful tools to manage attendance, grades, events, and communication.  
 
 ## ✨ Features
 

@@ -23,6 +23,14 @@ const Announcements = () => {
   };
 
   const handlePost = async () => {
+     if (!title.trim()) {
+    alert("Title is required.");
+    return;
+  }
+  if (!content.trim()) {
+    alert("Content is required.");
+    return;
+  }
     try {
       await axios.post('http://localhost:5000/api/announcements', { title, content });
       setTitle('');

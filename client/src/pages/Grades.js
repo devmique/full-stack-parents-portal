@@ -15,7 +15,7 @@ const Grades = () => {
     grade: '',
     units: ''
   });
-  const [editGrade, setEditGrade] = useState(null); // To store grade for editing
+  const [editGrade, setEditGrade] = useState(null); 
 
   const fetchGrades = () => {
     axios
@@ -31,6 +31,35 @@ const Grades = () => {
   }, []);
 
   const handleAdd = () => {
+  if (!newGrade.student_id.trim()) {
+    alert("Student ID is required");
+    return;
+  }
+  if (!newGrade.school_year.trim()) {
+    alert("School Year is required");
+    return;
+  }
+  if (!newGrade.term.trim()) {
+    alert("Term is required");
+    return;
+  }
+  if (!newGrade.subject_code.trim()) {
+    alert("Subject Code is required");
+    return;
+  }
+  if (!newGrade.subject_title.trim()) {
+    alert("Subject Title is required");
+    return;
+  }
+  if (!newGrade.grade.trim()) {
+    alert("Grade is required");
+    return;
+  }
+  if (!newGrade.units.trim()) {
+    alert("Units are required");
+    return;
+  }
+
     axios
       .post('http://localhost:5000/api/grades', newGrade)
       .then(() => {
@@ -62,6 +91,7 @@ const Grades = () => {
   };
 
   const handleUpdate = () => {
+ 
     if (editGrade) {
       axios
         .put(`http://localhost:5000/api/grades/${editGrade.id}`, newGrade)

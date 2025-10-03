@@ -29,10 +29,19 @@ const Attendance = () => {
   };
 
   const handleAdd = async () => {
-    if (!newRecord.student_id || !newRecord.date || !newRecord.status) {
-      alert('All fields are required');
-      return;
-    }
+     if (!newRecord.student_id.trim()) {
+    alert('Student ID is required');
+    return;
+  }
+  if (!newRecord.date) {
+    alert('Date is required');
+    return;
+  }
+  if (!newRecord.status) {
+    alert('Status is required');
+    return;
+  }
+
 
     const dayOfWeek = new Date(newRecord.date).toLocaleDateString('en-US', { weekday: 'long' });
 

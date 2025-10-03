@@ -21,7 +21,9 @@ const Subjects = () => {
 
   const handleAddSubject = async (e) => {
     e.preventDefault();
-    if (!newSubject.subject_code || !newSubject.subject_title || !newSubject.term || !newSubject.units) return;
+    if (!newSubject.subject_code || !newSubject.subject_title || !newSubject.term || !newSubject.units){
+       alert("All fields are required.");
+      return;}
 
     try {
       await axios.post('http://localhost:5000/api/subjects', newSubject);

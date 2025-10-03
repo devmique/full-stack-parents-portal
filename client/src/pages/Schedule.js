@@ -44,6 +44,12 @@ const Schedule = () => {
 
   const handleAdd = async (e) => {
     e.preventDefault();
+    if (!newRow.time_slot.trim()) {
+    alert("Time slot is required!");
+    return;
+  }
+
+
     try {
       await axios.post('http://localhost:5000/api/schedule', newRow);
       fetchSchedule();

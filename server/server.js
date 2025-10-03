@@ -15,7 +15,8 @@ const calendarRoutes = require('./routes/calendar');
 const attendanceRoutes = require('./routes/attendance');
 const notificationRoutes = require('./routes/notifications');
 const messagenotifRoutes = require('./routes/messagenotif');
-
+const studentlist = require("./routes/studentlist")
+const subjectlist = require("./routes/subjectlist")
 
 const app = express();
 app.use(express.json());
@@ -64,6 +65,11 @@ app.use('/api/notifications', notificationRoutes);
 
 //message notif route
 app.use('/api/messagenotif', messagenotifRoutes);
+
+//list route
+app.use('/api/studentlist', studentlist)
+
+app.use('/api/subjectlist', subjectlist)
 
 // Configure Multer for Profile Picture Uploads
 const storage = multer.diskStorage({

@@ -7,6 +7,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import Logo from "../assets/logo.png";
 
 const AuthPage = () => {
+  const [loading, setLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ name: "", email: "", password: "", contactNumber:"" }); 
   const navigate = useNavigate(); 
@@ -21,14 +22,13 @@ const AuthPage = () => {
 
   const handleSubmit = async (e) => {
   e.preventDefault();
-  console.log("Sending Data:", formData);
+  setLoading(true)
 
   try {
     const url = isLogin ? "http://localhost:5000/login" : "http://localhost:5000/register";
     const updatedFormData = isLogin ? formData : { ...formData, role: "parent"};
 
     const response = await axios.post(url, updatedFormData);
-    console.log("Received Data from Backend:", response.data); 
 
     if (!isLogin) {
       //  Show success message on registration
@@ -57,6 +57,8 @@ const AuthPage = () => {
     }
   } catch (error) {
     alert(error.response?.data?.error || "Something went wrong! Please try again.");
+  } finally{
+    setLoading(false)
   }
 };
 
@@ -101,8 +103,8 @@ const AuthPage = () => {
           </div>
 
           {/* Submit Button */}
-          <button className="submit" type="submit">
-            <i className={isLogin ? "fas fa-sign-in-alt" : "fas fa-user-plus"}></i> {isLogin ? "Login" : "Register"}
+          <button className="submit" type="submit" disabled={loading}>
+            <i className={isLogin ? "fas fa-sign-in-alt" : "fas fa-user-plus"}></i> {isLogin ? loading? "Logging in...":"Login" : loading? "Registering...": "Register"}
           </button>
         </form>
 

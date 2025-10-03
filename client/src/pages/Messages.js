@@ -48,7 +48,7 @@ useEffect(() => {
     .catch(err => console.error(err));
   }, 1000); 
 
-  return () => clearInterval(interval); // cleanup on unmount or contact change
+  return () => clearInterval(interval); 
 }, [selectedContact, user.id]);
 
 

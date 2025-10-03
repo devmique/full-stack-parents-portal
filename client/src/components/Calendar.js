@@ -5,7 +5,12 @@ import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
 import Events from "../pages/Events"
 import '../styles/Calendar.css'
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
+
 const CalendarPage = () => {
+  const [studentlist, setStudentList] = useState(null);
+  const [subjectlist, setSubjectList] = useState(null);
   const [events, setEvents] = useState([]);
   const user = JSON.parse(sessionStorage.getItem("user")) || {};
   const token = sessionStorage.getItem("token");
@@ -78,8 +83,55 @@ const CalendarPage = () => {
   }
 };
 
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/studentlist');
+        setStudentList(res.data);
+      } catch (err) {
+        console.error('Error fetching student list:', err);
+      }
+    };
+    fetchStudents();
+  }, [])
+  
+
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/subjectlist');
+        setSubjectList(res.data);
+      } catch (err) {
+        console.error('Error fetching subject list:', err);
+      }
+    }
+    fetchSubjects()
+    }, [])
+
+  
   return (
     <div>
+      <div className="list-container">
+     {studentlist && (
+       
+        <div className="list-card studentlist-card">
+          <PeopleAltOutlinedIcon style={{color:"#699bebff", fontSize:"30px"}}/>
+          <h2>Students</h2>
+            <h1>{studentlist.count}</h1>
+            </div>
+       
+      )}
+
+      {subjectlist && (
+     
+        <div className="list-card subjectlist-card">
+          <ListAltOutlinedIcon style={{color:"#fcf8a5ff",fontSize:"30px"}}/>
+          <h2>Subjects</h2>
+            <h1>{subjectlist.count}</h1>
+            </div>
+        
+        )}
+        </div>
        <div className="calendar-container">
        <div className="calendar-header">
         <h2>School Calendar</h2>
@@ -95,7 +147,7 @@ const CalendarPage = () => {
             />
           </div>
           </div>
-          <Events/>
+        
         
          </div>
     </div>

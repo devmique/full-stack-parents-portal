@@ -4,7 +4,7 @@ import "../styles/Subjects.css"
 const Subjects = () => {
    const user = JSON.parse(sessionStorage.getItem("user")) || {};
   const [subjects, setSubjects] = useState([]);
-  const [newSubject, setNewSubject] = useState({ subject_code: '', subject_title: '' });
+  const [newSubject, setNewSubject] = useState({ subject_code: '', subject_title: '', term:'', units:'' });
 
   useEffect(() => {
     fetchSubjects();
@@ -21,12 +21,12 @@ const Subjects = () => {
 
   const handleAddSubject = async (e) => {
     e.preventDefault();
-    if (!newSubject.subject_code || !newSubject.subject_title) return;
+    if (!newSubject.subject_code || !newSubject.subject_title || !newSubject.term || !newSubject.units) return;
 
     try {
       await axios.post('http://localhost:5000/api/subjects', newSubject);
       fetchSubjects();
-      setNewSubject({ subject_code: '', subject_title: '' });
+      setNewSubject({ subject_code: '', subject_title: '', term: '', units: '' });
     } catch (err) {
       console.error(err);
     }
@@ -61,6 +61,20 @@ const Subjects = () => {
             onChange={(e) => setNewSubject({ ...newSubject, subject_title: e.target.value })}
             className="input-field"
           />
+            <input
+            type="text"
+            placeholder="Term"
+            value={newSubject.term}
+            onChange={(e) => setNewSubject({ ...newSubject, term: e.target.value })}
+            className="input-field"
+          />
+            <input
+            type="text"
+            placeholder="Units"
+            value={newSubject.units}
+            onChange={(e) => setNewSubject({ ...newSubject, units: e.target.value })}
+            className="input-field"
+          />
           <button type="submit" className="addsubj-button">
             Add Subject
           </button>
@@ -72,6 +86,8 @@ const Subjects = () => {
           <tr>
             <th>Subject Code</th>
             <th>Subject Title</th>
+             <th>Term</th>
+            <th>Units</th>
             {user.role === 'admin' && <th>Action</th>}
           </tr>
         </thead>
@@ -80,6 +96,8 @@ const Subjects = () => {
             <tr key={subj.id}>
               <td>{subj.subject_code}</td>
               <td>{subj.subject_title}</td>
+              <td>{subj.term}</td>
+              <td>{subj.units}</td>
               {user.role === 'admin' && (
                 <td>
                   <button

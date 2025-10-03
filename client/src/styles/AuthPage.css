@@ -150,11 +150,17 @@ i{
     align-items: center;
     justify-content: center;
     gap: 10px;
+
  
 }
 
 .submit:hover {
     background: rgba(17, 81, 191, 0.872);
+ 
+    .fas{
+         transition: 0.3s ease-in-out;
+         transform: scale(1.2);
+    }
 }
 
 /* Adjust icon inside button */
@@ -164,7 +170,6 @@ i{
 }
 
 form {
-   
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -195,10 +200,10 @@ button {
     font-weight: bold;
     cursor: pointer;
     width: 100%;
-        padding: 13px;
-        margin: 10px 0;
-        border: none;
-        border-radius: 20px;
+    padding: 13px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 20px;
 }
 
 button:hover {
@@ -206,7 +211,7 @@ button:hover {
     
 }
 .beforelog{
-padding: 10px;
+    padding: 10px;
     box-sizing: border-box;
     background-color: white;
     border: 3px solid rgba(30, 99, 219, 0.872);
@@ -220,7 +225,7 @@ padding: 10px;
 }
 .beforereg {
     padding:10px;
-box-sizing: border-box;
+    box-sizing: border-box;
     background-color: white;
     border: 3px solid rgba(30, 99, 219, 0.872);
     color: rgba(17, 81, 191, 0.872);

@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import MapsHomeWorkOutlinedIcon from '@mui/icons-material/MapsHomeWorkOutlined';
 import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
@@ -18,7 +18,9 @@ import {
    FaXmark, FaBars} from "react-icons/fa6";
 
 const Sidebar = () => {
-   const [isOpen, setIsOpen] = useState(true); //  Open by default on large screens
+  const location = useLocation();
+
+  const [isOpen, setIsOpen] = useState(true); //  Open by default on large screens
  
   const toggleSidebar = () => {
     setIsOpen(!isOpen)
@@ -61,28 +63,28 @@ const Sidebar = () => {
       {/* Sidebar Menu */}
       <div className="sidebar-menu">
          <h3 className="menu-title">Menu</h3> 
-         <Link to={homePath} className="sidebar-item">
+         <Link to={homePath} className={`sidebar-item ${location.pathname === homePath ? "active" : ""}`}>
           <MapsHomeWorkOutlinedIcon className="icon" /> Home
         </Link>
-        <Link to="/dashboard/subjects" className="sidebar-item">
+        <Link to="/dashboard/subjects" className={`sidebar-item ${location.pathname === "/dashboard/subjects" ? "active" : ""}`}>
           <LibraryBooksOutlinedIcon className="icon" /> Subjects 
         </Link>
-         <Link to="/dashboard/schedule" className="sidebar-item">
+         <Link to="/dashboard/schedule" className={`sidebar-item ${location.pathname === "/dashboard/schedule" ? "active" : ""}`}>
           <EventNoteOutlinedIcon className="icon" />Schedule
         </Link>
-        <Link to="/dashboard/grades"className="sidebar-item">
+        <Link to="/dashboard/grades"className={`sidebar-item ${location.pathname === "/dashboard/grades" ? "active" : ""}`}>
           <SchoolOutlinedIcon className="icon" /> Grades
         </Link>
-        <Link to="/dashboard/attendance" className="sidebar-item">
+        <Link to="/dashboard/attendance" className={`sidebar-item ${location.pathname === "/dashboard/attendance" ? "active" : ""}`}>
           <ChecklistOutlinedIcon className="icon" /> Attendance Record
         </Link>
-        <Link to="/dashboard/announcements" className="sidebar-item">
+        <Link to="/dashboard/announcements" className={`sidebar-item ${location.pathname === "/dashboard/announcements" ? "active" : ""}`}>
           <CampaignOutlinedIcon className="icon" /> Announcements 
         </Link>
-         <Link to="/dashboard/events" className="sidebar-item">
+         <Link to="/dashboard/events"className={`sidebar-item ${location.pathname === "/dashboard/events"? "active" : ""}`}>
           <CalendarTodayOutlinedIcon className="icon" />Events
         </Link>
-        <Link to= "/dashboard/messages"  className="sidebar-item">
+        <Link to= "/dashboard/messages"  className={`sidebar-item ${location.pathname === "/dashboard/messages" ? "active" : ""}`}>
           <SmsOutlinedIcon  className="icon" /> Messages
         </Link>
       </div>

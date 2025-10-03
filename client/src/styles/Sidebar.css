@@ -69,7 +69,7 @@ color: rgb(34, 34, 34);
     border-radius: 5px;
     
 }
-.sidebar-item:active {
+.sidebar-item.active {
 color: rgba(6, 65, 167, 0.872);
     font-weight: bold;
     .icon{

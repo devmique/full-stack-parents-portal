@@ -14,15 +14,11 @@
 
 .dashboard-content {
     flex: 1;
+    gap: 20px;
     padding: 20px;
     display: flex;
     flex-direction: column;
+
 }
 
-.dashboard-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    flex-grow: 1;
-}
 

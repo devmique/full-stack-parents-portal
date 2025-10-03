@@ -1,6 +1,9 @@
 .schedule-container {
     padding: 20px;
-    
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .schedule-title {
@@ -16,7 +19,7 @@
     padding: 15px;
     border-radius: 6px;
     background: #f9f9f9;
-    min-width: 1000px;
+    min-width: 530px;
 }
 
 .form-group {
@@ -34,18 +37,20 @@
 }
 
 .time-input {
+    background-color: white;
     width: 50%;
 }
 
 .day-grid {
     
     display: grid;
-    grid-template-columns: repeat(auto-fill, 170px);
+    grid-template-columns: repeat(3, 170px);
     gap: 10px;
     margin-top: 10px;
 }
 
 .day-column {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
     background-color: #fff;
     border: 1px solid #ddd;
     padding: 8px;

@@ -1,3 +1,28 @@
+.list-container{
+    flex: 1;
+    gap: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.list-card {
+    background-color: white;
+    padding: 15px;
+    border-radius: 10px;
+    width: 250px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.list-card h2 {
+    color: #333;
+}
+
+.studentlist-card {}
+
+.subjectlist-card {}
+
+
 .calendar-container{
     display: flex;
     justify-content: center;
@@ -72,6 +97,9 @@ background-color: rgb(253, 253, 209);
 }
 @media screen and (max-width: 768px) {
    .calendar-container{
+    flex-direction: column;
+   }
+   .list-container{
     flex-direction: column;
    }
 }

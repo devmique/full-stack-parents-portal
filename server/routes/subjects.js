@@ -12,9 +12,9 @@ router.get('/', (req, res) => {
 
 // Add a new subject
 router.post('/', (req, res) => {
-  const { subject_code, subject_title } = req.body;
-  const sql = "INSERT INTO subjects (subject_code, subject_title) VALUES (?, ?)";
-  db.query(sql, [subject_code, subject_title], (err, result) => {
+  const { subject_code, subject_title, term, units } = req.body;
+  const sql = "INSERT INTO subjects (subject_code, subject_title, term, units) VALUES (?, ?, ?,?)";
+  db.query(sql, [subject_code, subject_title, term, units], (err, result) => {
     if (err) return res.status(500).json({ error: "Database error" });
     res.json({ message: "Subject added successfully", id: result.insertId });
    const type = 'general'

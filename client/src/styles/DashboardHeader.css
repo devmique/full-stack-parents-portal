@@ -279,5 +279,8 @@ padding: 0px 10px 0 10px;
     }  
     .search-bar{
         right: -100px;
-    }        
+    }  
+    .dropdown{
+        display:none;
+    }      
 }

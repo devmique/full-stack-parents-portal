@@ -115,7 +115,7 @@ const CalendarPage = () => {
      {studentlist && (
        
         <div className="list-card studentlist-card">
-          <PeopleAltOutlinedIcon style={{color:"#ccc", fontSize:"30px"}}/>
+          <PeopleAltOutlinedIcon style={{color:"#93bbfaff", fontSize:"30px"}}/>
           <h2>Students</h2>
             <h1>{studentlist.count}</h1>
             </div>
@@ -125,7 +125,7 @@ const CalendarPage = () => {
       {subjectlist && (
      
         <div className="list-card subjectlist-card">
-          <ListAltOutlinedIcon style={{color:"#ccc",fontSize:"30px"}}/>
+          <ListAltOutlinedIcon style={{color:"#f5ffa7ff",fontSize:"30px"}}/>
           <h2>Subjects</h2>
             <h1>{subjectlist.count}</h1>
             </div>
@@ -147,8 +147,6 @@ const CalendarPage = () => {
             />
           </div>
           </div>
-          <Events/>
-        
          </div>
     </div>
   );

@@ -5,6 +5,7 @@
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+
 }
 
 .subject-title {
@@ -74,4 +75,39 @@ width: 150px;
     text-decoration: underline;
     color: #a00;
     background-color: transparent;
+}
+@media (max-width: 768px) {
+    .subject-title {
+        font-size: 22px;
+    }
+
+    .subject-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .input-field {
+        width: 90%;
+    }
+
+    .addsubj-button {
+        width: 90%;
+    }
+
+    .subject-container {
+        padding: 15px;
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .subject-table th,
+    .subject-table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .subject-title {
+        font-size: 20px;
+    }
 }

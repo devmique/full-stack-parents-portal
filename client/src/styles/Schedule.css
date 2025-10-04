@@ -126,11 +126,46 @@
     text-decoration: underline;
     background-color: transparent;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 992px) {
     .day-grid {
-
-        grid-template-columns: repeat(1, 500px);
-
+        grid-template-columns: repeat(2, 1fr);
     }
-      
+}
+
+@media screen and (max-width: 768px) {
+    .schedule-container{
+     width: 100%;
+    }
+    .day-grid {
+        grid-template-columns: 1fr;
+    
+    }
+
+    .schedule-title {
+        font-size: 22px;
+    }
+
+    .form-input {
+        font-size: 13px;
+    }
+
+    .schedule-table th,
+    .schedule-table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .schedule-title {
+        font-size: 20px;
+    }
+
+    .add-button {
+        width: 100%;
+    }
+
+    .day-column {
+        min-width: 100%;
+    }
 }

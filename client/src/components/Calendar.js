@@ -136,7 +136,7 @@ const CalendarPage = () => {
         <h2>School Calendar</h2>
        
           <div className ="calendar-card">
-      <FullCalendar
+      <FullCalendar 
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
         events={events}

@@ -3,11 +3,13 @@ import axios from 'axios';
 import '../styles/Attendance.css'; 
 
 const Attendance = () => {
+  const today =new Date().toISOString().split("T")[0];
   const user = JSON.parse(sessionStorage.getItem('user'));
+  const [onEdit, setOnEdit] = useState(false);
   const [attendance, setAttendance] = useState([]);
   const [newRecord, setNewRecord] = useState({
     student_id: '',
-    date: '',
+    date: today,
     status: '',
   });
   const [editRecordId, setEditRecordId] = useState(null);
@@ -51,7 +53,7 @@ const Attendance = () => {
         day_of_week: dayOfWeek,
       });
       fetchAttendance();
-      setNewRecord({ student_id: '', date: '', status: '' });
+      setNewRecord({ student_id: '', date: today, status: '' });
     } catch (err) {
       console.error('Add Error:', err);
     }
@@ -69,6 +71,7 @@ const Attendance = () => {
   const handleEdit = (record) => {
     setEditRecordId(record.id);
     setEditStatus(record.status);
+    setOnEdit(true)
   };
 
   const handleUpdate = async (id) => {
@@ -78,6 +81,7 @@ const Attendance = () => {
       await axios.put(`http://localhost:5000/api/attendance/${id}`, { status: editStatus, student_id });
       setEditRecordId(null);
       setEditStatus('');
+      setOnEdit(false);
       fetchAttendance();
     } catch (err) {
       console.error('Update Error:', err);
@@ -110,7 +114,7 @@ const Attendance = () => {
             <option value="Absent">Absent</option>
             <option value="Excused">Excused</option>
           </select>
-          <button className="btn btn-primary" onClick={handleAdd}>Add Record</button>
+          <button disabled={onEdit}className="btn btn-primary" onClick={handleAdd}>Add Record</button>
         </div>
       )}
 
@@ -152,7 +156,7 @@ const Attendance = () => {
                     <>
                       <div className="action-btns">
                       <button className="btn btn-save" onClick={() => handleUpdate(record.id)} style={{ marginRight: '5px', color: 'rgba(17, 81, 191, 0.872)' }}>Save</button>
-                        <button className="btn btn-cancel" onClick={() => setEditRecordId(null)} style={{ color: 'gray' }}>Cancel</button>
+                        <button className="btn btn-cancel" onClick={() => {setEditRecordId(null); setOnEdit(false);}} style={{ color: 'gray' }}>Cancel</button>
                         </div>
                     </>
                   ) : (

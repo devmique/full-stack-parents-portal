@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import ProfileUpload from "./ProfileUpload";
 import "../styles/Profile.css";
-import ClearIcon from '@mui/icons-material/Clear';
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import CallEndRoundedIcon from '@mui/icons-material/CallEndRounded';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
@@ -62,7 +62,7 @@ const Profile = () => {
     <div className="profile-page">
     <div className="profile-header">
 
-      <button onClick={goBackToDashboard} className="back-btn"><ClearIcon className="clearIcon"/></button>
+      <button onClick={goBackToDashboard} className="back-btn"><ArrowBackOutlinedIcon className="clearIcon"/></button>
         <p style={{ fontSize:"23px", color: "rgb(49, 49, 49)", margin:"5px 0 10px 0", padding:"0 0 0 10px", display:"flex"}}> My Profile</p>
       </div>
       <br></br>
@@ -72,7 +72,7 @@ const Profile = () => {
         alt="Profile"
         className="profile-pic-large"
       />
-      <h3>{user?.name || "Unknown"}</h3>
+      <h3 className="userName">{user?.name || "Unknown"}</h3>
       <div className="info" style={{textAlign:"left"}}>
         <br></br>
         

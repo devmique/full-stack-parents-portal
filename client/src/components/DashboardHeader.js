@@ -158,7 +158,10 @@ const markAllMessagesAsRead = async () => {
   // Logout Function
 const handleLogout = () => {
     if (window.confirm("Are you sure you want to log out?")) {
-      sessionStorage.clear();
+        sessionStorage.clear();
+      sessionStorage.removeItem("user");
+      sessionStorage.removeItem("token");
+
       navigate("/");
     }
   };
@@ -167,12 +170,15 @@ const handleLogout = () => {
 
   return (
     <div className="dashboard-header">
+     
        <div className="sidebar-logo" style={{margin:"0 10px 20px 0"}}>
                 <Link to={homePath} >
                   <img style={{ width: "40px" }} src={Logo} alt="School Logo" className="logo" />
                   </Link>
               <span className="school-name">Don Bosco College</span>
               </div>
+
+               <div className="header-right">
       {/* Search Bar */}
       <div className="search-container">
        <div className="search-bar">
@@ -210,10 +216,11 @@ const handleLogout = () => {
           )}
           </div>
       </div>
+   
 
  
       {/* Notifications & Profile */}
-      <div className="header-right">
+     
         {/* Notification Button */}
        <div className="message-notif-section" onClick={toggleMessageNotifDropdown} style={{ position: "relative" }}>
   <button className="messageNotif-btn">
@@ -297,7 +304,6 @@ const handleLogout = () => {
       </div>
 
       
-
 
 
 

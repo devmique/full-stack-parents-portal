@@ -6,6 +6,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap; 
 }
 .list-card {
     background-color: white;
@@ -47,12 +48,13 @@ text-align: center;
 
 .calendar-card {
     width: 600px;
-    height: 600px;
+    height: auto;
     margin: 10px;
     background: #ffffff;
     border-radius: 16px;
     padding: 20px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    overflow-x: auto; 
 }
 
 /* FullCalendar custom tweaks */
@@ -95,15 +97,49 @@ text-align: center;
 .calendar-card th{
 background-color: rgb(253, 253, 209);
 }
-@media screen and (max-width: 768px) {
-   .calendar-container{
-    flex-direction: column;
-   }
-   .list-container{
-    flex-direction: column;
-   }
-
+@media screen and (max-width: 992px) {
+  .list-container {
+    flex-wrap: wrap;
+  }
+  .calendar-card {
+    width: 90%;
+    max-width: 500px;
+  }
 }
 
+/* Mobile screens */
+@media screen and (max-width: 768px) {
+  .list-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+  .calendar-container {
+    flex-direction: column;
+  }
+  .calendar-card {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    padding: 15px;
+  }
+}
 
+/* Very small screens (phones <480px) */
+@media screen and (max-width: 480px) {
+  .calendar-header h2 {
+    font-size: 20px;
+  }
+  .calendar-card {
+    padding: 10px;
+    border-radius: 12px;
+  }
+  .fc .fc-toolbar-title {
+    font-size: 16px;
+  }
+  .fc-event {
+    font-size: 12px;
+    padding: 1px 3px;
+  }
+}
 

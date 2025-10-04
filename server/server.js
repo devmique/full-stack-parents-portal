@@ -181,7 +181,7 @@ app.post("/register", (req, res) => {
 
             const role = "parent";
            const sql = "INSERT INTO users (name, email, password, contact_number, role, profile_pic) VALUES (?, ?, ?, ?, ?, ?)";
-db.query(sql, [name, email, hashedPassword, contactNumber, role, null], (err) => {
+           db.query(sql, [name, email, hashedPassword, contactNumber, role, null], (err) => {
 
                 if (err) {
                     console.error(" Database Error:", err);
@@ -223,7 +223,7 @@ app.post("/login", (req, res) => {
             }
 
             //  Generate JWT token
-              const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+              const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "24h" });
              
             res.json({
                 message: "Login successful!",

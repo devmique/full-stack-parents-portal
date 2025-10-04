@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../styles/Help.css"; 
 import { useNavigate } from "react-router-dom";
-import ClearIcon from '@mui/icons-material/Clear';
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 
 const Help = () => {
   const [issue, setIssue] = useState("");
@@ -51,7 +51,7 @@ const Help = () => {
 <>
        <div className='help-header'>
          
-        <button onClick={goBackToDashboard} className="back-btn"><ClearIcon className="clearIcon" /></button>
+        <button onClick={goBackToDashboard} className="back-btn"><ArrowBackOutlinedIcon className="clearIcon" /></button>
          <p style={{ fontSize:"23px", color: "rgb(49, 49, 49)", margin:"5px 0 10px 0", padding:"0 0 0 10px"}}>Help & Support</p>
        
         </div>

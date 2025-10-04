@@ -14,7 +14,7 @@
     transition: transform 0.3s ease-in-out;
     overflow-y: auto;
     z-index: 101;
-    transform: translateX(-100%);
+      transform: translateX(-100%);
 }
 .menu-title{
 color: rgb(34, 34, 34);
@@ -70,7 +70,7 @@ color: rgb(34, 34, 34);
     
 }
 .sidebar-item.active {
-color: rgba(6, 65, 167, 0.872);
+    color: rgba(6, 65, 167, 0.872);
     background: rgba(0, 0, 0, 0.1);
     font-weight: bold;
     .icon{
@@ -115,4 +115,19 @@ background-color: rgb(157, 156, 156);
 }
 .logout-btn:active{
     color:#e23636;;
+}
+
+
+@media screen and (max-width: 480px) {
+  .sidebar {
+    width: 70%;
+    transform: translate(-100%);
+  }
+  .sidebar-item {
+    padding: 10px;
+  }
+  .sidebar-item .icon {
+    margin-right: 6px;
+  }
+
 }

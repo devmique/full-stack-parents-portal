@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import "../styles/Settings.css";
 import ClearIcon from '@mui/icons-material/Clear';
 const Settings = () => {
@@ -59,13 +59,13 @@ const Settings = () => {
            
         <div className='settingsHeader'>
          
-        <button onClick={goBackToDashboard} className="back-btn"><ClearIcon className="clearIcon" /></button>
+        <button onClick={goBackToDashboard} className="back-btn"><ArrowBackOutlinedIcon className="clearIcon" /></button>
          <p style={{ fontSize:"23px", color: "rgb(49, 49, 49)", margin:"5px 0 10px 0", padding:"0 0 0 10px"}}>Settings</p>
        
         </div>
             <div className='settingsContainer'>
       <p className="delete"onClick={handleDeleteAccount}>
-            <DeleteForeverIcon style={{ fontSize: "15px", margin: "1px 1px 1px 1px" }} className="headerIcon" /> Delete your account
+            Delete my account
               </p>
               </div>
             </>

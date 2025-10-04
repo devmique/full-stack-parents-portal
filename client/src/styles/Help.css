@@ -1,14 +1,14 @@
 .help-header{
    
-            position: absolute;
-            top: 1px;
-            right: 1px;
-            display: flex;
-            flex-direction: column;
-            background-color: white;
-            width: 100%;
-            border-bottom: 2px solid #ddd;
-    
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  width: 100%;
+  border-bottom: 2px solid #ddd;
+  padding: 5px;
         
 }
 
@@ -39,4 +39,31 @@
     color: white;
         background-color: rgba(17, 81, 191, 0.872);
     
+}
+@media screen and (max-width: 768px) {
+  .submit-form textarea {
+    width: 100%;
+    height: 90px;
+    font-size: 13px;
+  }
+
+  .submit-form button {
+    width: 70%;
+    max-width: none;
+  }
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 480px) {
+  .submit-form textarea {
+    width: 100%;
+    height: 80px;
+    font-size: 12px;
+  }
+
+  .submit-form button {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
 }

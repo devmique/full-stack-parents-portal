@@ -11,7 +11,6 @@ const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ name: "", email: "", password: "", contactNumber:"" }); 
   const navigate = useNavigate(); 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({

@@ -25,6 +25,10 @@
     margin-bottom: 1.5rem;
     transition: background-color 0.3s;
     width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    gap: 6px;
 }
 
 .export-btn:hover {
@@ -127,10 +131,87 @@ text-decoration: underline;
     color: #a00;
 }
 
-@media screen and (max-width: 768px) {
-.grades-form-grid {
-       
-        grid-template-columns: repeat(1, 500px);
-        
-    }
+/* Tablet screens */
+@media screen and (max-width: 992px) {
+  .grades-container {
+    padding: 1.5rem;
+  }
+
+  .grades-container h2 {
+    font-size: 24px;
+  }
+
+  .grades-form-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+
 }
+
+/* Mobile screens */
+@media screen and (max-width: 768px) {
+  .grades-container {
+    padding: 1rem;
+    border-radius: 10px;
+    width: 100%;
+  }
+
+  .grades-container h2 {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .grades-form-grid {
+    grid-template-columns: 1fr;
+    
+  }
+
+  .grade-form button {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+
+  .export-btn {
+    width: 200px;
+    justify-content: center;
+     font-size: 14px;
+     padding: 6px 10px;
+  }
+
+  .grades-container table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    border-radius: 8px;
+  }
+
+  .grades-container table th,
+  .grades-container table td {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+
+/* Very small screens (phones <480px) */
+@media screen and (max-width: 480px) {
+  .grades-container {
+    padding: 0.75rem;
+  }
+
+  .grades-container h2 {
+    font-size: 18px;
+  }
+
+
+  .grades-container table th,
+  .grades-container table td {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .grade-form input {
+    font-size: 13px;
+    padding: 8px;
+  }
+}
+

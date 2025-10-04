@@ -22,8 +22,8 @@
  
 }
 .profile-pic-large {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 10px;
@@ -53,4 +53,43 @@
     right: 12px;
     
    
+}
+
+/* Mobile screens */
+@media screen and (max-width: 768px) {
+  .profile-page {
+    width: 90%;
+    margin: 40px auto;
+    padding: 20px;
+    text-align: center;
+  }
+  .profile-pic-large {
+    width: 120px;
+    height: 120px;
+  }
+  .profile-header {
+    position: relative;
+    text-align: center;
+    justify-content: center;
+  }
+}
+
+/* Very small phones (<480px) */
+@media screen and (max-width: 480px) {
+  .profile-page {
+    width: 95%;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 8px;
+  }
+  .userName{
+    font-size: 20px;
+  }
+  
+
+  .back-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
 }

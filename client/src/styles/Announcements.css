@@ -112,3 +112,103 @@ background-color: rgba(28, 79, 167, 0.872);
 .delete-btn:hover {
     background-color: #c0392b;
 }
+
+/* Tablet screens */
+@media screen and (max-width: 992px) {
+  .announcements-container {
+    padding: 15px;
+  }
+
+  .page-title {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  .announcement-form input,
+  .announcement-form textarea {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .announcement-form button {
+    width: auto;
+    padding: 10px 16px;
+    align-self: flex-start;
+  }
+}
+
+/* Mobile screens */
+@media screen and (max-width: 768px) {
+  .announcements-container {
+    padding: 10px;
+  }
+
+  .page-title {
+    font-size: 22px;
+  }
+
+  .announcement-form {
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+
+  .announcement-form input,
+  .announcement-form textarea {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .announcement-form button {
+    width: 100%;
+    margin-top: 5px;
+  }
+
+  .announcement-card {
+    padding: 15px 18px;
+  }
+
+  .announcement-title {
+    font-size: 18px;
+  }
+
+  .announcement-content {
+    font-size: 14px;
+  }
+}
+
+/* Very small screens (phones <480px) */
+@media screen and (max-width: 480px) {
+  .page-title {
+    font-size: 20px;
+  }
+
+  .announcement-form input,
+  .announcement-form textarea {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .announcement-form button {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .announcement-card {
+    padding: 12px 15px;
+    border-radius: 8px;
+  }
+
+  .announcement-title {
+    font-size: 16px;
+  }
+
+  .announcement-content {
+    font-size: 13px;
+  }
+
+  .delete-btn {
+    width: 100%;
+    font-size: 13px;
+    padding: 8px;
+  }
+}

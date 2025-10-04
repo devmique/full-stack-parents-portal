@@ -20,7 +20,6 @@ import Messages from './pages/Messages';
 // ✅ Protected Route Component
 const ProtectedRoute = ({ element, allowedRoles }) => {
   const user = JSON.parse(sessionStorage.getItem("user"));
-  
   useEffect(() => {
     const handleStorageChange = (event) => {
       // If the logged-out user or session expired, navigate to the login page

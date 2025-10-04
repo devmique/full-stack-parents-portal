@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import "../styles/Grades.css"
 const Grades = () => {
   const user = JSON.parse(sessionStorage.getItem("user"));
@@ -148,6 +149,7 @@ const Grades = () => {
       <h2>Grades</h2>
 
       <button onClick={exportToPDF} className="export-btn">
+        <PictureAsPdfOutlinedIcon/>
         Export to PDF
       </button>
 

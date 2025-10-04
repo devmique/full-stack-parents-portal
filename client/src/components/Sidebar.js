@@ -30,14 +30,14 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true); //  Open by default on large screens
  
   const toggleSidebar = () => {
-    setIsOpen(!isOpen)
+    setIsOpen(!isOpen);
   }
 
 
 
   const navigate = useNavigate();
   const user = JSON.parse(sessionStorage.getItem("user")) || {};
-   // ✅ Logout Function
+   // Logout Function
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to log out?")) {
       sessionStorage.clear();

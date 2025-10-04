@@ -7,11 +7,18 @@ import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import ChecklistOutlinedIcon from '@mui/icons-material/ChecklistOutlined';
 import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
-import SmsOutlinedIcon from '@mui/icons-material/SmsOutlined';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
+import HomeWorkIcon from '@mui/icons-material/HomeWork';
+import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
+import EventNoteIcon from '@mui/icons-material/EventNote';
+import SchoolIcon from '@mui/icons-material/School';
+import CampaignIcon from '@mui/icons-material/Campaign';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import Logo from "../assets/logo.png"; // Ensure your logo is in `src/assets/`
 import "../styles/Sidebar.css";
 import { 
@@ -64,28 +71,28 @@ const Sidebar = () => {
       <div className="sidebar-menu">
          <h3 className="menu-title">Menu</h3> 
          <Link to={homePath} className={`sidebar-item ${location.pathname === homePath ? "active" : ""}`}>
-          <MapsHomeWorkOutlinedIcon className="icon" /> Home
+          {location.pathname === homePath ? <HomeWorkIcon className="icon"/>:<MapsHomeWorkOutlinedIcon className="icon" />} Home
         </Link>
         <Link to="/dashboard/subjects" className={`sidebar-item ${location.pathname === "/dashboard/subjects" ? "active" : ""}`}>
-          <LibraryBooksOutlinedIcon className="icon" /> Subjects 
+          {location.pathname === "/dashboard/subjects"? <LibraryBooksIcon className="icon"/>:<LibraryBooksOutlinedIcon className="icon" />} Subjects 
         </Link>
          <Link to="/dashboard/schedule" className={`sidebar-item ${location.pathname === "/dashboard/schedule" ? "active" : ""}`}>
-          <EventNoteOutlinedIcon className="icon" />Schedule
+          {location.pathname === "/dashboard/schedule"? <EventNoteIcon className="icon"/>:<EventNoteOutlinedIcon className="icon" />}Schedule
         </Link>
         <Link to="/dashboard/grades"className={`sidebar-item ${location.pathname === "/dashboard/grades" ? "active" : ""}`}>
-          <SchoolOutlinedIcon className="icon" /> Grades
+          {location.pathname==="/dashboard/grades"? <SchoolIcon className="icon"/>: <SchoolOutlinedIcon className="icon" />} Grades
         </Link>
         <Link to="/dashboard/attendance" className={`sidebar-item ${location.pathname === "/dashboard/attendance" ? "active" : ""}`}>
           <ChecklistOutlinedIcon className="icon" /> Attendance Record
         </Link>
         <Link to="/dashboard/announcements" className={`sidebar-item ${location.pathname === "/dashboard/announcements" ? "active" : ""}`}>
-          <CampaignOutlinedIcon className="icon" /> Announcements 
+          {location.pathname==="/dashboard/announcements"? <CampaignIcon className="icon"/>: <CampaignOutlinedIcon className="icon" />} Announcements 
         </Link>
          <Link to="/dashboard/events"className={`sidebar-item ${location.pathname === "/dashboard/events"? "active" : ""}`}>
-          <CalendarTodayOutlinedIcon className="icon" />Events
+          {location.pathname ==="/dashboard/events"? <CalendarTodayIcon className="icon"/>:<CalendarTodayOutlinedIcon className="icon" />}Events
         </Link>
         <Link to= "/dashboard/messages"  className={`sidebar-item ${location.pathname === "/dashboard/messages" ? "active" : ""}`}>
-          <SmsOutlinedIcon  className="icon" /> Messages
+          {location.pathname==="/dashboard/messages"? <ChatBubbleIcon className="icon"/>: <ChatBubbleOutlineOutlinedIcon className="icon" />} Messages
         </Link>
       </div>
 

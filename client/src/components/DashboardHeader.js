@@ -5,7 +5,9 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import ChatBubbleOutlineOutlinedIcon from '@mui/icons-material/ChatBubbleOutlineOutlined';
+import MarkEmailUnreadOutlinedIcon from '@mui/icons-material/MarkEmailUnreadOutlined';
+import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
+import MarkunreadOutlinedIcon from '@mui/icons-material/MarkunreadOutlined';
 import "../styles/DashboardHeader.css";
 import axios from "axios"
 import Logo from "../assets/logo.png"; 
@@ -215,22 +217,9 @@ const handleLogout = () => {
         {/* Notification Button */}
        <div className="message-notif-section" onClick={toggleMessageNotifDropdown} style={{ position: "relative" }}>
   <button className="messageNotif-btn">
-    <ChatBubbleOutlineOutlinedIcon />
+    { unreadMsgCount >0 ?<MarkEmailUnreadOutlinedIcon/>:  <MarkunreadOutlinedIcon/>}
           </button>
-                 {unreadMsgCount > 0 && (
-              <span
-                style={{
-          position: "absolute",
-          top: "22px",
-          right: "20px",
-          backgroundColor: "red",
-          borderRadius: "50%",
-          width: "7px",
-          height: "7px",
           
-                }}
-              />
-          )}
                  {/* Message Notification Dropdown */}
     
   <div className={`messagenotif-dropdown ${openMessageNotif ? "open" : ""}`}>
@@ -254,24 +243,10 @@ const handleLogout = () => {
 
         <div className="notif-section" onClick={toggleNotifDropdown} style={{ position: "relative" }}>
           <button className="notification-btn">
-            <NotificationsNoneIcon />
+           {unreadCount>0? <NotificationsActiveOutlinedIcon/>: <NotificationsNoneIcon />} 
             </button>
-            {unreadCount > 0 && (
-              <span
-                style={{
-          position: "absolute",
-          top: "29px",
-          right: "38px",
-          backgroundColor: "red",
-          borderRadius: "50%",
-          width: "7px",
-          height: "7px",
           
-                }}
-              />
-            )}
             {/* Notification Dropdown */}
-     
         <div className={`notif-dropdown ${openNotif ? "open" : ""}`}>
           <ul>
             {notifications.length === 0 ? (

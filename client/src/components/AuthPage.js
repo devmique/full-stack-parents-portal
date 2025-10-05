@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; 
 import "../styles/AuthPage.css"; 
@@ -6,11 +6,27 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import Logo from "../assets/logo.png";
 
+
 const AuthPage = () => {
   const [loading, setLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ name: "", email: "", password: "", contactNumber:"" }); 
   const navigate = useNavigate(); 
+
+// ✅ Prevent going back to login if user is already logged in
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    const user = JSON.parse(sessionStorage.getItem("user"));
+
+    if (token && user) {
+      if (user.role === "admin") {
+        navigate("/dashboard/admin", { replace: true });
+      } else {
+        navigate("/dashboard/parent", { replace: true });
+      }
+    }
+  }, [navigate]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({

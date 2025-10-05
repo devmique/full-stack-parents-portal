@@ -72,10 +72,12 @@ color: rgb(34, 34, 34);
 .sidebar-item.active {
     color: rgba(6, 65, 167, 0.872);
     background: rgba(0, 0, 0, 0.1);
+     border-radius: 5px;
     font-weight: bold;
     .icon{
     color: rgba(6, 65, 167, 0.872);
     }
+    
 }
 .sidebar-other {
     margin-top: auto;

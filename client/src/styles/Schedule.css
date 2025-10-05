@@ -8,9 +8,9 @@
 
 .schedule-title {
     margin-bottom: 30px;
-        font-size: 28px;
-        font-weight: bold;
-        color: #333;
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
 }
 
 .schedule-form {
@@ -42,7 +42,6 @@
 }
 
 .day-grid {
-    
     display: grid;
     grid-template-columns: repeat(3, 170px);
     gap: 10px;
@@ -81,12 +80,14 @@
 }
 
 .schedule-table-wrapper {
-    overflow-x: auto;
+    overflow: auto;
 }
 
 .schedule-table {
+  
     width: 100%;
     border-collapse: collapse;
+    overflow: auto;
 }
 
 .schedule-table th,
@@ -157,12 +158,24 @@
 }
 
 @media screen and (max-width: 480px) {
+    .schedule-container{
+    
+    }
+    .time-input {
+    width: 45%;
+}
+     .day-grid {
+       
+         width: 40%;
+    }
+   
     .schedule-title {
         font-size: 20px;
+
     }
 
     .add-button {
-        width: 100%;
+        width: 40%;
     }
 
     .day-column {

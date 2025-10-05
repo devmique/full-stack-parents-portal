@@ -1,7 +1,8 @@
 .events-table {
     border-collapse: collapse;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-
+    overflow: auto;
+    max-width: 300px;
 }
 .events-container{
     padding:10px;
@@ -20,7 +21,6 @@ text-align: center;
 
 .events-table th,
 .events-table td {
-  
 border-bottom: 1px solid #ccc;
 }
 

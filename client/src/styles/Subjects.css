@@ -21,6 +21,7 @@
     margin-bottom: 20px;
     justify-content: center;
     flex-wrap: wrap;
+   
 }
 
 .input-field {
@@ -38,7 +39,7 @@
     border: none;
     border-radius: 6px;
     cursor: pointer;
-width: 150px;
+    width: 150px;
 }
 
 .addsubj-button:hover {
@@ -48,6 +49,7 @@ width: 150px;
 .subject-table {
     width: 100%;
     border-collapse: collapse;
+    overflow: auto;
 }
 
 .subject-table th,
@@ -55,6 +57,7 @@ width: 150px;
     border: 1px solid #ddd;
     padding: 12px;
     text-align: left;
+   
 }
 
 .subject-table th {
@@ -101,6 +104,16 @@ width: 150px;
 }
 
 @media (max-width: 480px) {
+ 
+   .subject-container {
+    max-width: 80%;
+    
+
+ }
+  .input-field {
+        width: 80%;
+    }
+
     .subject-table th,
     .subject-table td {
         font-size: 12px;

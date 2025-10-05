@@ -291,6 +291,11 @@ button:hover {
 
 /* Very small screens */
 @media (max-width: 480px) {
+    .auth-container {
+  
+    width: 90%;
+ 
+  }
   .title {
     font-size: 1.2rem;
   }

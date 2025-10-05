@@ -1,6 +1,6 @@
 .grades-container {
     max-width: 1200px;
-    margin: auto;
+    margin: 0;
     padding: 2rem;
     background: #fff;
     border-radius: 12px;
@@ -8,10 +8,10 @@
 }
 
 .grades-container h2 {
-        margin-bottom: 30px;
-        font-size: 28px;
-        font-weight: bold;
-        color: #333;
+    margin-bottom: 30px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
 }
 
 .export-btn {
@@ -72,6 +72,7 @@
     width: 100%;
     border-collapse: collapse;
     margin-top: 1rem;
+    overflow: auto;
 }
 
  .grades-container table thead {
@@ -180,7 +181,6 @@ text-decoration: underline;
 
   .grades-container table {
     display: block;
-    overflow-x: auto;
     white-space: nowrap;
     border-radius: 8px;
   }
@@ -195,6 +195,7 @@ text-decoration: underline;
 /* Very small screens (phones <480px) */
 @media screen and (max-width: 480px) {
   .grades-container {
+    width: 40%;
     padding: 0.75rem;
   }
 

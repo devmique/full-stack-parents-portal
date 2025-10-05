@@ -119,7 +119,6 @@ background-color: rgb(253, 253, 209);
   }
   .calendar-card {
     width: 100%;
-    max-width: 100%;
     height: auto;
     padding: 15px;
   }

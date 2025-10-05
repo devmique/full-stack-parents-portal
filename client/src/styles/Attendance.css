@@ -1,7 +1,7 @@
 .attendance-container {
   max-width: 1000px;
-  margin: 40px auto;
   padding: 20px;
+  margin: 5px;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
@@ -57,6 +57,7 @@
 .attendance-table {
   width: 100%;
   border-collapse: collapse;
+  overflow: auto;
 }
 
 .attendance-table th,
@@ -206,7 +207,7 @@ color: #c0392b;
 
   .attendance-table {
     display: block;
-    overflow-x: auto;
+    
     white-space: nowrap;
     border-radius: 8px;
   }
@@ -226,6 +227,7 @@ color: #c0392b;
 /* Very small screens (phones <480px) */
 @media screen and (max-width: 480px) {
   .attendance-container {
+    width: 50%;
     padding: 8px;
   }
 
@@ -236,6 +238,7 @@ color: #c0392b;
   .add-form input,
   .add-form select {
     font-size: 13px;
+    width: 40%;
     padding: 8px;
   }
 
@@ -248,5 +251,6 @@ color: #c0392b;
   .btn-primary {
     font-size: 13px;
     padding: 8px;
+      width: 40%;
   }
 }

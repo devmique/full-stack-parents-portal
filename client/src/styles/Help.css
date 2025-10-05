@@ -56,13 +56,13 @@
 /* Mobile responsiveness */
 @media screen and (max-width: 480px) {
   .submit-form textarea {
-    width: 100%;
+    width: 95%;
     height: 80px;
     font-size: 12px;
   }
 
   .submit-form button {
-    width: 100%;
+    width: 95%;
     padding: 12px;
     font-size: 14px;
   }

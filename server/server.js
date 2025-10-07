@@ -1,4 +1,5 @@
 require("dotenv").config();
+const { verifyToken, authorizeRole } = require("./middleware/authMiddleware");
 const express = require("express");
 const mysql = require("mysql");
 const bcrypt = require("bcryptjs");
@@ -39,37 +40,37 @@ db.connect((err) => {
 });
 
 //attendance route
-app.use('/api/attendance', attendanceRoutes)
+app.use('/api/attendance', verifyToken, attendanceRoutes)
 
 //grades route
-app.use('/api/grades', gradesRoute)
+app.use('/api/grades',verifyToken, gradesRoute)
 
 //events route
-app.use('/api/calendar', calendarRoutes);
+app.use('/api/calendar',verifyToken, calendarRoutes);
 
 //announcements route 
-app.use('/api/announcements', announcementRoutes)
+app.use('/api/announcements',verifyToken, announcementRoutes)
 
 //connect message route
-app.use('/api/messages', messageRoutes)
+app.use('/api/messages',verifyToken, messageRoutes)
 
 
 //subjects route
-app.use('/api/subjects', subjectRoutes);
+app.use('/api/subjects',verifyToken, subjectRoutes);
 
 //schedule route
-app.use('/api/schedule', scheduleRoutes);
+app.use('/api/schedule',verifyToken, scheduleRoutes);
 
 //notif route
-app.use('/api/notifications', notificationRoutes);
+app.use('/api/notifications',verifyToken, notificationRoutes);
 
 //message notif route
-app.use('/api/messagenotif', messagenotifRoutes);
+app.use('/api/messagenotif',verifyToken, messagenotifRoutes);
 
 //list route
-app.use('/api/studentlist', studentlist)
+app.use('/api/studentlist',verifyToken, studentlist)
 
-app.use('/api/subjectlist', subjectlist)
+app.use('/api/subjectlist',verifyToken, subjectlist)
 
 // Configure Multer for Profile Picture Uploads
 const storage = multer.diskStorage({
@@ -82,17 +83,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 //  Upload Profile Picture API
-app.post("/upload-profile-pic", upload.single("profilePic"), (req, res) => {
+app.post("/upload-profile-pic", verifyToken, upload.single("profilePic"), (req, res) => {
     if (!req.file) {
         return res.status(400).json({ error: "No file uploaded" });
     }
 
-    const token = req.headers.authorization?.split(" ")[1];
-    if (!token) return res.status(401).json({ error: "Unauthorized" });
-
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = decoded.id;
+       const userId = req.user.id;
         const imageUrl = `http://localhost:5000/uploads/${req.file.filename}`;
 
         //  Save image URL to database
@@ -110,14 +107,9 @@ app.post("/upload-profile-pic", upload.single("profilePic"), (req, res) => {
 app.use("/uploads", express.static("uploads"));
 
 //delete account
-app.delete("/delete-account", (req, res) => {
-    const token = req.headers.authorization?.split(" ")[1];
-    if (!token) return res.status(401).json({ error: "Unauthorized" });
-
+app.delete("/delete-account", verifyToken, (req, res) => {
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const userId = decoded.id;
-
+        const userId = req.user.id;
         db.query("DELETE FROM users WHERE id = ?", [userId], (err) => {
             if (err) return res.status(500).json({ error: "Database error" });
             res.json({ message: "Account deleted successfully" });
@@ -140,7 +132,7 @@ db.query(createHelpTable, (err) => {
 });
 
 // Help Request Submission Route
-app.post("/help", (req, res) => {
+app.post("/help", verifyToken, (req, res) => {
     const { userName, issue } = req.body;
 
     if (!userName || !issue) {

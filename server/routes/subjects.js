@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-
+const { authorizeRole } = require('../middleware/authMiddleware');
 // Get all subjects
 router.get('/', (req, res) => {
   db.query("SELECT * FROM subjects", (err, results) => {
@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 });
 
 // Add a new subject
-router.post('/', (req, res) => {
+router.post('/', authorizeRole("admin"),(req, res) => {
   const { subject_code, subject_title, term, units } = req.body;
   const sql = "INSERT INTO subjects (subject_code, subject_title, term, units) VALUES (?, ?, ?,?)";
   db.query(sql, [subject_code, subject_title, term, units], (err, result) => {
@@ -27,7 +27,7 @@ router.post('/', (req, res) => {
 });
 
 // Delete a subject
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authorizeRole("admin"),(req, res) => {
   
   const id = req.params.id;
   db.query("DELETE FROM subjects WHERE id = ?", [id], (err, result) => {

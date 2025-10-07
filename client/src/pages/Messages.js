@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "../styles/Messages.css"
 import SendIcon from '@mui/icons-material/Send'
+axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const Messages = () => {
   const user = JSON.parse(sessionStorage.getItem("user"));
 

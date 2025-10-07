@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "../styles/Schedule.css"
+axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
 const Schedule = () => {

@@ -6,21 +6,18 @@ import axios from "axios";
 import '../styles/Calendar.css'
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
+axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 
 const CalendarPage = () => {
   const [studentlist, setStudentList] = useState(null);
   const [subjectlist, setSubjectList] = useState(null);
   const [events, setEvents] = useState([]);
   const user = JSON.parse(sessionStorage.getItem("user")) || {};
-  const token = sessionStorage.getItem("token");
 
  useEffect(() => {
   const fetchEvents = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/calendar", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log("Fetched Events:", res.data); 
+      const res = await axios.get("http://localhost:5000/api/calendar");
       setEvents(
         res.data.map((event) => ({
           id: event.id,
@@ -46,7 +43,6 @@ const CalendarPage = () => {
       const res = await axios.post(
         "http://localhost:5000/api/calendar",
         { title,start: arg.dateStr },
-        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       setEvents((prev) => [
@@ -68,9 +64,9 @@ const CalendarPage = () => {
   if (!window.confirm(`Delete event "${info.event.title}"?`)) return;
 
   try {
-    await axios.delete(`http://localhost:5000/api/calendar/${info.event.id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
+    await axios.delete(`http://localhost:5000/api/calendar/${info.event.id}`
+    
+    );
 
     // Remove it from calendar UI immediately
     info.event.remove(); 

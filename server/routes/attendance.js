@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-
+const { authorizeRole } = require('../middleware/authMiddleware');
 // Get all attendance records
 router.get('/', (req, res) => {
   const studentId = req.query.student_id; 
@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
 });
 
 // Add a new attendance record
-router.post('/', (req, res) => {
+router.post('/', authorizeRole("admin"),(req, res) => {
   const { student_id, date, day_of_week, status } = req.body;
 
   if (!student_id || !date || !day_of_week || !status) {
@@ -51,7 +51,7 @@ router.post('/', (req, res) => {
 
 
 // Update an existing attendance record
-router.put('/:id', (req, res) => {
+router.put('/:id', authorizeRole("admin"), (req, res) => {
   const { status } = req.body;
   const attendanceId = req.params.id;
 
@@ -88,7 +88,7 @@ router.put('/:id', (req, res) => {
 
 
 // Delete an attendance record
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authorizeRole("admin"), (req, res) => {
   const attendanceId = req.params.id;
 
   db.query("DELETE FROM attendance WHERE id = ?", [attendanceId], (err) => {

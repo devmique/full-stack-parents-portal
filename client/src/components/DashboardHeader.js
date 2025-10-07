@@ -11,6 +11,8 @@ import MarkunreadOutlinedIcon from '@mui/icons-material/MarkunreadOutlined';
 import "../styles/DashboardHeader.css";
 import axios from "axios"
 import Logo from "../assets/logo.png"; 
+axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
+
 const DashboardHeader = () => {
   const [openMessageNotif, setOpenMessageNotif] = useState(false);
   const [messageNotifs, setMessageNotifs] = useState([]);
@@ -158,7 +160,7 @@ const markAllMessagesAsRead = async () => {
   // Logout Function
 const handleLogout = () => {
     if (window.confirm("Are you sure you want to log out?")) {
-        sessionStorage.clear();
+      sessionStorage.clear();
       sessionStorage.removeItem("user");
       sessionStorage.removeItem("token");
 

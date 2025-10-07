@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-
+const { authorizeRole } = require('../middleware/authMiddleware');
 // Get all grades
 router.get('/', (req, res) => {
   const studentId = req.query.student_id; 
@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
 });
 
 // Add a new grade
-router.post('/', (req, res) => {
+router.post('/',authorizeRole("admin"),(req, res) => {
   const { student_id, school_year, term, subject_code, subject_title, grade, units } = req.body;
 
   if (!student_id || !school_year || !term || !subject_code || !subject_title || !grade || !units) {
@@ -45,7 +45,7 @@ router.post('/', (req, res) => {
 });
 
 // Update an existing grade
-router.put('/:id', (req, res) => {
+router.put('/:id',authorizeRole("admin"), (req, res) => {
   const { student_id, school_year, term, subject_code, subject_title, grade, units } = req.body;
   const gradeId = req.params.id;
 
@@ -70,7 +70,7 @@ db.query("INSERT INTO notifications (user_id, message) VALUES (?, ?)", [student_
 });
 
 // Delete a grade
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authorizeRole("admin"),(req, res) => {
   const gradeId = req.params.id;
 
   db.query("DELETE FROM grades WHERE id = ?", [gradeId], (err) => {

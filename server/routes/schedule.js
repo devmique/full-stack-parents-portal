@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
-
+const { authorizeRole } = require('../middleware/authMiddleware');
 // Get full schedule
 router.get('/', (req, res) => {
   db.query("SELECT * FROM schedule", (err, results) => {
@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 });
 
 // Add a new schedule row
-router.post('/', (req, res) => {
+router.post('/', authorizeRole("admin"),(req, res) => {
   const { time_slot, monday, tuesday, wednesday, thursday, friday, saturday } = req.body;
 
   const sql = `
@@ -43,7 +43,7 @@ router.post('/', (req, res) => {
 });
 
 // Delete a schedule row
-router.delete('/:id', (req, res) => {
+router.delete('/:id', authorizeRole("admin"),(req, res) => {
   const id = req.params.id;
   db.query("DELETE FROM schedule WHERE id = ?", [id], (err, result) => {
     if (err) return res.status(500).json({ error: "Database error" });

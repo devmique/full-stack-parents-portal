@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require("../db");
+const { authorizeRole } = require('../middleware/authMiddleware');
 
 // Get all announcements
 router.get('/', (req, res) => {
@@ -11,7 +12,7 @@ router.get('/', (req, res) => {
 });
 
 // Create new announcement (admin only)
-router.post('/', (req, res) => {
+router.post('/', authorizeRole("admin"), (req, res) => {
   const { title, content } = req.body;
     if (!title || !content ) {
     return res.status(400).json({ error: "All fields are required" });
@@ -32,7 +33,7 @@ router.post('/', (req, res) => {
 });
 
 // Delete announcement by ID (admin only)
-router.delete('/:id', (req, res) => {
+router.delete('/:id',authorizeRole("admin"), (req, res) => {
   const id = req.params.id;
   db.query('DELETE FROM announcements WHERE id = ?', [id], (err, result) => {
     if (err) return res.status(500).json({ error: 'Error deleting announcement' });

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "../styles/Subjects.css"
+axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const Subjects = () => {
-   const user = JSON.parse(sessionStorage.getItem("user")) || {};
+  const user = JSON.parse(sessionStorage.getItem("user")) || {};
   const [subjects, setSubjects] = useState([]);
   const [newSubject, setNewSubject] = useState({ subject_code: '', subject_title: '', term:'', units:'' });
 

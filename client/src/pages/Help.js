@@ -3,7 +3,7 @@ import axios from "axios";
 import "../styles/Help.css"; 
 import { useNavigate } from "react-router-dom";
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
-
+axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const Help = () => {
   const [issue, setIssue] = useState("");
   const [message, setMessage] = useState("");

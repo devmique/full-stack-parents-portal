@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "../styles/Announcements.css"
+axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const Announcements = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [title, setTitle] = useState('');
@@ -80,7 +81,10 @@ const handleDelete = async (id) => {
       )}
 
       <div className="announcement-list">
-        {announcements.map((a) => (
+         {announcements.length === 0 ? (
+          <p style={{fontSize: "20px"}}> No announcements available at the moment.</p>
+        ) : (
+        announcements.map((a) => (
           <div key={a.id} className="announcement-card">
             <div className="announcement-date">{new Date(a.date_posted).toLocaleString()}</div>
             <h2 className="announcement-title">{a.title}</h2>
@@ -94,7 +98,8 @@ const handleDelete = async (id) => {
               </button>
             )}
           </div>
-        ))}
+        ))
+        )}
       </div>
     </div>
   );

@@ -179,6 +179,9 @@
     width: 100%;
     flex-direction: column;
     height: auto;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
   }
 
   .contacts-list {

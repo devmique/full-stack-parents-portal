@@ -1,25 +1,11 @@
 
 const express = require('express');
 const router = express.Router();
-const jwt = require("jsonwebtoken");
 const db = require("../db");
-
-// Middleware to authenticate
-const authenticate = (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) return res.status(401).json({ error: "Unauthorized" });
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-    next();
-  } catch (err) {
-    return res.status(401).json({ error: "Invalid token" });
-  }
-};
+const { authorizeRole } = require('../middleware/authMiddleware');
 
 // GET events (admin and parent)
-router.get("/", authenticate, (req, res) => {
+router.get("/", (req, res) => {
   const sql = "SELECT * FROM calendar_events ORDER BY date ASC";
   db.query(sql, (err, results) => {
     if (err) return res.status(500).json({ error: "Failed to fetch events" });
@@ -36,7 +22,7 @@ router.get("/", authenticate, (req, res) => {
 });
 
 // POST new event (admin only)`
-router.post("/", authenticate, (req, res) => {
+router.post("/", authorizeRole("admin"),(req, res) => {
   const { title, start } = req.body;
   if (req.user.role !== "admin") return res.status(403).json({ error: "Only admins can add events" });
   if (!title || !start) return res.status(400).json({ error: "Title and start date required" });
@@ -55,7 +41,7 @@ router.post("/", authenticate, (req, res) => {
 });
 
 // DELETE event (admin only)
-router.delete("/:id", authenticate, (req, res) => {
+router.delete("/:id", authorizeRole("admin"), (req, res) => {
   if (req.user.role !== "admin") return res.status(403).json({ error: "Only admins can delete events" });
 
   const sql = "DELETE FROM calendar_events WHERE id = ?";

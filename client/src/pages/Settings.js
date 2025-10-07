@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import "../styles/Settings.css";
-import ClearIcon from '@mui/icons-material/Clear';
 const Settings = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
@@ -20,7 +19,7 @@ const Settings = () => {
 
     const goBackToDashboard = () => {
     
-        if (user?.role === "admin") {
+      if (user?.role === "admin") {
       navigate("/dashboard/admin");
     } else {
       navigate("/dashboard/parent");

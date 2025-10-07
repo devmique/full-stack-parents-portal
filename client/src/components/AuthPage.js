@@ -8,7 +8,7 @@ import Logo from "../assets/logo.png";
 
 
 const AuthPage = () => {
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ name: "", email: "", password: "", contactNumber:"" }); 
   const navigate = useNavigate(); 
@@ -37,7 +37,7 @@ const AuthPage = () => {
 
   const handleSubmit = async (e) => {
   e.preventDefault();
-  setLoading(true)
+  setIsLoading(true)
 
   try {
     const url = isLogin ? "http://localhost:5000/login" : "http://localhost:5000/register";
@@ -71,7 +71,7 @@ const AuthPage = () => {
   } catch (error) {
     alert(error.response?.data?.error || "Something went wrong! Please try again.");
   } finally{
-    setLoading(false)
+    setIsLoading(false)
   }
 };
 
@@ -116,9 +116,9 @@ const AuthPage = () => {
           </div>
 
           {/* Submit Button */}
-         <button className="submit" type="submit" disabled={loading}>
+         <button className="submit" type="submit" disabled={isLoading}>
   {isLogin ? (
-    loading ? (
+    isLoading ? (
       <CircularProgress size="16px" color="white" />
     ) : (
       <>
@@ -126,7 +126,7 @@ const AuthPage = () => {
       </>
     )
   ) : (
-    loading ? (
+    isLoading ? (
        <CircularProgress size="16px" color="white" />
     ) : (
       <>

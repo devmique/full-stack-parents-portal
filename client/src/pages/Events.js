@@ -2,16 +2,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "../styles/Events.css"
+axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const Events = () => {
-  const [events, setEvents] = useState([]);
- const token = sessionStorage.getItem("token");
+const [events, setEvents] = useState([]);
+
    useEffect(() => {
   const fetchEvents = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/calendar", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      console.log("Fetched Events:", res.data); 
+      const res = await axios.get("http://localhost:5000/api/calendar"
+
+      );
       setEvents(
         res.data.map((event) => ({
           id: event.id,

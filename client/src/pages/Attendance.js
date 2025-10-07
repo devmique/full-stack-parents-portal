@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/Attendance.css'; 
-
+axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const Attendance = () => {
   const today =new Date().toISOString().split("T")[0];
   const user = JSON.parse(sessionStorage.getItem('user'));

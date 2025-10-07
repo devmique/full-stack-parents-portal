@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../styles/ProfileUpload.css";
 import CircularProgress from '@mui/material/CircularProgress';
+axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const ProfileUpload = ({ onUploadSuccess }) => {
   const [file, setFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -13,16 +14,15 @@ const ProfileUpload = ({ onUploadSuccess }) => {
   const handleUpload = async () => {
     if (!file) return alert("Please select a file first!");
 
-    setUploading(true);
+    setIsUploading(true);
     const formData = new FormData();
     formData.append("profilePic", file);
 
     try {
-      const token = sessionStorage.getItem("token");
       const response = await axios.post("http://localhost:5000/upload-profile-pic", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
+       
         },
       });
 
@@ -43,7 +43,7 @@ const ProfileUpload = ({ onUploadSuccess }) => {
     } catch (error) {
       alert("Upload failed!");
     } finally {
-      setUploading(false);
+      setIsUploading(false);
     }
   };
 
@@ -51,8 +51,8 @@ const ProfileUpload = ({ onUploadSuccess }) => {
     <div className="profile-upload">
       
       <input type="file" onChange={handleFileChange} />
-      <button className="uploadPfp"onClick={handleUpload} disabled={uploading}>
-        {uploading ?  <CircularProgress size="15px" color="white" /> : "Upload Profile Picture"}
+      <button className="uploadPfp"onClick={handleUpload} disabled={isUploading}>
+        {isUploading ?  <CircularProgress size="15px" color="white" /> : "Upload Profile Picture"}
       </button>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import "../styles/ProfileUpload.css";
-
+import CircularProgress from '@mui/material/CircularProgress';
 const ProfileUpload = ({ onUploadSuccess }) => {
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -52,7 +52,7 @@ const ProfileUpload = ({ onUploadSuccess }) => {
       
       <input type="file" onChange={handleFileChange} />
       <button className="uploadPfp"onClick={handleUpload} disabled={uploading}>
-        {uploading ? "Uploading..." : "Upload Profile Picture"}
+        {uploading ?  <CircularProgress size="15px" color="white" /> : "Upload Profile Picture"}
       </button>
     </div>
   );

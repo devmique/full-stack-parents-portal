@@ -14,12 +14,13 @@
 }
 
 .uploadPfp {
-padding: 10px;
+    font-size: 12px;
+    padding: 13px;
     width: 70%;
     background-color: transparent;
     border: 3px solid rgba(30, 99, 219, 0.872);
     color: rgba(17, 81, 191, 0.872);
-    border-radius: zpx;
+    border-radius: 30px;
     transition: 0.8s;
 }
 
@@ -27,3 +28,11 @@ padding: 10px;
 color: white;
 background-color: rgba(17, 81, 191, 0.872);
 }
+
+/* Mobile screens */
+@media screen and (max-width: 768px) {
+.uploadPfp {
+    width: 100%;
+}
+}
+

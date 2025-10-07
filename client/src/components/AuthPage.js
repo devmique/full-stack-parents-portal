@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom"; 
 import "../styles/AuthPage.css"; 
 import "@fortawesome/fontawesome-free/css/all.min.css";
-
+import CircularProgress from '@mui/material/CircularProgress';
 import Logo from "../assets/logo.png";
 
 
@@ -62,8 +62,6 @@ const AuthPage = () => {
     sessionStorage.setItem("token", token);
     sessionStorage.setItem("user", JSON.stringify({id, name, role, email, contactNumber, profilePic: profilePic || "/default-profile.png" }));
 
-    console.log(" Stored User in sessionStorage:", sessionStorage.getItem("user"));
-
     //  Redirect based on role
     if (role === "admin") {
       navigate("/dashboard/admin");
@@ -118,9 +116,26 @@ const AuthPage = () => {
           </div>
 
           {/* Submit Button */}
-          <button className="submit" type="submit" disabled={loading}>
-            <i className={isLogin ? "fas fa-sign-in-alt" : "fas fa-user-plus"}></i> {isLogin ? loading? "Logging in...":"Login" : loading? "Registering...": "Register"}
-          </button>
+         <button className="submit" type="submit" disabled={loading}>
+  {isLogin ? (
+    loading ? (
+      <CircularProgress size="16px" color="white" />
+    ) : (
+      <>
+        <i className="fas fa-sign-in-alt"></i> Login
+      </>
+    )
+  ) : (
+    loading ? (
+       <CircularProgress size="16px" color="white" />
+    ) : (
+      <>
+        <i className="fas fa-user-plus"></i> Register
+      </>
+    )
+  )}
+</button>
+
         </form>
 
         {isLogin ? (

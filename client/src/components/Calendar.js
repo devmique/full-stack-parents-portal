@@ -6,7 +6,6 @@ import axios from "axios";
 import '../styles/Calendar.css'
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
-axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 
 const CalendarPage = () => {
   const [studentlist, setStudentList] = useState(null);
@@ -17,7 +16,11 @@ const CalendarPage = () => {
  useEffect(() => {
   const fetchEvents = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/calendar");
+      const res = await axios.get("http://localhost:5000/api/calendar",{
+         headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`
+        }}
+      );
       setEvents(
         res.data.map((event) => ({
           id: event.id,
@@ -43,6 +46,10 @@ const CalendarPage = () => {
       const res = await axios.post(
         "http://localhost:5000/api/calendar",
         { title,start: arg.dateStr },
+        {
+         headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`
+        }}
       );
 
       setEvents((prev) => [
@@ -65,7 +72,10 @@ const CalendarPage = () => {
 
   try {
     await axios.delete(`http://localhost:5000/api/calendar/${info.event.id}`
-    
+    ,{
+         headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`
+        }}
     );
 
     // Remove it from calendar UI immediately
@@ -81,7 +91,12 @@ const CalendarPage = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/studentlist');
+        const res = await axios.get('http://localhost:5000/api/studentlist'
+          ,{
+         headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`
+        }}
+        );
         setStudentList(res.data);
       } catch (err) {
         console.error('Error fetching student list:', err);
@@ -94,7 +109,12 @@ const CalendarPage = () => {
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/subjectlist');
+        const res = await axios.get('http://localhost:5000/api/subjectlist'
+          ,{
+         headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`
+        }}
+        );
         setSubjectList(res.data);
       } catch (err) {
         console.error('Error fetching subject list:', err);

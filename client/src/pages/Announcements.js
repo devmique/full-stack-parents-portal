@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "../styles/Announcements.css"
-axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const Announcements = () => {
+  const token = sessionStorage.getItem("token");
   const [announcements, setAnnouncements] = useState([]);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -16,7 +16,12 @@ const Announcements = () => {
 
   const fetchAnnouncements = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/announcements');
+      const res = await axios.get('http://localhost:5000/api/announcements' 
+          ,{
+         headers: {
+          Authorization: `Bearer ${token}`
+        }}
+      );
       setAnnouncements(res.data);
     } catch (err) {
       console.error(err);
@@ -33,7 +38,9 @@ const Announcements = () => {
     return;
   }
     try {
-      await axios.post('http://localhost:5000/api/announcements', { title, content });
+      await axios.post('http://localhost:5000/api/announcements', { title, content},{
+          headers: {authorization: `Bearer ${token}` }
+       });
       setTitle('');
       setContent('');
       fetchAnnouncements();
@@ -44,7 +51,12 @@ const Announcements = () => {
 
 const handleDelete = async (id) => {
   try {
-    await axios.delete(`http://localhost:5000/api/announcements/${id}`);
+    await axios.delete(`http://localhost:5000/api/announcements/${id}`
+        ,{
+         headers: {
+          Authorization: `Bearer ${token}`
+        }}
+    );
     fetchAnnouncements();
   } catch (err) {
     console.error('Delete failed:', err);

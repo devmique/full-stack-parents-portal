@@ -11,8 +11,6 @@ import MarkunreadOutlinedIcon from '@mui/icons-material/MarkunreadOutlined';
 import "../styles/DashboardHeader.css";
 import axios from "axios"
 import Logo from "../assets/logo.png"; 
-axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
-
 const DashboardHeader = () => {
   const [openMessageNotif, setOpenMessageNotif] = useState(false);
   const [messageNotifs, setMessageNotifs] = useState([]);
@@ -58,9 +56,12 @@ const homePath = user?.role === "admin" ? "/dashboard/admin" : "/dashboard/paren
     sessionStorage.setItem("notifications", JSON.stringify(readNotifs));
     setNotifications(readNotifs);
     setUnreadCount(0);
-     await axios.put(`http://localhost:5000/api/notifications/mark-all-read`, {
-      studentId: user.id,
-    });
+     await axios.put(`http://localhost:5000/api/notifications/mark-all-read`, 
+     {studentId: user.id},
+         { headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`
+        } }
+    );
   };
 
   const loadNotifications = () => {
@@ -81,6 +82,8 @@ useEffect(() => {
     try {
       const res = await axios.get("http://localhost:5000/api/notifications" , {
         params: user.role !== 'admin' ? { student_id: user.id } : {},
+       headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+
       });
       const data = await res.data;
       setNotifications(data);
@@ -111,7 +114,12 @@ const toggleMessageNotifDropdown = () => {
 
   const fetchMessageNotifs = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/messagenotif?userId=${user.id}`);
+      const res = await axios.get(`http://localhost:5000/api/messagenotif?userId=${user.id}`
+          ,{
+         headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`
+        }}
+      );
       const data = await res.data;
       setMessageNotifs(data);
       const unreadMessages = data.filter((msg) => !msg.read_status);
@@ -119,7 +127,7 @@ const toggleMessageNotifDropdown = () => {
 
   
       if (newUnreadCount !== unreadMsgCount) {
-  setUnreadMsgCount(newUnreadCount);
+     setUnreadMsgCount(newUnreadCount);
 }
 
     } catch (err) {
@@ -136,9 +144,10 @@ const toggleMessageNotifDropdown = () => {
 const markAllMessagesAsRead = async () => {
   try {
     // Send request to mark all messages as read in the database
-    await axios.put(`http://localhost:5000/api/messagenotif/mark-all-read`, {
-      userId: user.id,
-    });
+    await axios.put(`http://localhost:5000/api/messagenotif/mark-all-read`, 
+      {userId: user.id},
+     { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }}
+    );
 
     // Update local state
     const updatedMessages = messageNotifs.map((msg) => ({
@@ -282,7 +291,7 @@ const handleLogout = () => {
             <span className="user-name">{name || "User"}</span>
             <small className="user-role">{role || "Unknown Role"}</small>
           </div>
-        </div>
+       
 
 
       {/* Dropdown Menu */}
@@ -301,7 +310,7 @@ const handleLogout = () => {
             </li>
           </ul>
         </div>
-     
+      </div>
 
       </div>
 

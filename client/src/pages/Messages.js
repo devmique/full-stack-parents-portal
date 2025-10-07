@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "../styles/Messages.css"
 import SendIcon from '@mui/icons-material/Send'
-axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const Messages = () => {
   const user = JSON.parse(sessionStorage.getItem("user"));
-
+  const token = sessionStorage.getItem("token");
 
   const [contacts, setContacts] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
@@ -17,7 +16,8 @@ const Messages = () => {
       params: {
         userId: user.id,
         role: user.role
-      }
+      },
+      headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => setContacts(res.data))
     .catch(err => console.error(err));
@@ -30,7 +30,8 @@ const Messages = () => {
       params: {
         sender_id: user.id,
         receiver_id: contact.id
-      }
+      },
+      headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => setConversation(res.data))
     .catch(err => console.error(err));
@@ -43,7 +44,8 @@ useEffect(() => {
       params: {
         sender_id: user.id,
         receiver_id: selectedContact.id
-      }
+      },
+      headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => setConversation(res.data))
     .catch(err => console.error(err));
@@ -59,7 +61,9 @@ useEffect(() => {
       sender_id: user.id,
       receiver_id: selectedContact.id,
       message: newMessage
-    })
+    },
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
     .then(() => {
       setConversation([...conversation, {
         sender_id: user.id,

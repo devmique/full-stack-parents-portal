@@ -4,8 +4,8 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import "../styles/Grades.css"
-axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const Grades = () => {
+  const token = sessionStorage.getItem("token");
   const user = JSON.parse(sessionStorage.getItem("user"));
   const [grades, setGrades] = useState([]);
   const [newGrade, setNewGrade] = useState({
@@ -23,6 +23,7 @@ const Grades = () => {
     axios
       .get('http://localhost:5000/api/grades', {
         params: user.role !== 'admin' ? { student_id: user.id } : {},
+        headers: { Authorization: `Bearer ${token}` }
       })
       .then(res => setGrades(res.data))
       .catch(err => console.error(err));
@@ -63,7 +64,9 @@ const Grades = () => {
   }
 
     axios
-      .post('http://localhost:5000/api/grades', newGrade)
+      .post('http://localhost:5000/api/grades', newGrade,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
       .then(() => {
         fetchGrades();
         setNewGrade({
@@ -96,7 +99,9 @@ const Grades = () => {
  
     if (editGrade) {
       axios
-        .put(`http://localhost:5000/api/grades/${editGrade.id}`, newGrade)
+        .put(`http://localhost:5000/api/grades/${editGrade.id}`, newGrade,
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
         .then(() => {
           fetchGrades();
           setEditGrade(null);
@@ -116,7 +121,9 @@ const Grades = () => {
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:5000/api/grades/${id}`)
+      .delete(`http://localhost:5000/api/grades/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
       .then(() => fetchGrades())
       .catch(err => console.error(err));
   };

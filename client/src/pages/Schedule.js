@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "../styles/Schedule.css"
-axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
 const Schedule = () => {
+  const token = sessionStorage.getItem("token");
   const user = JSON.parse(sessionStorage.getItem("user"));
   const [schedule, setSchedule] = useState([]);
   const [newRow, setNewRow] = useState({
@@ -27,7 +27,9 @@ const Schedule = () => {
 
   const fetchSchedule = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/schedule');
+      const res = await axios.get('http://localhost:5000/api/schedule',{
+          headers: { Authorization: `Bearer ${token}` }
+      });
       const formatted = res.data.map(row => ({
         ...row,
         monday: safeParse(row.monday),
@@ -52,7 +54,9 @@ const Schedule = () => {
 
 
     try {
-      await axios.post('http://localhost:5000/api/schedule', newRow);
+      await axios.post('http://localhost:5000/api/schedule', newRow,{
+          headers: { Authorization: `Bearer ${token}` }
+      });
       fetchSchedule();
       setNewRow({
         time_slot: '',
@@ -65,7 +69,9 @@ const Schedule = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/schedule/${id}`);
+      await axios.delete(`http://localhost:5000/api/schedule/${id}`,{
+          headers: { Authorization: `Bearer ${token}` }
+      });
       fetchSchedule();
     } catch (err) {
       console.error(err);
@@ -103,18 +109,21 @@ const Schedule = () => {
                   type="text"
                   placeholder="Subject Code"
                   className="form-input"
+                  value={newRow[day]?.subject_code || ""}
                   onChange={(e) => handleCellChange(day, 'subject_code', e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="Subject Title"
                   className="form-input"
+                  value={newRow[day]?.subject_title || ""}
                   onChange={(e) => handleCellChange(day, 'subject_title', e.target.value)}
                 />
                 <input
                   type="text"
                   placeholder="Professor"
                   className="form-input"
+                  value={newRow[day]?.professor || ""}
                   onChange={(e) => handleCellChange(day, 'professor', e.target.value)}
                 />
               </div>

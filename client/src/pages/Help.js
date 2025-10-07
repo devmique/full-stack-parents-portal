@@ -3,14 +3,18 @@ import axios from "axios";
 import "../styles/Help.css"; 
 import { useNavigate } from "react-router-dom";
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
-axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const Help = () => {
   const [issue, setIssue] = useState("");
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
    const navigate = useNavigate();
     
-     const goBackToDashboard = () => {
+    
+  // Get user from sessionStorage
+  const user = JSON.parse(sessionStorage.getItem("user")) || {};
+  const userName = user.name || "Unknown";
+  
+  const goBackToDashboard = () => {
     
         if (user?.role === "admin") {
       navigate("/dashboard/admin");
@@ -18,10 +22,6 @@ const Help = () => {
       navigate("/dashboard/parent");
     }
   };
-  // Get user from sessionStorage
-  const user = JSON.parse(sessionStorage.getItem("user")) || {};
-  const userName = user.name || "Unknown";
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -31,7 +31,9 @@ const Help = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/help", { userName, issue });
+      const response = await axios.post("http://localhost:5000/help", { userName, issue },
+        { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` } }
+      );
 
       if (response.data.success) {
         setMessage("Your issue has been submitted successfully.");

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/Attendance.css'; 
-axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const Attendance = () => {
   const today =new Date().toISOString().split("T")[0];
   const user = JSON.parse(sessionStorage.getItem('user'));
+  const token = sessionStorage.getItem("token");
   const [onEdit, setOnEdit] = useState(false);
   const [attendance, setAttendance] = useState([]);
   const [newRecord, setNewRecord] = useState({
@@ -19,16 +19,18 @@ const Attendance = () => {
     fetchAttendance();
   }, []);
 
-  const fetchAttendance = async () => {
-    try {
-      const res = await axios.get('http://localhost:5000/api/attendance', {
-        params: user.role !== 'admin' ? { student_id: user.id } : {},
-      });
-      setAttendance(res.data);
-    } catch (err) {
-      console.error('Error fetching attendance:', err);
-    }
-  };
+const fetchAttendance = async () => {
+  try {
+    const res = await axios.get('http://localhost:5000/api/attendance', {
+      params: user.role !== 'admin' ? { student_id: user.id } : {},
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    setAttendance(res.data);
+  } catch (err) {
+    console.error('Error fetching attendance:', err);
+  }
+};
+
 
   const handleAdd = async () => {
      if (!newRecord.student_id.trim()) {
@@ -51,6 +53,8 @@ const Attendance = () => {
       await axios.post('http://localhost:5000/api/attendance', {
         ...newRecord,
         day_of_week: dayOfWeek,
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
       });
       fetchAttendance();
       setNewRecord({ student_id: '', date: today, status: '' });
@@ -61,7 +65,9 @@ const Attendance = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/attendance/${id}`);
+      await axios.delete(`http://localhost:5000/api/attendance/${id}`,{
+        headers: { Authorization: `Bearer ${token}` }
+      });
       fetchAttendance();
     } catch (err) {
       console.error('Delete Error:', err);
@@ -78,7 +84,9 @@ const Attendance = () => {
     try {
       const student_id = user.id;
   
-      await axios.put(`http://localhost:5000/api/attendance/${id}`, { status: editStatus, student_id });
+      await axios.put(`http://localhost:5000/api/attendance/${id}`, { status: editStatus, student_id },{
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setEditRecordId(null);
       setEditStatus('');
       setOnEdit(false);

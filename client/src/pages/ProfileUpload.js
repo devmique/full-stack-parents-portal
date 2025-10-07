@@ -22,7 +22,7 @@ const ProfileUpload = ({ onUploadSuccess }) => {
       const response = await axios.post("http://localhost:5000/upload-profile-pic", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-       
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         },
       });
 
@@ -52,7 +52,7 @@ const ProfileUpload = ({ onUploadSuccess }) => {
       
       <input type="file" onChange={handleFileChange} />
       <button className="uploadPfp"onClick={handleUpload} disabled={isUploading}>
-        {isUploading ?  <CircularProgress size="15px" color="white" /> : "Upload Profile Picture"}
+        {isUploading ?  <CircularProgress size="13px" color="white" /> : "Upload Profile Picture"}
       </button>
     </div>
   );

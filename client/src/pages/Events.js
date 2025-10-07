@@ -9,7 +9,11 @@ const [events, setEvents] = useState([]);
    useEffect(() => {
   const fetchEvents = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/calendar"
+      const res = await axios.get("http://localhost:5000/api/calendar",{
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`
+        }
+      }
 
       );
       setEvents(
@@ -31,7 +35,7 @@ const [events, setEvents] = useState([]);
     <div className="events-container">
       <h2>Agenda</h2>
       {events.length === 0 ? (
-        <p>No events listed.</p>
+        <p style={{fontSize: "20px"}}>No events listed.</p>
       ) : (
 
             <table className="events-table">

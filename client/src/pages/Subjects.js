@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import "../styles/Subjects.css"
-axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const Subjects = () => {
+  const token = sessionStorage.getItem("token");
   const user = JSON.parse(sessionStorage.getItem("user")) || {};
   const [subjects, setSubjects] = useState([]);
   const [newSubject, setNewSubject] = useState({ subject_code: '', subject_title: '', term:'', units:'' });
@@ -13,7 +13,9 @@ const Subjects = () => {
 
   const fetchSubjects = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/subjects');
+      const res = await axios.get('http://localhost:5000/api/subjects',{
+          headers: { Authorization: `Bearer ${token}` }
+      });
       setSubjects(res.data);
     } catch (err) {
       console.error(err);
@@ -27,7 +29,9 @@ const Subjects = () => {
       return;}
 
     try {
-      await axios.post('http://localhost:5000/api/subjects', newSubject);
+      await axios.post('http://localhost:5000/api/subjects', newSubject,{
+          headers: { Authorization: `Bearer ${token}` }
+      });
       fetchSubjects();
       setNewSubject({ subject_code: '', subject_title: '', term: '', units: '' });
     } catch (err) {
@@ -37,7 +41,9 @@ const Subjects = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/subjects/${id}`);
+      await axios.delete(`http://localhost:5000/api/subjects/${id}`,{
+          headers: { Authorization: `Bearer ${token}` }
+      });
       fetchSubjects();
     } catch (err) {
       console.error(err);

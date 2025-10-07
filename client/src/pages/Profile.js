@@ -7,7 +7,6 @@ import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import CallEndRoundedIcon from '@mui/icons-material/CallEndRounded';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
-axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const Profile = () => {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
@@ -34,6 +33,11 @@ const Profile = () => {
       const response = await axios.post(
         "http://localhost:5000/upload-profile-pic",
         formData,
+        { headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       
       );
 

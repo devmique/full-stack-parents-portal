@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+
 import axios from 'axios';
 import "../styles/Announcements.css"
 const Announcements = () => {
@@ -77,11 +80,11 @@ const handleDelete = async (id) => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-          <textarea
+          <ReactQuill
+            theme="snow"
             placeholder="Write your announcement..."
-           
             value={content}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={setContent}
           />
           <button
             
@@ -100,7 +103,12 @@ const handleDelete = async (id) => {
           <div key={a.id} className="announcement-card">
             <div className="announcement-date">{new Date(a.date_posted).toLocaleString()}</div>
             <h2 className="announcement-title">{a.title}</h2>
-            <p className="announcement-content">{a.content}</p>
+            
+             {/* ✅ Render formatted HTML safely */}
+           <div
+             className="announcement-content"
+             dangerouslySetInnerHTML={{ __html: a.content }}
+           ></div>
             {isAdmin && (
               <button
                className="delete-btn"

@@ -35,8 +35,8 @@ router.post('/',authorizeRole("admin"),(req, res) => {
 
   db.query(sql, [student_id, school_year, term, subject_code, subject_title, grade, units], (err, result) => {
     if (err) return res.status(500).json({ error: "Database error" });
-
-    const message = `Admin added a new grade: ${subject_title}`;
+    const timestamp = new Date().toLocaleString();
+    const message = `Admin added a new grade: ${subject_title}. ${timestamp}`;
    db.query("INSERT INTO notifications (user_id, message) VALUES (?, ?)", [student_id, message]);
 
 
@@ -60,8 +60,8 @@ router.put('/:id',authorizeRole("admin"), (req, res) => {
 
   db.query(sql, [school_year, term, subject_code, subject_title, grade, units, gradeId], (err) => {
     if (err) return res.status(500).json({ error: "Database error" });
-
-    const message = `Admin updated a grade: ${subject_title}`;
+      const timestamp = new Date().toLocaleString();
+    const message = `Admin updated a grade: ${subject_title}. ${timestamp}`;
 db.query("INSERT INTO notifications (user_id, message) VALUES (?, ?)", [student_id, message]);
 
 

@@ -24,7 +24,8 @@ router.post('/', authorizeRole("admin"), (req, res) => {
     (err, result) => {
       if (err) return res.status(500).json({ error: 'Error creating announcement' });
        const type = 'general'
-       const message = ` Admin posted an announcement`;
+       const timestamp = new Date().toLocaleString();
+       const message = ` Admin posted an announcement. ${timestamp} `;
        db.query("INSERT INTO notifications (message, type) VALUES (?,?)", [message, type]);
 
       res.json({ message: 'Announcement created successfully' });

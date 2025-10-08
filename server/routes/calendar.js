@@ -34,7 +34,8 @@ router.post("/", authorizeRole("admin"),(req, res) => {
 
     res.json({ id: result.insertId, title, date });
      const type = 'general'
-     const message = ` Admin posted an event`;
+         const timestamp = new Date().toLocaleString();
+     const message = ` Admin posted an event. ${timestamp} `;
     db.query("INSERT INTO notifications (message, type) VALUES (?,?)", [message, type]);
 
   });

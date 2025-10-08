@@ -19,7 +19,8 @@ router.post('/', authorizeRole("admin"),(req, res) => {
     res.json({ message: "Subject added successfully", id: result.insertId });
    const type = 'general'
   // Add notification
-    const message = ` Admin added a new subject: ${subject_title} (${subject_code})`;
+      const timestamp = new Date().toLocaleString();
+    const message = ` Admin added a new subject: ${subject_title} (${subject_code}). ${timestamp}`;
     db.query("INSERT INTO notifications (message, type) VALUES (?,?)", [message, type]);
 
   });

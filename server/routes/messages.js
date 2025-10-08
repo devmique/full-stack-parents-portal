@@ -58,7 +58,7 @@ router.post('/', (req, res) => {
     
       // Add notification
      const timestamp = new Date().toLocaleString();
-    const notifMessage = ` You received a message from ${senderName} (${timestamp})`;
+    const notifMessage = ` You received a message from ${senderName}. ${timestamp}`;
       const messagenotifQuery = `
         INSERT INTO messagenotif (user_id, message)
         VALUES (?, ?)

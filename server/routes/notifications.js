@@ -7,8 +7,8 @@ router.get('/', (req, res) => {
   const { student_id } = req.query;
 
   const query = student_id
-    ? `SELECT * FROM notifications WHERE user_id = ? OR type = 'general' ORDER BY created_at DESC`
-    : `SELECT * FROM notifications ORDER BY created_at DESC`;
+    ? `SELECT * FROM notifications WHERE user_id = ? OR type = 'general' ORDER BY created_at ASC`
+    : `SELECT * FROM notifications ORDER BY created_at ASC`;
 
   db.query(query, student_id ? [student_id] : [], (err, results) => {
     if (err) return res.status(500).json({ error: "Database error" });

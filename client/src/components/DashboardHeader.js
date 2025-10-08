@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaSearch } from "react-icons/fa";
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -22,7 +22,11 @@ const DashboardHeader = () => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [unreadMsgCount, setUnreadMsgCount] = useState(0);
-  
+  const profileRef = useRef(null);
+  const notifRef = useRef(null);
+  const msgNotifRef = useRef(null);
+
+
      // Get user data from session storage
   const user = JSON.parse(sessionStorage.getItem("user")) || {};
   const { name, role, profilePic } = user;
@@ -178,6 +182,27 @@ const handleLogout = () => {
   };
 
   
+ useEffect(() => {
+  const handleClickOutside = (event) => {
+    // Close profile dropdown
+    if (profileRef.current && !profileRef.current.contains(event.target)) {
+      setOpen(false);
+    }
+    // Close notification dropdown
+    if (notifRef.current && !notifRef.current.contains(event.target)) {
+      setOpenNotif(false);
+    }
+    // Close message notification dropdown
+    if (msgNotifRef.current && !msgNotifRef.current.contains(event.target)) {
+      setOpenMessageNotif(false);
+    }
+  };
+
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
 
   return (
     <div className="dashboard-header">
@@ -233,8 +258,8 @@ const handleLogout = () => {
       {/* Notifications & Profile */}
      
         {/* Notification Button */}
-       <div className="message-notif-section" onClick={toggleMessageNotifDropdown} style={{ position: "relative" }}>
-  <button className="messageNotif-btn">
+       <div ref={msgNotifRef} className="message-notif-section" onClick={toggleMessageNotifDropdown} style={{ position: "relative" }}>
+       <button className="messageNotif-btn">
     { unreadMsgCount >0 ?<MarkEmailUnreadOutlinedIcon/>:  <MarkunreadOutlinedIcon/>}
           </button>
           
@@ -248,7 +273,7 @@ const handleLogout = () => {
         messageNotifs
           .slice()
           .reverse()
-          .slice(0, 10)
+          .slice(0, 100)
           .map((msg, index) => (
             <li key={index} style={{ padding: "5px 10px", borderBottom: "1px solid #eee" }}>
               {msg.message}
@@ -259,7 +284,7 @@ const handleLogout = () => {
   </div>
 </div>
 
-        <div className="notif-section" onClick={toggleNotifDropdown} style={{ position: "relative" }}>
+        <div ref={notifRef} className="notif-section" onClick={toggleNotifDropdown} style={{ position: "relative" }}>
           <button className="notification-btn">
            {unreadCount>0? <NotificationsActiveOutlinedIcon/>: <NotificationsNoneIcon />} 
             </button>
@@ -273,7 +298,7 @@ const handleLogout = () => {
               notifications
                 .slice()
                 .reverse()
-                .slice(0, 10)
+                .slice(0, 100)
                 .map((notif, index) => (
                   <li key={index} style={{ padding: "5px 10px", borderBottom: "1px solid #eee" }}>
                     {notif.message}
@@ -285,7 +310,7 @@ const handleLogout = () => {
         </div>
 
         {/* Profile Section */}
-        <div className="profile-section" onClick={() => setOpen(!open)} style={{position:"relative"}}>
+        <div ref={profileRef} className="profile-section" onClick={() => setOpen(!open)} style={{position:"relative"}}>
           <img src={profilePic || "/default-profile.png"} alt="Profile" className="profile-pic" />
           <div className="user-info">
             <span className="user-name">{name || "User"}</span>

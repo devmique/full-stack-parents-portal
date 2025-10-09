@@ -18,10 +18,21 @@ const notificationRoutes = require('./routes/notifications');
 const messagenotifRoutes = require('./routes/messagenotif');
 const studentlist = require("./routes/studentlist")
 const subjectlist = require("./routes/subjectlist")
+const http = require("http")
+const { Server } = require("socket.io");
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000", // your frontend URL
+    methods: ["GET", "POST"],
+  },
+});
 app.use(express.json());
 app.use(cors());
+//connect message route
+app.use('/api/messages',verifyToken, messageRoutes)
 
 // Database Connection
 const db = mysql.createConnection({
@@ -51,8 +62,7 @@ app.use('/api/calendar',verifyToken, calendarRoutes);
 //announcements route 
 app.use('/api/announcements',verifyToken, announcementRoutes)
 
-//connect message route
-app.use('/api/messages',verifyToken, messageRoutes)
+
 
 
 //subjects route
@@ -71,6 +81,71 @@ app.use('/api/messagenotif',verifyToken, messagenotifRoutes);
 app.use('/api/studentlist',verifyToken, studentlist)
 
 app.use('/api/subjectlist',verifyToken, subjectlist)
+
+
+//Socket .io setup
+const users = new Map(); //store connected users
+
+io.on("connection", (socket)=>{
+    console.log("User connected:", socket.id);
+
+    //When user joins
+    socket.on("register", (userId)=>{
+        users.set(userId, socket.id);
+        console.log(`User ${userId} connected as ${socket.id}`)
+    })
+
+    //handle sending message
+    socket.on("sendMessage", ({sender_id, receiver_id, message})=>{
+        const receiverSocketId = users.get(receiver_id);
+
+        const messageQuery =`INSERT INTO messages (sender_id, receiver_id, message, timestamp)
+        VALUES(?, ?, ?, NOW())`;
+        db.query(messageQuery, [sender_id, receiver_id, message], (err)=>{
+            if(err) return console.error("Message DB error", err);
+
+      // Save notification
+      db.query("SELECT name FROM users WHERE id=?", [sender_id], (err, resName) => {
+        if (err) return console.error(" Name fetch error:", err);
+        const senderName = resName[0]?.name || "Someone";
+        const notifMsg = `You received a message from ${senderName}. ${new Date().toLocaleString()}`;
+        db.query(
+          "INSERT INTO messagenotif (user_id, message) VALUES (?, ?)",
+          [receiver_id, notifMsg],
+          (err) => {
+            if (err) console.error(" Failed to save notification:", err);
+          }
+        );
+      });
+
+      //send to receiver in real time
+      const msgData = {
+        sender_id,
+        receiver_id,
+        message,
+        timeStamp: new Date()
+      };
+
+      if(receiverSocketId){
+        io.to(receiverSocketId).emit("receiverMessage", msgData)
+      }
+        })
+    })
+      socket.on("disconnect", () => {
+    console.log("Socket disconnected:", socket.id);
+    for (let [userId, id] of users.entries()) {
+      if (id === socket.id) users.delete(userId);
+    }
+  });
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", socket.id);
+    for (let [userId, id] of users.entries()) {
+      if (id === socket.id) users.delete(userId);
+    }
+  });
+})
+
+
 
 // Configure Multer for Profile Picture Uploads
 const storage = multer.diskStorage({
@@ -234,7 +309,7 @@ app.post("/login", (req, res) => {
 
 //  Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(` Server running on port ${PORT}`);
 });
 

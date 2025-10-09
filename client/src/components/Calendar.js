@@ -159,6 +159,7 @@ const CalendarPage = () => {
         dateClick={handleDateClick}
         eventClick={handleEventClick}
         height="auto"
+        displayEventTime={false}
             />
           </div>
           </div>

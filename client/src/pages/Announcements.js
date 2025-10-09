@@ -85,6 +85,7 @@ const handleDelete = async (id) => {
             placeholder="Write your announcement..."
             value={content}
             onChange={setContent}
+            style={{backgroundColor:"white"}}
           />
           <button
             

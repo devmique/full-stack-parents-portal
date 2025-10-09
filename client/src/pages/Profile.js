@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import ProfileUpload from "./ProfileUpload";
 import "../styles/Profile.css";
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
@@ -23,26 +22,9 @@ const Profile = () => {
 
   // Profile Upload Handler
   const handleUploadSuccess = async (newProfilePic) => {
-    if (!user) return;
+   
 
-    try {
-      const token = sessionStorage.getItem("token");
-      const formData = new FormData();
-      formData.append("profilePic", newProfilePic);
-
-      const response = await axios.post(
-        "http://localhost:5000/upload-profile-pic",
-        formData,
-        { headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      
-      );
-
-      if (response.data.profilePic) {
-        const updatedUser = { ...user, profilePic: response.data.profilePic };
+        const updatedUser = { ...user, profilePic: newProfilePic };
         
         // Update sessionStorage
         sessionStorage.setItem("user", JSON.stringify(updatedUser));
@@ -50,10 +32,7 @@ const Profile = () => {
         //  Force re-render to display new profile picture
         setUser(updatedUser);
       }
-    } catch (error) {
-      console.error("Profile picture upload failed", error);
-    }
-  };
+   
 
   const goBackToDashboard = () => {
     if (user?.role === "admin") {

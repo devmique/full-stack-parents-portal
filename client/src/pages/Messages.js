@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
+import io from "socket.io-client"
 import "../styles/Messages.css"
 import SendIcon from '@mui/icons-material/Send'
+
+const socket =io("http://localhost:5000") //connect to backend socket
+
 const Messages = () => {
   const user = JSON.parse(sessionStorage.getItem("user"));
   const token = sessionStorage.getItem("token");
@@ -10,7 +14,22 @@ const Messages = () => {
   const [selectedContact, setSelectedContact] = useState(null);
   const [conversation, setConversation] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const chatEndRef = useRef(null); // reference to bottom of chat
+   
 
+    //  Auto scroll to bottom when conversation updates
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [conversation]);
+
+  // Register user socket connection
+  useEffect(() => {
+    socket.emit("register", user.id);
+  }, [user.id]);
+
+  //fetch contact list
   useEffect(() => {
     axios.get('http://localhost:5000/api/messages/contacts', {
       params: {
@@ -21,7 +40,7 @@ const Messages = () => {
     })
     .then(res => setContacts(res.data))
     .catch(err => console.error(err));
-  }, [user]);
+  }, [user, token]);
 
   const loadConversation = (contact) => {
     setSelectedContact(contact);
@@ -36,46 +55,43 @@ const Messages = () => {
     .then(res => setConversation(res.data))
     .catch(err => console.error(err));
   };
-useEffect(() => {
-  if (!selectedContact) return;
 
-  const interval = setInterval(() => {
-    axios.get('http://localhost:5000/api/messages/conversation', {
-      params: {
-        sender_id: user.id,
-        receiver_id: selectedContact.id
-      },
-      headers: { Authorization: `Bearer ${token}` }
-    })
-    .then(res => setConversation(res.data))
-    .catch(err => console.error(err));
-  }, 1000); 
+//Listen for incoming messages
+ useEffect(() => {
+ socket.on("receiveMessage", (msg)=>{
+  if(selectedContact && 
+    (msg.sender_id === selectedContact.id || msg.receiver_id === selectedContact.id
+  ) ){
+    setConversation(prev => [...prev, msg])
+  }
+ })
+      return () => {
+      socket.off("receiveMessage");
+    };
 
-  return () => clearInterval(interval); 
-}, [selectedContact, user.id]);
+ }, [selectedContact]);
 
-
+ // ✅Send message
   const sendMessage = () => {
-    if (!newMessage.trim()) return;
-    axios.post('http://localhost:5000/api/messages', {
+    if (!newMessage.trim() || !selectedContact) return;
+
+    const msgData = {
       sender_id: user.id,
       receiver_id: selectedContact.id,
-      message: newMessage
-    },
-    { headers: { Authorization: `Bearer ${token}` } }
-  )
-    .then(() => {
-      setConversation([...conversation, {
-        sender_id: user.id,
-        receiver_id: selectedContact.id,
-        message: newMessage,
-        timestamp: new Date()
-      }]);
-      setNewMessage("");
-    })
-    .catch(err => console.error(err));
-  };
+      message: newMessage,
+    };
 
+    // Send through socket (no axios)
+    socket.emit("sendMessage", msgData);
+
+    // Display instantly
+    setConversation((prev) => [
+      ...prev,
+      { ...msgData, timestamp: new Date() },
+    ]);
+
+    setNewMessage("");
+  };
   return (
     <div className="message-page">
       <div className="contacts-list">
@@ -114,6 +130,7 @@ useEffect(() => {
                  <div className="message-time">{new Date(msg.timestamp).toLocaleString()}</div>
                 </div>
               ))}
+                <div ref={chatEndRef}></div> {/* 👈 dummy div to scroll into view */}
             </div>
             <div className="chat-input">
               <input

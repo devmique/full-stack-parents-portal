@@ -123,13 +123,17 @@ io.on("connection", (socket)=>{
         sender_id,
         receiver_id,
         message,
-        timeStamp: new Date()
+        timestamp: new Date()
       };
 
-      if(receiverSocketId){
-        io.to(receiverSocketId).emit("receiverMessage", msgData)
-      }
-        })
+      // Emit to receiver
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("receiveMessage", msgData);
+    }
+
+    // Emit back to sender
+    io.to(socket.id).emit("receiveMessage", msgData);
+  });
     })
       socket.on("disconnect", () => {
     console.log("Socket disconnected:", socket.id);

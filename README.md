@@ -21,6 +21,24 @@ The **Parent’s Portal** is a full-stack school management platform designed to
 
 ---
 
+## Tech Stack
+
+### Frontend:
+
+- React.js
+- Axios (for API communication)
+
+### Backend
+- Node.js
+- Express.js
+- Multer (for profile picture uploads)
+- JSON Web Token (JWT) for authentication
+- Socket.IO (for real-time messaging)
+
+### Database
+- MySQL
+
+---
 
 ## Setup Instructions
 

@@ -31,7 +31,12 @@ const DashboardHeader = () => {
   const user = JSON.parse(sessionStorage.getItem("user")) || {};
   const { name, role, profilePic } = user;
 
-const homePath = user?.role === "admin" ? "/dashboard/admin" : "/dashboard/parent";
+const homePath =
+  user?.role === "admin"
+    ? "/dashboard/admin"
+    : user?.role === "instructor"
+    ? "/dashboard/instructor"
+    : "/dashboard/parent";
   const menuItems = [
     { name: "Home", path: homePath},
     { name: "Subjects", path: "/dashboard/subjects"},
@@ -85,7 +90,7 @@ useEffect(() => {
   const fetchNotifications = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/notifications" , {
-        params: user.role !== 'admin' ? { student_id: user.id } : {},
+        params: user.role === 'parent' ? { student_id: user.id } : {},
        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
 
       });

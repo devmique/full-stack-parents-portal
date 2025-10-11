@@ -71,7 +71,7 @@ const Messages = () => {
 
  }, [selectedContact]);
 
- // ✅Send message
+ // Send message
   const sendMessage = () => {
     if (!newMessage.trim() || !selectedContact) return;
 
@@ -83,12 +83,6 @@ const Messages = () => {
 
     // Send through socket (no axios)
     socket.emit("sendMessage", msgData);
-
-    // Display instantly
-    setConversation((prev) => [
-      ...prev,
-      { ...msgData, timestamp: new Date() },
-    ]);
 
     setNewMessage("");
   };

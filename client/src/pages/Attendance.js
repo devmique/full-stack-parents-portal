@@ -22,7 +22,7 @@ const Attendance = () => {
 const fetchAttendance = async () => {
   try {
     const res = await axios.get('http://localhost:5000/api/attendance', {
-      params: user.role !== 'admin' ? { student_id: user.id } : {},
+      params: user.role === 'parent' ? { student_id: user.id } : {},
       headers: { Authorization: `Bearer ${token}` }
     });
     setAttendance(res.data);
@@ -100,7 +100,7 @@ const fetchAttendance = async () => {
     <div className="attendance-container">
       <h2 className="attendance-title">Attendance</h2>
 
-      {user.role === 'admin' && (
+      {user.role === 'instructor' && (
         <div className="add-form">
           <input
             type="text"
@@ -134,7 +134,7 @@ const fetchAttendance = async () => {
             <th>Date</th>
             <th>Day</th>
             <th>Status</th>
-            {user.role === 'admin' && <th>Action</th>}
+            {user.role === 'instructor' && <th>Action</th>}
           </tr>
         </thead>
         <tbody>
@@ -158,7 +158,7 @@ const fetchAttendance = async () => {
                   record.status
                 )}
               </td>
-              {user.role === 'admin' && (
+              {user.role === 'instructor' && (
                 <td>
                   {editRecordId === record.id ? (
                     <>

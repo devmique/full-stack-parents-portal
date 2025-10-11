@@ -21,8 +21,11 @@ const AuthPage = () => {
     if (token && user) {
       if (user.role === "admin") {
         navigate("/dashboard/admin", { replace: true });
-      } else {
+      } else if(user?.role === "parent") {
         navigate("/dashboard/parent", { replace: true });
+      }
+      else if(user?.role === "instructor"){
+       navigate("/dashboard/instructor", { replace: true });
       }
     }
   }, [navigate]);
@@ -65,6 +68,9 @@ const AuthPage = () => {
     //  Redirect based on role
     if (role === "admin") {
       navigate("/dashboard/admin");
+    }
+    else if( role==="instructor"){
+      navigate("/dashboard/instructor");
     } else {
       navigate("/dashboard/parent");
     }

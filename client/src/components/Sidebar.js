@@ -49,7 +49,11 @@ const Sidebar = () => {
   
     
 
-   const homePath = user?.role === "admin" ? "/dashboard/admin" : "/dashboard/parent";
+   const homePath = user?.role === "admin"
+    ? "/dashboard/admin"
+    : user?.role === "instructor"
+    ? "/dashboard/instructor"
+    : "/dashboard/parent";
   return (
 <>
     {/* ✅ Toggle Button (Only Shows on Small Screens) */}
@@ -79,12 +83,16 @@ const Sidebar = () => {
          <Link to="/dashboard/schedule" className={`sidebar-item ${location.pathname === "/dashboard/schedule" ? "active" : ""}`}>
           {location.pathname === "/dashboard/schedule"? <EventNoteIcon className="icon"/>:<EventNoteOutlinedIcon className="icon" />}Schedule
         </Link>
+        {user.role!=="admin" && (
+          <>
         <Link to="/dashboard/grades"className={`sidebar-item ${location.pathname === "/dashboard/grades" ? "active" : ""}`}>
           {location.pathname==="/dashboard/grades"? <SchoolIcon className="icon"/>: <SchoolOutlinedIcon className="icon" />} Grades
         </Link>
         <Link to="/dashboard/attendance" className={`sidebar-item ${location.pathname === "/dashboard/attendance" ? "active" : ""}`}>
           <ChecklistOutlinedIcon className="icon" /> Attendance Record
         </Link>
+        </>
+        )}
         <Link to="/dashboard/announcements" className={`sidebar-item ${location.pathname === "/dashboard/announcements" ? "active" : ""}`}>
           {location.pathname==="/dashboard/announcements"? <CampaignIcon className="icon"/>: <CampaignOutlinedIcon className="icon" />} Announcements 
         </Link>

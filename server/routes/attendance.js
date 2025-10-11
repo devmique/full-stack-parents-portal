@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
 });
 
 // Add a new attendance record
-router.post('/', authorizeRole("admin"),(req, res) => {
+router.post('/', authorizeRole("instructor"),(req, res) => {
   const { student_id, date, day_of_week, status } = req.body;
 
   if (!student_id || !date || !day_of_week || !status) {
@@ -41,8 +41,7 @@ router.post('/', authorizeRole("admin"),(req, res) => {
 
     
     const formattedDate = new Date(date).toDateString();
-
-    const message = `Admin added an attendance on ${formattedDate}`;
+    const message = `Instructor added an attendance on ${formattedDate}`;
     db.query("INSERT INTO notifications (user_id, message) VALUES (?, ?)",[student_id, message]);
 
     res.json({ message: "Attendance record added successfully", id: result.insertId });
@@ -51,7 +50,7 @@ router.post('/', authorizeRole("admin"),(req, res) => {
 
 
 // Update an existing attendance record
-router.put('/:id', authorizeRole("admin"), (req, res) => {
+router.put('/:id', authorizeRole("instructor"), (req, res) => {
   const { status } = req.body;
   const attendanceId = req.params.id;
 
@@ -77,7 +76,7 @@ router.put('/:id', authorizeRole("admin"), (req, res) => {
     db.query(updateSql, [status, attendanceId], (err) => {
       if (err) return res.status(500).json({ error: "Database error" });
 
-      const message = `Admin updated an attendance on ${formattedDate}`;
+      const message = `Instructor updated an attendance on ${formattedDate}`;
      db.query("INSERT INTO notifications (user_id, message) VALUES (?, ?)", [studentId, message]);
 
 
@@ -88,7 +87,7 @@ router.put('/:id', authorizeRole("admin"), (req, res) => {
 
 
 // Delete an attendance record
-router.delete('/:id', authorizeRole("admin"), (req, res) => {
+router.delete('/:id', authorizeRole("instructor"), (req, res) => {
   const attendanceId = req.params.id;
 
   db.query("DELETE FROM attendance WHERE id = ?", [attendanceId], (err) => {

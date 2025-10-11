@@ -22,7 +22,7 @@ const Grades = () => {
   const fetchGrades = () => {
     axios
       .get('http://localhost:5000/api/grades', {
-        params: user.role !== 'admin' ? { student_id: user.id } : {},
+        params: user.role === 'parent' ? { student_id: user.id } : {},
         headers: { Authorization: `Bearer ${token}` }
       })
       .then(res => setGrades(res.data))
@@ -161,7 +161,7 @@ const Grades = () => {
         Export to PDF
       </button>
 
-      {user.role === 'admin' && (
+      {user.role === 'instructor' && (
         <div className="grade-form">
             <div className="grades-form-grid">
           {["student_id", "school_year", "term", "subject_code", "subject_title", "grade", "units"].map(field => (
@@ -194,7 +194,7 @@ const Grades = () => {
             <th>Subject Title</th>
             <th>Grade</th>
             <th>Units</th>
-            {user.role === 'admin' && <th>Action</th>}
+            {user.role === 'instructor' && <th>Action</th>}
           </tr>
         </thead>
         <tbody>
@@ -208,7 +208,7 @@ const Grades = () => {
               <td>{g.subject_title}</td>
               <td>{g.grade}</td>
               <td>{g.units}</td>
-              {user.role === 'admin' && (
+              {user.role === 'instructor' && (
                 <td>
                   <div className='action-buttons'>
                   <button onClick={() => handleEdit(g)}>Edit</button>

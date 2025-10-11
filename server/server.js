@@ -265,7 +265,7 @@ app.post("/register", (req, res) => {
     });
 });
 
-//  User Login (Admin & Parent)
+//  User Login 
 app.post("/login", (req, res) => {
     const { email, password } = req.body;
 
@@ -294,7 +294,7 @@ app.post("/login", (req, res) => {
             }
 
             //  Generate JWT token
-              const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "24h" });
+              const token = jwt.sign({ id: user.id, role: user.role, name: user.name }, process.env.JWT_SECRET, { expiresIn: "24h" });
              
             res.json({
                 message: "Login successful!",

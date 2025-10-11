@@ -18,6 +18,9 @@ const Help = () => {
     
         if (user?.role === "admin") {
       navigate("/dashboard/admin");
+    }
+    else if( user?.role==="instructor"){
+      navigate("/dashboard/instructor");
     } else {
       navigate("/dashboard/parent");
     }

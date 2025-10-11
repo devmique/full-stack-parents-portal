@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
 });
 
 // Add a new grade
-router.post('/',authorizeRole("admin"),(req, res) => {
+router.post('/',authorizeRole("instructor"),(req, res) => {
   const { student_id, school_year, term, subject_code, subject_title, grade, units } = req.body;
 
   if (!student_id || !school_year || !term || !subject_code || !subject_title || !grade || !units) {
@@ -36,7 +36,7 @@ router.post('/',authorizeRole("admin"),(req, res) => {
   db.query(sql, [student_id, school_year, term, subject_code, subject_title, grade, units], (err, result) => {
     if (err) return res.status(500).json({ error: "Database error" });
     const timestamp = new Date().toLocaleString();
-    const message = `Admin added a new grade: ${subject_title}. ${timestamp}`;
+    const message = `Instructor added a new grade: ${subject_title}. ${timestamp}`;
    db.query("INSERT INTO notifications (user_id, message) VALUES (?, ?)", [student_id, message]);
 
 
@@ -45,7 +45,7 @@ router.post('/',authorizeRole("admin"),(req, res) => {
 });
 
 // Update an existing grade
-router.put('/:id',authorizeRole("admin"), (req, res) => {
+router.put('/:id',authorizeRole("instructor"), (req, res) => {
   const { student_id, school_year, term, subject_code, subject_title, grade, units } = req.body;
   const gradeId = req.params.id;
 
@@ -61,7 +61,7 @@ router.put('/:id',authorizeRole("admin"), (req, res) => {
   db.query(sql, [school_year, term, subject_code, subject_title, grade, units, gradeId], (err) => {
     if (err) return res.status(500).json({ error: "Database error" });
       const timestamp = new Date().toLocaleString();
-    const message = `Admin updated a grade: ${subject_title}. ${timestamp}`;
+    const message = `Instructor updated a grade: ${subject_title}. ${timestamp}`;
 db.query("INSERT INTO notifications (user_id, message) VALUES (?, ?)", [student_id, message]);
 
 
@@ -70,7 +70,7 @@ db.query("INSERT INTO notifications (user_id, message) VALUES (?, ?)", [student_
 });
 
 // Delete a grade
-router.delete('/:id', authorizeRole("admin"),(req, res) => {
+router.delete('/:id', authorizeRole("instructor"),(req, res) => {
   const gradeId = req.params.id;
 
   db.query("DELETE FROM grades WHERE id = ?", [gradeId], (err) => {

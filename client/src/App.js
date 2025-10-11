@@ -14,8 +14,7 @@ import Events from "./pages/Events";
 import Settings from "./pages/Settings"; 
 import Help from "./pages/Help"; 
 import Messages from './pages/Messages';
-
-
+import InstructorDashboard from "./components/InstructorDashboard";
 
 // ✅ Protected Route Component
 const ProtectedRoute = ({ element, allowedRoles }) => {
@@ -55,26 +54,26 @@ function App() {
         <Route path="/" element={<AuthPage />} />
 
         {/* Dashboard Layout with Nested Routes */}
-        <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} allowedRoles={["admin", "parent"]} />}>
+        <Route path="/dashboard" element={<ProtectedRoute element={<Dashboard />} allowedRoles={["admin", "parent", "instructor"]} />}>
           <Route path="admin" element={<ProtectedRoute element={<AdminDashboard />} allowedRoles={["admin"]} />} />
           <Route path="parent" element={<ProtectedRoute element={<ParentDashboard />} allowedRoles={["parent"]} />} />
-         
-          <Route path="subjects" element={<ProtectedRoute element={<Subjects />} allowedRoles={["admin", "parent"]} />} />
-          <Route path="schedule" element={<ProtectedRoute element={<Schedule />} allowedRoles={["admin", "parent"]} />} />
-          <Route path="grades" element={<ProtectedRoute element={<Grades />} allowedRoles={["admin", "parent"]} />} />
+          <Route path="instructor" element={<ProtectedRoute element={<InstructorDashboard />} allowedRoles={["instructor"]} />} />
+          <Route path="subjects" element={<ProtectedRoute element={<Subjects />} allowedRoles={["admin", "parent", "instructor"]} />} />
+          <Route path="schedule" element={<ProtectedRoute element={<Schedule />} allowedRoles={["admin", "parent", "instructor"]} />} />
+          <Route path="grades" element={<ProtectedRoute element={<Grades />} allowedRoles={["instructor", "parent"]} />} />
 
-          <Route path="attendance" element={<ProtectedRoute element={<Attendance />} allowedRoles={["admin", "parent"]} />} />
-          <Route path="announcements" element={<ProtectedRoute element={<Announcements />} allowedRoles={["admin", "parent"]} />} />
-          <Route path="events" element={<ProtectedRoute element={<Events />} allowedRoles={["admin", "parent"]} />} />
-           <Route path="messages" element={<ProtectedRoute element={<Messages />} allowedRoles={["admin", "parent"]} />} />
+          <Route path="attendance" element={<ProtectedRoute element={<Attendance />} allowedRoles={["instructor", "parent"]} />} />
+          <Route path="announcements" element={<ProtectedRoute element={<Announcements />} allowedRoles={["admin", "parent", "instructor"]} />} />
+          <Route path="events" element={<ProtectedRoute element={<Events />} allowedRoles={["admin", "parent", "instructor"]} />} />
+           <Route path="messages" element={<ProtectedRoute element={<Messages />} allowedRoles={["admin", "parent", "instructor"]} />} />
         
           
 
           </Route>
         
-          <Route path="/profile" element={<ProtectedRoute element={<Profile />} allowedRoles={["admin", "parent"]} />} />
-        <Route path="/settings" element={<ProtectedRoute element={<Settings />} allowedRoles={["admin", "parent"]} />} />
-         <Route path="/help" element={<ProtectedRoute element={<Help />} allowedRoles={["admin", "parent"]} />} />
+          <Route path="/profile" element={<ProtectedRoute element={<Profile />} allowedRoles={["admin", "parent", "instructor"]} />} />
+        <Route path="/settings" element={<ProtectedRoute element={<Settings />} allowedRoles={["admin", "parent", "instructor"]} />} />
+         <Route path="/help" element={<ProtectedRoute element={<Help />} allowedRoles={["admin", "parent", "instructor"]} />} />
       </Routes>
     </Router>
   );

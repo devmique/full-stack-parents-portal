@@ -8,10 +8,10 @@ router.get('/contacts', (req, res) => {
   const role = req.query.role;
  
   let query = "";
-  if (role === 'admin') {
+  if (role === 'admin' || role === 'instructor') {
     query = "SELECT id, name, email FROM users WHERE role = 'parent'";
   } else {
-    query = "SELECT id, name, email FROM users WHERE role = 'admin'";
+    query = "SELECT id, name, email FROM users WHERE role = 'admin' OR role = 'instructor'";
   }
 
   db.query(query, (err, results) => {

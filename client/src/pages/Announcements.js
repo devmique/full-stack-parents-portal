@@ -37,7 +37,7 @@ const Announcements = () => {
     toast({ title: "Missing Field", description: "Title is required.", variant: "destructive" });
     return;
   }
-  if (!content.trim()) {
+  if (!content.trim() || content === "<p><br></p>" || content === "<p></p>") {
     toast({ title: "Missing Field", description: "Content is required.", variant: "destructive" });
     return;
   }

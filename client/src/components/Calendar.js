@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import CircularProgress from '@mui/material/CircularProgress';
 import axios from "axios";
 import '../styles/Calendar.css'
 import { useToast } from "../hooks/use-toast";
@@ -12,6 +13,7 @@ const CalendarPage = () => {
   const { toast } = useToast();
   const [studentlist, setStudentList] = useState(null);
   const [subjectlist, setSubjectList] = useState(null);
+  const [loadingCards, setLoadingCards] = useState(true);
   const [events, setEvents] = useState([]);
   const user = JSON.parse(sessionStorage.getItem("user")) || {};
 
@@ -95,65 +97,57 @@ const CalendarPage = () => {
   }
 };
 
+    // ✅ Fetch student and subject lists
   useEffect(() => {
-    const fetchStudents = async () => {
+    const fetchData = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/studentlist'
-          ,{
-         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`
-        }}
-        );
-        setStudentList(res.data);
+        const [studentsRes, subjectsRes] = await Promise.all([
+          axios.get("http://localhost:5000/api/studentlist", {
+            headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
+          }),
+          axios.get("http://localhost:5000/api/subjectlist", {
+            headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
+          }),
+        ]);
+        setStudentList(studentsRes.data);
+        setSubjectList(subjectsRes.data);
       } catch (err) {
-        console.error('Error fetching student list:', err);
+        console.error("Error fetching data:", err);
+      } finally {
+        setLoadingCards(false);
       }
     };
-    fetchStudents();
-  }, [])
-  
+    fetchData();
+  }, [studentlist, subjectlist]);
 
-  useEffect(() => {
-    const fetchSubjects = async () => {
-      try {
-        const res = await axios.get('http://localhost:5000/api/subjectlist'
-          ,{
-         headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`
-        }}
-        );
-        setSubjectList(res.data);
-      } catch (err) {
-        console.error('Error fetching subject list:', err);
-      }
-    }
-    fetchSubjects()
-    }, [])
 
   
   return (
     <div>
+      {/* ✅ Cards Section */}
       <div className="list-container">
-     {studentlist && (
-       
-        <div className="list-card studentlist-card">
-          <PeopleAltOutlinedIcon style={{color:"#93bbfaff", fontSize:"30px"}}/>
-          <h2>Students</h2>
-            <h1>{studentlist.count}</h1>
+        {loadingCards ? (
+          <>
+            <CircularProgress />
+            <CircularProgress />
+           
+          </>
+        ) : (
+          <>
+            <div className="list-card studentlist-card">
+              <PeopleAltOutlinedIcon style={{ color: "#93bbfa", fontSize: "30px" }} />
+              <h2>Students</h2>
+              <h1>{studentlist?.count || 0}</h1>
             </div>
-       
-      )}
 
-      {subjectlist && (
-     
-        <div className="list-card subjectlist-card">
-          <ListAltOutlinedIcon style={{color:"#f5ffa7ff",fontSize:"30px"}}/>
-          <h2>Subjects</h2>
-            <h1>{subjectlist.count}</h1>
+            <div className="list-card subjectlist-card">
+              <ListAltOutlinedIcon style={{ color: "#f5ffa7", fontSize: "30px" }} />
+              <h2>Subjects</h2>
+              <h1>{subjectlist?.count || 0}</h1>
             </div>
-        
+          </>
         )}
-        </div>
+      </div>
        <div className="calendar-container">
        <div className="calendar-header">
         <h2>School Calendar</h2>

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useToast } from "../hooks/use-toast";
 import axios from "axios";
 import "../styles/ProfileUpload.css";
 import CircularProgress from '@mui/material/CircularProgress';
 axios.defaults.headers.common["Authorization"] = `Bearer ${sessionStorage.getItem("token")}`;
 const ProfileUpload = ({ onUploadSuccess }) => {
+  const { toast } = useToast();
   const [file, setFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -12,7 +14,10 @@ const ProfileUpload = ({ onUploadSuccess }) => {
   };
 
   const handleUpload = async () => {
-    if (!file) return alert("Please select a file first!");
+    if (!file) {
+      toast({ title: "No File Selected", description: "Please select a file to upload.", variant: "destructive" });
+      return;
+    }
 
     setIsUploading(true);
     const formData = new FormData();
@@ -37,11 +42,12 @@ const ProfileUpload = ({ onUploadSuccess }) => {
         // ✅ Update parent component immediately
         onUploadSuccess(updatedProfilePic);
 
-        alert("Profile picture updated!");
+        toast({ title: "Success", description: "Profile picture uploaded successfully!" });
         window.location.reload();
       }
     } catch (error) {
-      alert("Upload failed!");
+      console.error("Upload error:", error);
+      toast({ title: "Upload Failed", description: error.response?.data?.message || "An error occurred during upload.", variant: "destructive" });
     } finally {
       setIsUploading(false);
     }

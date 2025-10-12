@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
+import { useToast } from "../hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import "../styles/Settings.css";
 const Settings = () => {
+    const { toast } = useToast();
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     
@@ -46,14 +48,18 @@ const Settings = () => {
 
       const data = await response.json();
       if (response.ok) {
-        alert("Account deleted successfully!");
+        toast({ title: "Account Deleted", description: "Your account has been deleted successfully." });
         sessionStorage.clear();
         navigate("/");
       } else {
-        alert(data.error || "Something went wrong!");
-      }
+      toast({
+        title: "Error",
+        description: data.message || "Failed to delete account.",
+        variant: "destructive",
+      });
+    }
     } catch (error) {
-      alert("Failed to delete account. Please try again.");
+      toast({ title: "Error", description: "There was an error deleting your account. Please try again later.", variant: "destructive" });
     }
   };
     return (

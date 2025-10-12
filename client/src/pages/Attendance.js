@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/Attendance.css'; 
+import { useToast } from "../hooks/use-toast";
 const Attendance = () => {
+ const { toast } = useToast();
   const today =new Date().toISOString().split("T")[0];
   const user = JSON.parse(sessionStorage.getItem('user'));
   const token = sessionStorage.getItem("token");
@@ -34,15 +36,15 @@ const fetchAttendance = async () => {
 
   const handleAdd = async () => {
      if (!newRecord.student_id.trim()) {
-    alert('Student ID is required');
+    toast({ title: "Missing Field", description: "Student ID is required.", variant: "destructive" }); 
     return;
   }
   if (!newRecord.date) {
-    alert('Date is required');
+   toast({ title: "Missing Field", description: "DATE is required.", variant: "destructive" }); 
     return;
   }
   if (!newRecord.status) {
-    alert('Status is required');
+  toast({ title: "Missing Field", description: "STATUS is required.", variant: "destructive" }); 
     return;
   }
 
@@ -58,6 +60,7 @@ const fetchAttendance = async () => {
       });
       fetchAttendance();
       setNewRecord({ student_id: '', date: today, status: '' });
+      toast({ title: "Success", description: "Attendance record added successfully!" });
     } catch (err) {
       console.error('Add Error:', err);
     }
@@ -69,8 +72,10 @@ const fetchAttendance = async () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchAttendance();
+      toast({ title: "Deleted", description: "Attendance record deleted successfully." });
     } catch (err) {
       console.error('Delete Error:', err);
+      toast({ title: "Error", description: "Failed to delete attendance record.", variant: "destructive" });
     }
   };
 
@@ -91,6 +96,7 @@ const fetchAttendance = async () => {
       setEditStatus('');
       setOnEdit(false);
       fetchAttendance();
+      toast({ title: "Success", description: "Attendance record updated successfully!" });
     } catch (err) {
       console.error('Update Error:', err);
     }

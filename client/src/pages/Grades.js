@@ -120,8 +120,12 @@ const Grades = () => {
       .delete(`http://localhost:5000/api/grades/${id}`,
         { headers: { Authorization: `Bearer ${token}` } }
       )
-      .then(() => fetchGrades())
-      .catch(err => console.error(err));
+      .then(() =>{ fetchGrades();
+        toast({ title: "Deleted", description: "Grade deleted successfully." });
+      })
+      .catch(err =>{ console.error(err)
+        toast({ title: "Error", description: "Failed to delete grade.", variant: "destructive" });
+      });
   };
 
   const exportToPDF = () => {

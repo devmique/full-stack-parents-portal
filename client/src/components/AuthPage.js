@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import {useToast} from "../hooks/use-toast";
 import { useNavigate } from "react-router-dom"; 
 import "../styles/AuthPage.css"; 
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -8,6 +9,7 @@ import Logo from "../assets/logo.png";
 
 
 const AuthPage = () => {
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ name: "", email: "", password: "", contactNumber:"" }); 
@@ -50,7 +52,7 @@ const AuthPage = () => {
 
     if (!isLogin) {
       //  Show success message on registration
-      alert(response.data.message);
+      toast({ title: "Registration Successful", description: "You can now log in with your credentials." });
       setIsLogin(true); // Switch to login form after registration
       return;
     }
@@ -58,7 +60,7 @@ const AuthPage = () => {
     //  Process login response
     const {id, token, name, role, email, contactNumber, profilePic } = response.data;
     if (!name || !role) {
-      alert("Error: User data missing in response! Check your backend.");
+      toast({ title: "Error", description: "Invalid response from server.", variant: "destructive" });
       return;
     }
     // Store token and user info in sessionStorage
@@ -75,7 +77,7 @@ const AuthPage = () => {
       navigate("/dashboard/parent");
     }
   } catch (error) {
-    alert(error.response?.data?.error || "Something went wrong! Please try again.");
+    toast({ title: "Error", description: error.response?.data?.message || "An error occurred. Please try again.", variant: "destructive" });
   } finally{
     setIsLoading(false)
   }

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-
+import { useToast } from "../hooks/use-toast";
 import axios from 'axios';
 import "../styles/Announcements.css"
 const Announcements = () => {
+  const { toast } = useToast();
   const token = sessionStorage.getItem("token");
   const [announcements, setAnnouncements] = useState([]);
   const [title, setTitle] = useState('');
@@ -33,11 +34,11 @@ const Announcements = () => {
 
   const handlePost = async () => {
      if (!title.trim()) {
-    alert("Title is required.");
+    toast({ title: "Missing Field", description: "Title is required.", variant: "destructive" });
     return;
   }
   if (!content.trim()) {
-    alert("Content is required.");
+    toast({ title: "Missing Field", description: "Content is required.", variant: "destructive" });
     return;
   }
     try {
@@ -47,6 +48,7 @@ const Announcements = () => {
       setTitle('');
       setContent('');
       fetchAnnouncements();
+      toast({ title: "Success", description: "Announcement posted successfully!" });
     } catch (err) {
       console.error(err);
     }
@@ -61,8 +63,10 @@ const handleDelete = async (id) => {
         }}
     );
     fetchAnnouncements();
+    toast({ title: "Deleted", description: "Announcement deleted successfully." });
   } catch (err) {
     console.error('Delete failed:', err);
+    toast({ title: "Error", description: "Failed to delete announcement.", variant: "destructive" });
   }
 };
 

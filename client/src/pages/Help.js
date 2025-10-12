@@ -1,12 +1,12 @@
 import React, { useState } from "react";
+import { useToast } from "../hooks/use-toast";
 import axios from "axios";
 import "../styles/Help.css"; 
 import { useNavigate } from "react-router-dom";
 import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 const Help = () => {
+  const { toast } = useToast();
   const [issue, setIssue] = useState("");
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState("");
    const navigate = useNavigate();
     
     
@@ -29,7 +29,7 @@ const Help = () => {
     e.preventDefault();
 
     if (!issue.trim()) {
-      setMessage("Please describe your issue.");
+      toast({ title: "Missing Field", description: "Please describe your issue before submitting.", variant: "destructive" });
       return;
     }
 
@@ -39,16 +39,11 @@ const Help = () => {
       );
 
       if (response.data.success) {
-        setMessage("Your issue has been submitted successfully.");
-        setMessageType("success");
+        toast({ title: "Success", description: "Your issue has been submitted." });
         setIssue(""); // Clear textarea
-      } else {
-        setMessage("Failed to submit your issue. Please try again.");
-        setMessageType("error");
-      }
+      } 
     } catch (error) {
-      setMessage("Error submitting issue.");
-       setMessageType("error");
+     toast({ title: "Error", description: "There was an error submitting your issue. Please try again later.", variant: "destructive" });
     }
   };
 
@@ -73,8 +68,6 @@ const Help = () => {
         ></textarea>
         <button type="submit">Submit</button>
       </form>
-
-        {message && <p style={ { color:messageType==="success"?"#39e75f": "#e23636"}} className="message">{message}</p>}
           </div>
           </>
   );

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useToast } from "../hooks/use-toast";
 import axios from 'axios';
 import "../styles/Subjects.css"
 const Subjects = () => {
+  const { toast } = useToast();
   const token = sessionStorage.getItem("token");
   const user = JSON.parse(sessionStorage.getItem("user")) || {};
   const [subjects, setSubjects] = useState([]);
@@ -24,9 +26,41 @@ const Subjects = () => {
 
   const handleAddSubject = async (e) => {
     e.preventDefault();
-    if (!newSubject.subject_code || !newSubject.subject_title || !newSubject.term || !newSubject.units){
-       alert("All fields are required.");
-      return;}
+    if (!newSubject.subject_code) {
+    toast({
+      title: "Missing Field",
+      description: "Please enter a Subject Code.",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  if (!newSubject.subject_title) {
+    toast({
+      title: "Missing Field",
+      description: "Please enter a Subject Title.",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  if (!newSubject.term) {
+    toast({
+      title: "Missing Field",
+      description: "Please select a Term.",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  if (!newSubject.units) {
+    toast({
+      title: "Missing Field",
+      description: "Please enter the number of Units.",
+      variant: "destructive",
+    });
+    return;
+  }
 
     try {
       await axios.post('http://localhost:5000/api/subjects', newSubject,{
@@ -34,6 +68,7 @@ const Subjects = () => {
       });
       fetchSubjects();
       setNewSubject({ subject_code: '', subject_title: '', term: '', units: '' });
+      toast({ title: "Success", description: "Subject added successfully!" });
     } catch (err) {
       console.error(err);
     }
@@ -45,8 +80,10 @@ const Subjects = () => {
           headers: { Authorization: `Bearer ${token}` }
       });
       fetchSubjects();
+      toast({ title: "Deleted", description: "Subject deleted successfully." });
     } catch (err) {
       console.error(err);
+      toast({ title: "Error", description: "Failed to delete subject.", variant: "destructive" });
     }
   };
 

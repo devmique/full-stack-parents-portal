@@ -4,10 +4,12 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
 import '../styles/Calendar.css'
+import { useToast } from "../hooks/use-toast";
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 
 const CalendarPage = () => {
+  const { toast } = useToast();
   const [studentlist, setStudentList] = useState(null);
   const [subjectlist, setSubjectList] = useState(null);
   const [events, setEvents] = useState([]);
@@ -61,8 +63,11 @@ const CalendarPage = () => {
           end: arg.dateStr,
         },
       ]);
+      toast({ title: "Success", description: "Event added successfully!" });
     } catch (err) {
+      
       console.error("Error adding event", err);
+      toast({ title: "Error", description: "Failed to add event.", variant: "destructive" });
     }
   };
 
@@ -83,8 +88,10 @@ const CalendarPage = () => {
 
     // And also update state just in case
     setEvents((prev) => prev.filter((e) => e.id !== info.event.id));
+    toast({ title: "Deleted", description: "Event deleted successfully." });
   } catch (err) {
     console.error("Error deleting event", err);
+    toast({ title: "Error", description: "Failed to delete event.", variant: "destructive" });
   }
 };
 

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useToast } from "../hooks/use-toast";
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import "../styles/Grades.css"
 const Grades = () => {
+    const { toast } = useToast(); 
   const token = sessionStorage.getItem("token");
   const user = JSON.parse(sessionStorage.getItem("user"));
   const [grades, setGrades] = useState([]);
@@ -34,34 +36,26 @@ const Grades = () => {
   }, []);
 
   const handleAdd = () => {
-  if (!newGrade.student_id.trim()) {
-    alert("Student ID is required");
-    return;
-  }
-  if (!newGrade.school_year.trim()) {
-    alert("School Year is required");
-    return;
-  }
-  if (!newGrade.term.trim()) {
-    alert("Term is required");
-    return;
-  }
-  if (!newGrade.subject_code.trim()) {
-    alert("Subject Code is required");
-    return;
-  }
-  if (!newGrade.subject_title.trim()) {
-    alert("Subject Title is required");
-    return;
-  }
-  if (!newGrade.grade.trim()) {
-    alert("Grade is required");
-    return;
-  }
-  if (!newGrade.units.trim()) {
-    alert("Units are required");
-    return;
-  }
+    const requiredFields = [
+      "student_id",
+      "school_year",
+      "term",
+      "subject_code",
+      "subject_title",
+      "grade",
+      "units",
+    ];
+
+    for (const field of requiredFields) {
+      if (!newGrade[field].trim()) {
+        toast({
+          title: "Missing Field",
+          description: `${field.replace("_", " ").toUpperCase()} is required.`,
+          variant: "destructive", // red error style
+        });
+        return;
+      }
+    }
 
     axios
       .post('http://localhost:5000/api/grades', newGrade,
@@ -78,6 +72,7 @@ const Grades = () => {
           grade: '',
           units: ''
         });
+        toast({ title: "Success", description: "Grade added successfully!" });
       })
       .catch(err => console.error(err));
   };
@@ -114,6 +109,7 @@ const Grades = () => {
             grade: '',
             units: ''
           });
+          toast({ title: "Success", description: "Grade updated successfully!" });
         })
         .catch(err => console.error(err));
     }

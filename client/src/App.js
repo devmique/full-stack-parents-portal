@@ -1,4 +1,5 @@
 import React, { useEffect }  from "react";
+import { Toaster } from "sonner";
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import AuthPage from "./components/AuthPage";
 import Dashboard from "./components/Dashboard";
@@ -47,7 +48,8 @@ const ProtectedRoute = ({ element, allowedRoles }) => {
 
 function App() {
   return (
-    
+    <>
+      <Toaster position="bottom-left" richColors  />
     <Router>
       <Routes>
         {/* Auth Page */}
@@ -76,6 +78,7 @@ function App() {
          <Route path="/help" element={<ProtectedRoute element={<Help />} allowedRoles={["admin", "parent", "instructor"]} />} />
       </Routes>
     </Router>
+    </>
   );
 }
 

@@ -25,6 +25,7 @@
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
     "socket.io-frontend": "^0.0.2",
+    "sonner": "^2.0.7",
     "timeago.js": "^4.0.2"
   },
   "devDependencies": {

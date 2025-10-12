@@ -83,7 +83,7 @@ app.use('/api/studentlist',verifyToken, studentlist)
 app.use('/api/subjectlist',verifyToken, subjectlist)
 
 
-//Socket .io setup
+//Socket.io setup
 const users = new Map(); //store connected users
 
 io.on("connection", (socket)=>{

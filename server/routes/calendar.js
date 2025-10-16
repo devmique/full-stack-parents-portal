@@ -41,10 +41,25 @@ router.post("/", authorizeRole("admin"),(req, res) => {
       if (!err2) {
         const notifId = notifResult.insertId;
 
-        //  Step 2: Assign notification to all parents
+        //  Step 2: Assign notification to users
         db.query(
-          "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users",
-          [notifId]
+          "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users WHERE role IN ('parent', 'instructor', 'admin')",
+          [notifId],
+          (linkErr)=>{
+               if (!linkErr) {
+            const io = req.app.get("io");
+
+            //  Emit real-time notification
+            io.emit("newNotification", {
+              id: notifId,
+              message,
+              type,
+              created_at: new Date(),
+              read_status: 0,
+            });
+          }
+        
+            }
         );
       }
     });

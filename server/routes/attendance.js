@@ -54,7 +54,22 @@ router.post('/', authorizeRole("instructor"),(req, res) => {
           // Step 2: Link notification to the specific student
           db.query(
             "INSERT INTO user_notifications (user_id, notification_id) VALUES (?, ?)",
-            [student_id, notifId]
+            [student_id, notifId],
+             (linkErr)=>{
+               if (!linkErr) {
+            const io = req.app.get("io");
+
+            //  Emit real-time notification
+            io.emit("newNotification", {
+              id: notifId,
+              message,
+              type,
+              created_at: new Date(),
+              read_status: 0,
+            });
+          }
+        
+            }
           );
         }
       }
@@ -104,7 +119,22 @@ router.put('/:id', authorizeRole("instructor"), (req, res) => {
             const notifId = notifResult.insertId;
             db.query(
               "INSERT INTO user_notifications (user_id, notification_id) VALUES (?, ?)",
-              [studentId, notifId]
+              [studentId, notifId],
+              (linkErr)=>{
+               if (!linkErr) {
+            const io = req.app.get("io");
+
+            //  Emit real-time notification
+            io.emit("newNotification", {
+              id: notifId,
+              message,
+              type,
+              created_at: new Date(),
+              read_status: 0,
+            });
+          }
+        
+            }
             );
           }
         }

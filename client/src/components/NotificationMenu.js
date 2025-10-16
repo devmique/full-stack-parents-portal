@@ -19,12 +19,6 @@ const NotificationMenu = ({ user }) => {
       setUnreadCount((prev) => prev + 1);
     });
 
-    socket.on("notificationRead", ({ userId }) => {
-      if (userId === user.id) {
-        setNotifications((prev) => prev.map((n) => ({ ...n, read_status: 1 })));
-        setUnreadCount(0);
-      }
-    });
 
     return () => socket.disconnect();
   }, [user.id]);

@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
     WHERE n.type = 'general' OR n.id IN (
       SELECT notification_id FROM user_notifications WHERE user_id = ?
     )
-    ORDER BY n.created_at ASC
+    ORDER BY n.created_at DESC
   `;
    
     
@@ -47,9 +47,7 @@ router.put('/mark-all-read', (req, res) => {
       console.error("Error updating notification read status:", err);
       return res.status(500).json({ message: "Server error" });
     }
-     // Emit event to notify this user’s socket
-    const io = req.app.get("io");
-    io.emit("notificationRead", { userId });
+ 
     res.sendStatus(200);
   });
 });

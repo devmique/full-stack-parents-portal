@@ -6,7 +6,7 @@ const db = require('../db');
 router.get('/', (req, res) => {
   const userId = req.query.userId;
 
-  const query = `SELECT * FROM messagenotif WHERE user_id = ? ORDER BY created_at ASC`;
+  const query = `SELECT * FROM messagenotif WHERE user_id = ? ORDER BY created_at DESC`;
 
   db.query(query, [userId], (err, results) => {
     if (err) return res.status(500).json({ error: err });
@@ -28,6 +28,7 @@ router.put('/mark-all-read', (req, res) => {
       console.error("Error updating notification read status:", err);
       return res.status(500).json({ message: "Server error" });
     }
+
     res.sendStatus(200);
   });
 });

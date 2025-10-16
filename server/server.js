@@ -110,12 +110,28 @@ io.on("connection", (socket)=>{
         const senderName = resName[0]?.name || "Someone";
         const notifMsg = `You received a message from ${senderName}. ${new Date().toLocaleString()}`;
         db.query(
-          "INSERT INTO messagenotif (user_id, message) VALUES (?, ?)",
-          [receiver_id, notifMsg],
-          (err) => {
-            if (err) console.error(" Failed to save notification:", err);
-          }
-        );
+  "INSERT INTO messagenotif (user_id, message) VALUES (?, ?)",
+  [receiver_id, notifMsg],
+  (err, result) => {
+    if (err) return console.error("Failed to save notification:", err);
+
+    const notifData = {
+      id: result.insertId,
+      user_id: receiver_id,
+      message: notifMsg,
+      read_status: 0,
+      created_at: new Date(),
+    };
+
+    // Emit real-time notification to the receiver
+  
+    
+      io.emit("newMsgNotification", notifData);
+      console.log("Sent real-time message notification to", receiver_id);
+    
+  }
+);
+
       });
 
       //send to receiver in real time
@@ -137,12 +153,6 @@ io.on("connection", (socket)=>{
     })
       socket.on("disconnect", () => {
     console.log("Socket disconnected:", socket.id);
-    for (let [userId, id] of users.entries()) {
-      if (id === socket.id) users.delete(userId);
-    }
-  });
-  socket.on("disconnect", () => {
-    console.log("User disconnected:", socket.id);
     for (let [userId, id] of users.entries()) {
       if (id === socket.id) users.delete(userId);
     }

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import MarkEmailUnreadOutlinedIcon from "@mui/icons-material/MarkEmailUnreadOutlined";
 import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
+import { io } from "socket.io-client";
 
 
 const MessageNotificationMenu = ({ user }) => {
@@ -9,6 +10,20 @@ const MessageNotificationMenu = ({ user }) => {
   const [unreadMsgCount, setUnreadMsgCount] = useState(0);
   const [openMessageNotif, setOpenMessageNotif] = useState(false);
   const msgNotifRef = useRef(null);
+
+useEffect(() => {
+    const socket = io("http://localhost:5000");
+
+    socket.emit("register", user.id);
+    socket.on("newMsgNotification", (notif) => {
+      console.log("New message notification received:", notif);
+      setMessageNotifs((prev) => [notif, ...prev]);
+      setUnreadMsgCount((prev) => prev + 1);
+    });
+
+
+    return () => socket.disconnect();
+  }, [user.id]);
 
   useEffect(() => {
     const fetchMessageNotifs = async () => {
@@ -63,7 +78,7 @@ const MessageNotificationMenu = ({ user }) => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
+      
   return (
     <div ref={msgNotifRef} className="message-notif-section" onClick={toggleMessageNotifDropdown}  style={{position:"relative"}}>
       <button className="messageNotif-btn">

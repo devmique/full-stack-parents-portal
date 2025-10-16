@@ -24,7 +24,7 @@ router.post('/', authorizeRole("admin"), (req, res) => {
     (err, result) => {
       if (err) return res.status(500).json({ error: 'Error creating announcement' });
        
-           //Create a general notification
+      //Create a general notification
       const timestamp = new Date().toLocaleString();
       const message = `Admin posted a new announcement: ${title}. ${timestamp}`;
       const type = 'general';
@@ -35,11 +35,24 @@ router.post('/', authorizeRole("admin"), (req, res) => {
         (err2, notifResult) => {
           if (!err2) {
             const notifId = notifResult.insertId;
-
-            // Link this notification to all parents
             db.query(
-              "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users ",
-              [notifId]
+              "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users WHERE role IN ('parent', 'instructor', 'admin')", 
+              [notifId],
+              (linkErr)=>{
+               if (!linkErr) {
+            const io = req.app.get("io");
+
+            //  Emit real-time notification
+            io.emit("newNotification", {
+              id: notifId,
+              message,
+              type,
+              created_at: new Date(),
+              read_status: 0,
+            });
+          }
+        
+            }
             );
           }
         }

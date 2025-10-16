@@ -45,8 +45,22 @@ router.post('/', authorizeRole("admin"),(req, res) => {
             const notifId = notifResult.insertId;
             // Link notification to all parents (so each has individual read tracking)
             db.query(
-              "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users",
-              [notifId]
+              "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users WHERE role IN ('parent', 'instructor', 'admin')",
+              [notifId],
+               (linkError) => {
+                if (!linkError) {
+                  const io = req.app.get("io");
+
+                  // ✅ Emit new notification to all clients
+                  io.emit("newNotification", {
+                    id: notifId,
+                    message,
+                    type,
+                    created_at: new Date(),
+                    read_status: 0,
+                  });
+                }
+              }
             );
           }
         }

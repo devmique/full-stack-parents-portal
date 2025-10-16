@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db'); 
-const http = require("http")
+
 // GET contacts 
 router.get('/contacts', (req, res) => {
   const userId = req.query.userId;

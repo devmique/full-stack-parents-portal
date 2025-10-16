@@ -32,17 +32,29 @@ router.post('/', authorizeRole("admin"),(req, res) => {
     ],
     (err, result) => {
       if (err) return res.status(500).json({ error: "Database error" });
-      // Add notification
-       const type = 'general'
-           const timestamp = new Date().toLocaleString();
-    const message = ` Admin added a new schedule. ${timestamp} `;
-    db.query("INSERT INTO notifications (message, type) VALUES (?,?)", [message, type]);
+      // ✅ Create notification
+      const message = `Admin added a new schedule for ${time_slot}.`;
+      const type = 'general';
+
+      db.query(
+        "INSERT INTO notifications (message, type) VALUES (?, ?)",
+        [message, type],
+        (err2, notifResult) => {
+          if (!err2) {
+            const notifId = notifResult.insertId;
+            // Link notification to all parents (so each has individual read tracking)
+            db.query(
+              "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users WHERE role IN ('parent', 'instructor')",
+              [notifId]
+            );
+          }
+        }
+      );
 
       res.json({ message: "Schedule added successfully", id: result.insertId });
     }
   );
 });
-
 // Delete a schedule row
 router.delete('/:id', authorizeRole("admin"),(req, res) => {
   const id = req.params.id;

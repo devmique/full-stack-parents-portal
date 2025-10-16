@@ -49,7 +49,8 @@ const [events, setEvents] = useState([]);
         <tbody>
           {events.map(event => (
             <tr key={event.id}>
-              <td>{event.title} </td> <td>{new Date(event.start).toLocaleDateString()}</td>
+              <td>{event.title}</td>
+              <td>{new Date(event.start).toLocaleDateString()}</td>
             </tr>
           ))}
             </tbody>

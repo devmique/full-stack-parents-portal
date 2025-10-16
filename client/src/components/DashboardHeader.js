@@ -11,6 +11,8 @@ import MarkunreadOutlinedIcon from '@mui/icons-material/MarkunreadOutlined';
 import "../styles/DashboardHeader.css";
 import axios from "axios"
 import Logo from "../assets/logo.png"; 
+import { io } from "socket.io-client";
+
 const DashboardHeader = () => {
   const [openMessageNotif, setOpenMessageNotif] = useState(false);
   const [messageNotifs, setMessageNotifs] = useState([]);
@@ -26,10 +28,37 @@ const DashboardHeader = () => {
   const notifRef = useRef(null);
   const msgNotifRef = useRef(null);
 
+  
 
      // Get user data from session storage
   const user = JSON.parse(sessionStorage.getItem("user")) || {};
   const { name, role, profilePic } = user;
+
+  useEffect(() => {
+  const socket = io("http://localhost:5000");
+
+  // Register user on connect
+  socket.emit("register", user.id);
+
+  // Listen for new notifications from server
+  socket.on("newNotification", (notif) => {
+    setNotifications((prev) => [notif, ...prev]);
+    setUnreadCount((prev) => prev + 1);
+  });
+
+  socket.on("notificationRead", ({ userId }) => {
+  if (userId === user.id) {
+    // update read status immediately for this user
+    const updated = notifications.map(n => ({ ...n, read_status: 1 }));
+    setNotifications(updated);
+    setUnreadCount(0);
+  }
+});
+
+  return () => {
+    socket.disconnect();
+  };
+}, [user.id]);
 
 const homePath =
   user?.role === "admin"
@@ -46,9 +75,9 @@ const homePath =
     { name: "Announcements", path: "/dashboard/announcements"},
     { name: "Events", path: "/dashboard/events"},
     { name: "Messages", path: "/dashboard/messages" },
-    { name: "Profile", path: "/dashboard/profile"},
-    { name: "Help", path: "/dashboard/help"},
-    { name: "Settings", path: "/dashboard/settings" },
+    { name: "Profile", path: "/profile"},
+    { name: "Help", path: "/help"},
+    { name: "Settings", path: "/settings" },
   ];
 
   const filteredItems = menuItems.filter((item) =>
@@ -56,28 +85,24 @@ const homePath =
   );
 
  // Notifications Logic
-  const getNotifications = () => {
-    return JSON.parse(sessionStorage.getItem("notifications")) || [];
-  };
-
-  const markAllAsRead = async () => {
-    const readNotifs = notifications.map((n) => ({ ...n, read: true }));
-    sessionStorage.setItem("notifications", JSON.stringify(readNotifs));
-    setNotifications(readNotifs);
-    setUnreadCount(0);
-     await axios.put(`http://localhost:5000/api/notifications/mark-all-read`, 
-     {studentId: user.id},
-         { headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`
-        } }
+ const markAllAsRead = async () => {
+  try {
+    await axios.put(
+      `http://localhost:5000/api/notifications/mark-all-read`,
+      { userId: user.id },
+      { headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` } }
     );
-  };
 
-  const loadNotifications = () => {
-    const notifs = getNotifications();
-    setNotifications(notifs);
-    setUnreadCount(notifs.filter((n) => !n.read).length);
-  };
+    const updated = notifications.map(n => ({ ...n, read_status: 1 }));
+    setNotifications(updated);
+    setUnreadCount(0);
+    sessionStorage.setItem("notifications", JSON.stringify(updated));
+    sessionStorage.setItem("unreadCount", 0);
+  } catch (err) {
+    console.error("Failed to mark notifications as read:", err);
+  }
+};
+ 
 
   const toggleNotifDropdown = () => {
     setOpenNotif(!openNotif);
@@ -90,24 +115,25 @@ useEffect(() => {
   const fetchNotifications = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api/notifications" , {
-        params: user.role === 'parent' ? { student_id: user.id } : {},
+        params:{ user_id: user.id },
        headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
 
       });
       const data = await res.data;
       setNotifications(data);
-      const unreadNotifications = data.filter((n) => !n.read_status);
-        setUnreadCount(unreadNotifications.length);
-        // Save unread notifications count to sessionStorage
-        sessionStorage.setItem("unreadCount", unreadNotifications.length);
+     // Count unread
+      const unread = data.filter(n => n.read_status === 0).length;
+      setUnreadCount(unread);
+
+       // local cache
+      sessionStorage.setItem("notifications", JSON.stringify(data));
+      sessionStorage.setItem("unreadCount", unread);
       } catch (err) {
       console.error("Failed to load notifications", err);
     }
   };
 
   fetchNotifications();
-  const interval = setInterval(fetchNotifications, 1000); 
-  return () => clearInterval(interval); // Clean up
 }, []);
 
   //Message notification
@@ -145,9 +171,6 @@ const toggleMessageNotifDropdown = () => {
   };
 
   fetchMessageNotifs();
-
-  const interval = setInterval(fetchMessageNotifs, 1000); 
-  return () => clearInterval(interval);
 }, [user.id]);
 
 const markAllMessagesAsRead = async () => {
@@ -265,7 +288,7 @@ const handleLogout = () => {
         {/* Notification Button */}
        <div ref={msgNotifRef} className="message-notif-section" onClick={toggleMessageNotifDropdown} style={{ position: "relative" }}>
        <button className="messageNotif-btn">
-    { unreadMsgCount >0 ?<MarkEmailUnreadOutlinedIcon/>:  <MarkunreadOutlinedIcon/>}
+    { unreadMsgCount >0 ?<MarkEmailUnreadOutlinedIcon style={{color:"rgba(6, 65, 167, 0.872)"}}/>:  <MarkunreadOutlinedIcon/>}
           </button>
           
                  {/* Message Notification Dropdown */}
@@ -291,7 +314,7 @@ const handleLogout = () => {
 
         <div ref={notifRef} className="notif-section" onClick={toggleNotifDropdown} style={{ position: "relative" }}>
           <button className="notification-btn">
-           {unreadCount>0? <NotificationsActiveOutlinedIcon/>: <NotificationsNoneIcon />} 
+           {unreadCount>0? <NotificationsActiveOutlinedIcon style={{color:"rgba(6, 65, 167, 0.872)"}}/>: <NotificationsNoneIcon />} 
             </button>
           
             {/* Notification Dropdown */}

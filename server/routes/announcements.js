@@ -23,16 +23,31 @@ router.post('/', authorizeRole("admin"), (req, res) => {
     [title, content],
     (err, result) => {
       if (err) return res.status(500).json({ error: 'Error creating announcement' });
-       const type = 'general'
-       const timestamp = new Date().toLocaleString();
-       const message = ` Admin posted an announcement. ${timestamp} `;
-       db.query("INSERT INTO notifications (message, type) VALUES (?,?)", [message, type]);
+       
+           //Create a general notification
+      const message = `Admin posted a new announcement: ${title}`;
+      const type = 'general';
+
+      db.query(
+        "INSERT INTO notifications (message, type) VALUES (?, ?)",
+        [message, type],
+        (err2, notifResult) => {
+          if (!err2) {
+            const notifId = notifResult.insertId;
+
+            // Link this notification to all parents
+            db.query(
+              "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users WHERE role IN ('parent', 'instructor')",
+              [notifId]
+            );
+          }
+        }
+      );
 
       res.json({ message: 'Announcement created successfully' });
     }
   );
 });
-
 // Delete announcement by ID (admin only)
 router.delete('/:id',authorizeRole("admin"), (req, res) => {
   const id = req.params.id;

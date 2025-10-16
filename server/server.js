@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { verifyToken, authorizeRole } = require("./middleware/authMiddleware");
+const { verifyToken } = require("./middleware/authMiddleware");
 const express = require("express");
 const mysql = require("mysql");
 const bcrypt = require("bcryptjs");
@@ -26,7 +26,7 @@ const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:3000", // your frontend URL
-    methods: ["GET", "POST"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
   },
 });
 app.use(express.json());
@@ -149,7 +149,7 @@ io.on("connection", (socket)=>{
   });
 })
 
-
+app.set("io", io);
 
 // Configure Multer for Profile Picture Uploads
 const storage = multer.diskStorage({

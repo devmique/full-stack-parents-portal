@@ -17,14 +17,37 @@ router.post('/', authorizeRole("admin"),(req, res) => {
   db.query(sql, [subject_code, subject_title, term, units], (err, result) => {
     if (err) return res.status(500).json({ error: "Database error" });
     res.json({ message: "Subject added successfully", id: result.insertId });
-   const type = 'general'
-  // Add notification
-      const timestamp = new Date().toLocaleString();
-    const message = ` Admin added a new subject: ${subject_title} (${subject_code}). ${timestamp}`;
-    db.query("INSERT INTO notifications (message, type) VALUES (?,?)", [message, type]);
+ 
+   // ✅ Create a general notification
+    const message = `Admin added a new subject: ${subject_title} (${subject_code}).`;
+    const type = 'general';
 
+    db.query(
+      "INSERT INTO notifications (message, type) VALUES (?, ?)",
+      [message, type],
+      (err2, notifResult) => {
+        if (!err2) {
+          const notifId = notifResult.insertId;
+          // Link this notification to all parents
+          db.query(
+            "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users WHERE role IN ('parent', 'instructor')",
+            [notifId],
+            (linkError)=>{
+              if(!linkError){
+                const io = req.app.get("io");
+                io.emit("newNotification", {
+                  id: notifId, 
+                  message,
+                  type,
+                  created_at: new Date(),
+                read_status: 0 });
+              }
+            }
+          );
+        }
+      }
+    );
   });
-  
 });
 
 // Delete a subject

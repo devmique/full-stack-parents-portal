@@ -39,12 +39,28 @@ router.post('/', authorizeRole("instructor"),(req, res) => {
   db.query(sql, [student_id, date, day_of_week, status], (err, result) => {
     if (err) return res.status(500).json({ error: "Database error" });
 
-    
+   // ✅ Improved notification logic
     const formattedDate = new Date(date).toDateString();
-    const message = `Instructor added an attendance on ${formattedDate}`;
-    db.query("INSERT INTO notifications (user_id, message) VALUES (?, ?)",[student_id, message]);
+    const message = `Instructor added an attendance record on ${formattedDate}`;
+    const type = 'personal';
 
-    res.json({ message: "Attendance record added successfully", id: result.insertId });
+    // Step 1: Insert into notifications table
+    db.query(
+      "INSERT INTO notifications (message, type) VALUES (?, ?)",
+      [message, type],
+      (err2, notifResult) => {
+        if (!err2) {
+          const notifId = notifResult.insertId;
+          // Step 2: Link notification to the specific student
+          db.query(
+            "INSERT INTO user_notifications (user_id, notification_id) VALUES (?, ?)",
+            [student_id, notifId]
+          );
+        }
+      }
+    );
+
+    res.json({ message: "Attendance record added successfully", id: result.insertId});
   });
 });
 
@@ -76,10 +92,24 @@ router.put('/:id', authorizeRole("instructor"), (req, res) => {
     db.query(updateSql, [status, attendanceId], (err) => {
       if (err) return res.status(500).json({ error: "Database error" });
 
-      const message = `Instructor updated an attendance on ${formattedDate}`;
-     db.query("INSERT INTO notifications (user_id, message) VALUES (?, ?)", [studentId, message]);
+      // ✅ Improved notification logic
+      const message = `Instructor updated an attendance record on ${formattedDate}`;
+      const type = 'personal';
 
-
+      db.query(
+        "INSERT INTO notifications (message, type) VALUES (?, ?)",
+        [message, type],
+        (err2, notifResult) => {
+          if (!err2) {
+            const notifId = notifResult.insertId;
+            db.query(
+              "INSERT INTO user_notifications (user_id, notification_id) VALUES (?, ?)",
+              [studentId, notifId]
+            );
+          }
+        }
+      );
+    
       res.json({ message: "Attendance record updated successfully" });
     });
   });

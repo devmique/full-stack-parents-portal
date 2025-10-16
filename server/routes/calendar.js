@@ -32,14 +32,27 @@ router.post("/", authorizeRole("admin"),(req, res) => {
   db.query(sql, [title, date, req.user.id], (err, result) => {
     if (err) return res.status(500).json({ error: "Failed to create event" });
 
-    res.json({ id: result.insertId, title, date });
-     const type = 'general'
-         const timestamp = new Date().toLocaleString();
-     const message = ` Admin posted an event. ${timestamp} `;
-    db.query("INSERT INTO notifications (message, type) VALUES (?,?)", [message, type]);
+   // ✅ Step 1: Create a general notification entry
+    const type = 'general';
+    const timestamp = new Date().toLocaleString();
+    const message = `Admin posted a new event: "${title}" on ${date}. (${timestamp})`;
 
+    db.query("INSERT INTO notifications (message, type) VALUES (?, ?)", [message, type], (err2, notifResult) => {
+      if (!err2) {
+        const notifId = notifResult.insertId;
+
+        //  Step 2: Assign notification to all parents
+        db.query(
+          "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users WHERE role IN ('parent', 'instructor')",
+          [notifId]
+        );
+      }
+    });
+
+    res.json({ id: result.insertId, title, date, message: "Event added successfully" });
   });
 });
+
 
 // DELETE event (admin only)
 router.delete("/:id", authorizeRole("admin"), (req, res) => {

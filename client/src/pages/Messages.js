@@ -124,7 +124,7 @@ const Messages = () => {
                  <div className="message-time">{new Date(msg.timestamp).toLocaleString()}</div>
                 </div>
               ))}
-                <div ref={chatEndRef}></div> {/* 👈 dummy div to scroll into view */}
+                <div ref={chatEndRef}></div> {/* dummy div to scroll into view */}
             </div>
             <div className="chat-input">
               <input

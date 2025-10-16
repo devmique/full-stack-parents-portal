@@ -35,10 +35,24 @@ router.post('/',authorizeRole("instructor"),(req, res) => {
 
   db.query(sql, [student_id, school_year, term, subject_code, subject_title, grade, units], (err, result) => {
     if (err) return res.status(500).json({ error: "Database error" });
-    const timestamp = new Date().toLocaleString();
-    const message = `Instructor added a new grade: ${subject_title}. ${timestamp}`;
-   db.query("INSERT INTO notifications (user_id, message) VALUES (?, ?)", [student_id, message]);
+       
+    // notification entry
+    const message = `Instructor added a new grade for ${subject_title}.`;
+    const type = 'personal';
 
+    db.query(
+      "INSERT INTO notifications (message, type) VALUES (?, ?)",
+      [message, type],
+      (err2, notifResult) => {
+        if (!err2) {
+          const notifId = notifResult.insertId;
+          db.query(
+            "INSERT INTO user_notifications (user_id, notification_id) VALUES (?, ?)",
+            [student_id, notifId]
+          );
+        }
+      }
+    );
 
     res.json({ message: "Grade added successfully", id: result.insertId });
   });
@@ -60,10 +74,23 @@ router.put('/:id',authorizeRole("instructor"), (req, res) => {
 
   db.query(sql, [school_year, term, subject_code, subject_title, grade, units, gradeId], (err) => {
     if (err) return res.status(500).json({ error: "Database error" });
-      const timestamp = new Date().toLocaleString();
-    const message = `Instructor updated a grade: ${subject_title}. ${timestamp}`;
-db.query("INSERT INTO notifications (user_id, message) VALUES (?, ?)", [student_id, message]);
+// ✅ Create update notification
+    const message = `Instructor updated a grade for ${subject_title}.`;
+    const type = 'personal';
 
+    db.query(
+      "INSERT INTO notifications (message, type) VALUES (?, ?)",
+      [message, type],
+      (err2, notifResult) => {
+        if (!err2) {
+          const notifId = notifResult.insertId;
+          db.query(
+            "INSERT INTO user_notifications (user_id, notification_id) VALUES (?, ?)",
+            [student_id, notifId]
+          );
+        }
+      }
+    );
 
     res.json({ message: "Grade updated successfully" });
   });

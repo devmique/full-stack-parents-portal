@@ -25,9 +25,10 @@ router.post('/', authorizeRole("admin"), (req, res) => {
       if (err) return res.status(500).json({ error: 'Error creating announcement' });
        
            //Create a general notification
-      const message = `Admin posted a new announcement: ${title}`;
+      const timestamp = new Date().toLocaleString();
+      const message = `Admin posted a new announcement: ${title}. ${timestamp}`;
       const type = 'general';
-
+     
       db.query(
         "INSERT INTO notifications (message, type) VALUES (?, ?)",
         [message, type],

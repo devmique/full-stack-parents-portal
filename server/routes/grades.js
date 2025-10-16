@@ -37,7 +37,8 @@ router.post('/',authorizeRole("instructor"),(req, res) => {
     if (err) return res.status(500).json({ error: "Database error" });
        
     // notification entry
-    const message = `Instructor added a new grade for ${subject_title}.`;
+    const timestamp = new Date().toLocaleString();
+    const message = `Instructor added a new grade for ${subject_title}. ${timestamp}`;
     const type = 'personal';
 
     db.query(
@@ -75,7 +76,8 @@ router.put('/:id',authorizeRole("instructor"), (req, res) => {
   db.query(sql, [school_year, term, subject_code, subject_title, grade, units, gradeId], (err) => {
     if (err) return res.status(500).json({ error: "Database error" });
 // ✅ Create update notification
-    const message = `Instructor updated a grade for ${subject_title}.`;
+    const timestamp = new Date().toLocaleString();
+    const message = `Instructor updated a grade for ${subject_title}. ${timestamp}`;
     const type = 'personal';
 
     db.query(

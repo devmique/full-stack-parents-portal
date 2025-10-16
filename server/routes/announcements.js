@@ -38,7 +38,7 @@ router.post('/', authorizeRole("admin"), (req, res) => {
 
             // Link this notification to all parents
             db.query(
-              "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users WHERE role IN ('parent', 'instructor')",
+              "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users ",
               [notifId]
             );
           }

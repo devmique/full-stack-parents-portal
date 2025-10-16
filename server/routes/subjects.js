@@ -19,7 +19,8 @@ router.post('/', authorizeRole("admin"),(req, res) => {
     res.json({ message: "Subject added successfully", id: result.insertId });
  
    // ✅ Create a general notification
-    const message = `Admin added a new subject: ${subject_title} (${subject_code}).`;
+       const timestamp = new Date().toLocaleString();
+    const message = `Admin added a new subject: ${subject_title} (${subject_code}). ${timestamp}`;
     const type = 'general';
 
     db.query(
@@ -30,7 +31,7 @@ router.post('/', authorizeRole("admin"),(req, res) => {
           const notifId = notifResult.insertId;
           // Link this notification to all parents
           db.query(
-            "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users WHERE role IN ('parent', 'instructor')",
+            "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users",
             [notifId],
             (linkError)=>{
               if(!linkError){

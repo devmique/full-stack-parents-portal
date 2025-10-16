@@ -33,7 +33,8 @@ router.post('/', authorizeRole("admin"),(req, res) => {
     (err, result) => {
       if (err) return res.status(500).json({ error: "Database error" });
       // ✅ Create notification
-      const message = `Admin added a new schedule for ${time_slot}.`;
+          const timestamp = new Date().toLocaleString();
+      const message = `Admin added a new schedule. ${timestamp}`;
       const type = 'general';
 
       db.query(
@@ -44,7 +45,7 @@ router.post('/', authorizeRole("admin"),(req, res) => {
             const notifId = notifResult.insertId;
             // Link notification to all parents (so each has individual read tracking)
             db.query(
-              "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users WHERE role IN ('parent', 'instructor')",
+              "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users",
               [notifId]
             );
           }

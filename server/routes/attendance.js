@@ -31,17 +31,22 @@ router.post('/', authorizeRole("instructor"),(req, res) => {
   if (!student_id || !date || !day_of_week || !status) {
     return res.status(400).json({ error: "All fields are required" });
   }
-
+   
   const sql = `
     INSERT INTO attendance (student_id, date, day_of_week, status)
     VALUES (?, ?, ?, ?)`;
 
   db.query(sql, [student_id, date, day_of_week, status], (err, result) => {
     if (err) return res.status(500).json({ error: "Database error" });
+    const userId = req.user.id; 
+ 
+  db.query("SELECT name FROM users WHERE id = ?", [userId], (err, nameResult) => {
+    if (err) return res.status(500).json({ error: "Failed to fetch name" });
 
-   // ✅ Improved notification logic
+    const instructorName = nameResult[0]?.name || "Instructor";
+    // notification logic
     const formattedDate = new Date(date).toDateString();
-    const message = `Instructor added an attendance record on ${formattedDate}`;
+    const message = `${instructorName} added an attendance record on ${formattedDate}`;
     const type = 'personal';
 
     // Step 1: Insert into notifications table
@@ -57,16 +62,20 @@ router.post('/', authorizeRole("instructor"),(req, res) => {
             [student_id, notifId],
              (linkErr)=>{
                if (!linkErr) {
-            const io = req.app.get("io");
+           const io = req.app.get("io");
+           const users = req.app.get("users");
 
-            //  Emit real-time notification
-            io.emit("newNotification", {
-              id: notifId,
-              message,
-              type,
-              created_at: new Date(),
-              read_status: 0,
-            });
+          const receiverSocketId = users.get(student_id);
+           if (receiverSocketId) {
+              io.to(receiverSocketId).emit("newNotification", {
+                id: notifId,
+                message,
+                type,
+                created_at: new Date(),
+                read_status: 0,
+              });
+            }
+
           }
         
             }
@@ -74,9 +83,10 @@ router.post('/', authorizeRole("instructor"),(req, res) => {
         }
       }
     );
-
+     });
     res.json({ message: "Attendance record added successfully", id: result.insertId});
-  });
+ 
+})
 });
 
 
@@ -88,7 +98,7 @@ router.put('/:id', authorizeRole("instructor"), (req, res) => {
   if (!status) {
     return res.status(400).json({ error: "Status is required" });
   }
-
+  
   const fetchDateSql = "SELECT date, student_id FROM attendance WHERE id = ?";
   db.query(fetchDateSql, [attendanceId], (err, results) => {
     if (err) return res.status(500).json({ error: "Database error" });
@@ -98,7 +108,7 @@ router.put('/:id', authorizeRole("instructor"), (req, res) => {
     const studentId = results[0].student_id;
   
     const formattedDate = new Date(rawDate).toDateString();
-
+     
     const updateSql = `
       UPDATE attendance 
       SET status = ?
@@ -106,9 +116,14 @@ router.put('/:id', authorizeRole("instructor"), (req, res) => {
 
     db.query(updateSql, [status, attendanceId], (err) => {
       if (err) return res.status(500).json({ error: "Database error" });
+       const userId = req.user.id; 
+   
+  db.query("SELECT name FROM users WHERE id = ?", [userId], (err, nameResult) => {
+    if (err) return res.status(500).json({ error: "Failed to fetch name" });
 
-      // ✅ Improved notification logic
-      const message = `Instructor updated an attendance record on ${formattedDate}`;
+    const instructorName = nameResult[0]?.name || "Instructor";
+      // notification logic
+      const message = `${instructorName} updated an attendance record on ${formattedDate}`;
       const type = 'personal';
 
       db.query(
@@ -123,15 +138,18 @@ router.put('/:id', authorizeRole("instructor"), (req, res) => {
               (linkErr)=>{
                if (!linkErr) {
             const io = req.app.get("io");
+           const users = req.app.get("users");
 
-            //  Emit real-time notification
-            io.emit("newNotification", {
-              id: notifId,
-              message,
-              type,
-              created_at: new Date(),
-              read_status: 0,
-            });
+          const receiverSocketId = users.get(student_id);
+           if (receiverSocketId) {
+              io.to(receiverSocketId).emit("newNotification", {
+                id: notifId,
+                message,
+                type,
+                created_at: new Date(),
+                read_status: 0,
+              });
+            }
           }
         
             }
@@ -139,9 +157,10 @@ router.put('/:id', authorizeRole("instructor"), (req, res) => {
           }
         }
       );
-    
+      });
       res.json({ message: "Attendance record updated successfully" });
-    });
+   
+  })
   });
 });
 

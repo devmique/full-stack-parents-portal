@@ -122,13 +122,12 @@ io.on("connection", (socket)=>{
       read_status: 0,
       created_at: new Date(),
     };
+    // Emit notification to receiver
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("newMsgNotification", notifData);
+      console.log(" Sent real-time message notification to", receiver_id);
+    }
 
-    // Emit real-time notification to the receiver
-  
-    
-      io.emit("newMsgNotification", notifData);
-      console.log("Sent real-time message notification to", receiver_id);
-    
   }
 );
 
@@ -160,7 +159,7 @@ io.on("connection", (socket)=>{
 })
 
 app.set("io", io);
-
+app.set("users", users);
 // Configure Multer for Profile Picture Uploads
 const storage = multer.diskStorage({
     destination: "./uploads/",

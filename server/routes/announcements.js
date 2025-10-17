@@ -17,16 +17,21 @@ router.post('/', authorizeRole("admin"), (req, res) => {
     if (!title || !content ) {
     return res.status(400).json({ error: "All fields are required" });
   }
-
+   
   db.query(
     'INSERT INTO announcements (title, content) VALUES (?, ?)',
     [title, content],
     (err, result) => {
       if (err) return res.status(500).json({ error: 'Error creating announcement' });
-       
+       const userId = req.user.id; 
+   // Get the admin’s name
+  db.query("SELECT name FROM users WHERE id = ?", [userId], (err, nameResult) => {
+    if (err) return res.status(500).json({ error: "Failed to fetch admin name" });
+
+    const adminName = nameResult[0]?.name || "Admin";
       //Create a general notification
       const timestamp = new Date().toLocaleString();
-      const message = `Admin posted a new announcement: ${title}. ${timestamp}`;
+      const message = `${adminName} posted a new announcement: ${title}. ${timestamp}`;
       const type = 'general';
      
       db.query(
@@ -57,10 +62,10 @@ router.post('/', authorizeRole("admin"), (req, res) => {
           }
         }
       );
-
+    });
       res.json({ message: 'Announcement created successfully' });
-    }
-  );
+    
+  })
 });
 // Delete announcement by ID (admin only)
 router.delete('/:id',authorizeRole("admin"), (req, res) => {

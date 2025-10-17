@@ -28,7 +28,7 @@ router.post('/',authorizeRole("instructor"),(req, res) => {
   if (!student_id || !school_year || !term || !subject_code || !subject_title || !grade || !units) {
     return res.status(400).json({ error: "All fields are required" });
   }
-
+    
   const sql = `
     INSERT INTO grades (student_id, school_year, term, subject_code, subject_title, grade, units)
     VALUES (?, ?, ?, ?, ?, ?, ?)`;
@@ -36,9 +36,15 @@ router.post('/',authorizeRole("instructor"),(req, res) => {
   db.query(sql, [student_id, school_year, term, subject_code, subject_title, grade, units], (err, result) => {
     if (err) return res.status(500).json({ error: "Database error" });
        
+    const userId = req.user.id; 
+   
+    db.query("SELECT name FROM users WHERE id = ?", [userId], (err, nameResult) => {
+      if (err) return res.status(500).json({ error: "Failed to fetch name" });
+  
+      const instructorName = nameResult[0]?.name || "Instructor";
     // notification entry
     const timestamp = new Date().toLocaleString();
-    const message = `Instructor added a new grade for ${subject_title}. ${timestamp}`;
+    const message = `${instructorName} added a new grade for ${subject_title}. ${timestamp}`;
     const type = 'personal';
 
     db.query(
@@ -52,16 +58,19 @@ router.post('/',authorizeRole("instructor"),(req, res) => {
             [student_id, notifId], 
             (linkErr)=>{
                if (!linkErr) {
-            const io = req.app.get("io");
+             const io = req.app.get("io");
+           const users = req.app.get("users");
 
-            //  Emit real-time notification
-            io.emit("newNotification", {
-              id: notifId,
-              message,
-              type,
-              created_at: new Date(),
-              read_status: 0,
-            });
+          const receiverSocketId = users.get(student_id);
+           if (receiverSocketId) {
+              io.to(receiverSocketId).emit("newNotification", {
+                id: notifId,
+                message,
+                type,
+                created_at: new Date(),
+                read_status: 0,
+              });
+            }
           }
         
             }
@@ -69,9 +78,10 @@ router.post('/',authorizeRole("instructor"),(req, res) => {
         }
       }
     );
-
+     });
     res.json({ message: "Grade added successfully", id: result.insertId });
-  });
+
+    })
 });
 
 // Update an existing grade
@@ -82,7 +92,7 @@ router.put('/:id',authorizeRole("instructor"), (req, res) => {
   if (!school_year || !term || !subject_code || !subject_title || !grade || !units) {
     return res.status(400).json({ error: "All fields are required" });
   }
-
+  
   const sql = `
     UPDATE grades 
     SET school_year = ?, term = ?, subject_code = ?, subject_title = ?, grade = ?, units = ?
@@ -90,9 +100,16 @@ router.put('/:id',authorizeRole("instructor"), (req, res) => {
 
   db.query(sql, [school_year, term, subject_code, subject_title, grade, units, gradeId], (err) => {
     if (err) return res.status(500).json({ error: "Database error" });
+
+      const userId = req.user.id; 
+   
+    db.query("SELECT name FROM users WHERE id = ?", [userId], (err, nameResult) => {
+      if (err) return res.status(500).json({ error: "Failed to fetch name" });
+  
+      const instructorName = nameResult[0]?.name || "Instructor";
 // ✅ Create update notification
     const timestamp = new Date().toLocaleString();
-    const message = `Instructor updated a grade for ${subject_title}. ${timestamp}`;
+    const message = `${instructorName} updated a grade for ${subject_title}. ${timestamp}`;
     const type = 'personal';
 
     db.query(
@@ -106,16 +123,19 @@ router.put('/:id',authorizeRole("instructor"), (req, res) => {
             [student_id, notifId],
              (linkErr)=>{
                if (!linkErr) {
-            const io = req.app.get("io");
+              const io = req.app.get("io");
+           const users = req.app.get("users");
 
-            //  Emit real-time notification
-            io.emit("newNotification", {
-              id: notifId,
-              message,
-              type,
-              created_at: new Date(),
-              read_status: 0,
-            });
+          const receiverSocketId = users.get(student_id);
+           if (receiverSocketId) {
+              io.to(receiverSocketId).emit("newNotification", {
+                id: notifId,
+                message,
+                type,
+                created_at: new Date(),
+                read_status: 0,
+              });
+            }
           }
         
             }
@@ -123,9 +143,10 @@ router.put('/:id',authorizeRole("instructor"), (req, res) => {
         }
       }
     );
-
+      });
     res.json({ message: "Grade updated successfully" });
-  });
+
+})
 });
 
 // Delete a grade

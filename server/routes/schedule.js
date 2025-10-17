@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 // Add a new schedule row
 router.post('/', authorizeRole("admin"),(req, res) => {
   const { time_slot, monday, tuesday, wednesday, thursday, friday, saturday } = req.body;
-
+  
   const sql = `
     INSERT INTO schedule (time_slot, monday, tuesday, wednesday, thursday, friday, saturday)
     VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -32,9 +32,16 @@ router.post('/', authorizeRole("admin"),(req, res) => {
     ],
     (err, result) => {
       if (err) return res.status(500).json({ error: "Database error" });
+
+      const userId = req.user.id; 
+   // Get the admin’s name
+  db.query("SELECT name FROM users WHERE id = ?", [userId], (err, nameResult) => {
+    if (err) return res.status(500).json({ error: "Failed to fetch admin name" });
+
+    const adminName = nameResult[0]?.name || "Admin";
       // ✅ Create notification
           const timestamp = new Date().toLocaleString();
-      const message = `Admin added a new schedule. ${timestamp}`;
+      const message = `${adminName} added a new schedule. ${timestamp}`;
       const type = 'general';
 
       db.query(
@@ -65,10 +72,11 @@ router.post('/', authorizeRole("admin"),(req, res) => {
           }
         }
       );
-
-      res.json({ message: "Schedule added successfully", id: result.insertId });
-    }
+      }
   );
+      res.json({ message: "Schedule added successfully", id: result.insertId });
+   
+})
 });
 // Delete a schedule row
 router.delete('/:id', authorizeRole("admin"),(req, res) => {

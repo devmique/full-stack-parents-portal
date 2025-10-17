@@ -13,14 +13,22 @@ router.get('/', (req, res) => {
 // Add a new subject
 router.post('/', authorizeRole("admin"),(req, res) => {
   const { subject_code, subject_title, term, units } = req.body;
+ 
   const sql = "INSERT INTO subjects (subject_code, subject_title, term, units) VALUES (?, ?, ?,?)";
   db.query(sql, [subject_code, subject_title, term, units], (err, result) => {
     if (err) return res.status(500).json({ error: "Database error" });
+
+     const userId = req.user.id; 
+     // Get the admin’s name
+    db.query("SELECT name FROM users WHERE id = ?", [userId], (err, nameResult) => {
+      if (err) return res.status(500).json({ error: "Failed to fetch admin name" });
+  
+      const adminName = nameResult[0]?.name || "Admin";
     res.json({ message: "Subject added successfully", id: result.insertId });
  
-   // ✅ Create a general notification
+   // Create a general notification
        const timestamp = new Date().toLocaleString();
-    const message = `Admin added a new subject: ${subject_title} (${subject_code}). ${timestamp}`;
+    const message = `${adminName} added a new subject: ${subject_title} (${subject_code}). ${timestamp}`;
     const type = 'general';
 
     db.query(
@@ -49,6 +57,7 @@ router.post('/', authorizeRole("admin"),(req, res) => {
       }
     );
   });
+})
 });
 
 // Delete a subject

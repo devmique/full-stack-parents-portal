@@ -2,7 +2,8 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import MarkEmailUnreadOutlinedIcon from "@mui/icons-material/MarkEmailUnreadOutlined";
 import MarkunreadOutlinedIcon from "@mui/icons-material/MarkunreadOutlined";
-import { io } from "socket.io-client";
+import socket from "../socket";
+
 
 
 const MessageNotificationMenu = ({ user }) => {
@@ -12,17 +13,19 @@ const MessageNotificationMenu = ({ user }) => {
   const msgNotifRef = useRef(null);
 
 useEffect(() => {
-    const socket = io("http://localhost:5000");
 
+ if (user?.id) {
     socket.emit("register", user.id);
     socket.on("newMsgNotification", (notif) => {
-      console.log("New message notification received:", notif);
-      setMessageNotifs((prev) => [notif, ...prev]);
-      setUnreadMsgCount((prev) => prev + 1);
+    setMessageNotifs((prev) => [notif, ...prev]);
+    setUnreadMsgCount((prev) => prev + 1);
     });
+  }
 
 
-    return () => socket.disconnect();
+     return () => {
+    socket.off("newMsgNotification");
+     }
   }, [user.id]);
 
   useEffect(() => {

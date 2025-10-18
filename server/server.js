@@ -79,7 +79,6 @@ app.use('/api/messagenotif',verifyToken, messagenotifRoutes);
 
 //list route
 app.use('/api/studentlist',verifyToken, studentlist)
-
 app.use('/api/subjectlist',verifyToken, subjectlist)
 
 
@@ -87,12 +86,11 @@ app.use('/api/subjectlist',verifyToken, subjectlist)
 const users = new Map(); //store connected users
 
 io.on("connection", (socket)=>{
-    console.log("User connected:", socket.id);
 
     //When user joins
     socket.on("register", (userId)=>{
         users.set(userId, socket.id);
-        console.log(`User ${userId} connected as ${socket.id}`)
+        console.log(`User connected`)
     })
 
     //handle sending message
@@ -122,10 +120,11 @@ io.on("connection", (socket)=>{
       read_status: 0,
       created_at: new Date(),
     };
+
     // Emit notification to receiver
     if (receiverSocketId) {
       io.to(receiverSocketId).emit("newMsgNotification", notifData);
-      console.log(" Sent real-time message notification to", receiver_id);
+      console.log("Sent real-time message notification");
     }
 
   }
@@ -151,7 +150,7 @@ io.on("connection", (socket)=>{
   });
     })
       socket.on("disconnect", () => {
-    console.log("Socket disconnected:", socket.id);
+    console.log("Socket disconnected:");
     for (let [userId, id] of users.entries()) {
       if (id === socket.id) users.delete(userId);
     }

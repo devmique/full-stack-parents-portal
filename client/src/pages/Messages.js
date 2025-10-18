@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import io from "socket.io-client"
 import "../styles/Messages.css"
 import SendIcon from '@mui/icons-material/Send'
 
-const socket =io("http://localhost:5000") //connect to backend socket
+import socket from "../socket";
 
 const Messages = () => {
   const user = JSON.parse(sessionStorage.getItem("user"));
@@ -26,7 +25,13 @@ const Messages = () => {
 
   // Register user socket connection
   useEffect(() => {
+   if (user?.id) {
+    socket.connect();
     socket.emit("register", user.id);
+  }
+  return () => {
+    socket.disconnect();
+  };
   }, [user.id]);
 
   //fetch contact list

@@ -60,9 +60,12 @@ router.post('/',authorizeRole("instructor"),(req, res) => {
                if (!linkErr) {
              const io = req.app.get("io");
            const users = req.app.get("users");
-
+           console.log(users)
+          console.log(student_id)
           const receiverSocketId = users.get(student_id);
+           console.log(receiverSocketId)
            if (receiverSocketId) {
+            console.log(" Sending notification to", receiverSocketId);
               io.to(receiverSocketId).emit("newNotification", {
                 id: notifId,
                 message,
@@ -72,7 +75,7 @@ router.post('/',authorizeRole("instructor"),(req, res) => {
               });
             }
           }
-        
+  
             }
           );
         }

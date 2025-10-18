@@ -65,7 +65,8 @@ router.post('/', authorizeRole("instructor"),(req, res) => {
            const io = req.app.get("io");
            const users = req.app.get("users");
 
-          const receiverSocketId = users.get(student_id);
+          const receiverSocketId = users.get(Number(student_id));
+                
            if (receiverSocketId) {
               io.to(receiverSocketId).emit("newNotification", {
                 id: notifId,
@@ -139,8 +140,9 @@ router.put('/:id', authorizeRole("instructor"), (req, res) => {
                if (!linkErr) {
             const io = req.app.get("io");
            const users = req.app.get("users");
-
-          const receiverSocketId = users.get(student_id);
+      
+          const receiverSocketId = users.get(Number(studentId));
+         
            if (receiverSocketId) {
               io.to(receiverSocketId).emit("newNotification", {
                 id: notifId,

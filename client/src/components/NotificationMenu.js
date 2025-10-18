@@ -15,6 +15,7 @@ const NotificationMenu = ({ user }) => {
     socket.emit("register", user.id);
 
     socket.on("newNotification", (notif) => {
+   
       setNotifications((prev) => [notif, ...prev]);
       setUnreadCount((prev) => prev + 1);
     });

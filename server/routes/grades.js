@@ -35,7 +35,8 @@ router.post('/',authorizeRole("instructor"),(req, res) => {
 
   db.query(sql, [student_id, school_year, term, subject_code, subject_title, grade, units], (err, result) => {
     if (err) return res.status(500).json({ error: "Database error" });
-       
+    const io = req.app.get("io");
+    const users = req.app.get("users")
     const userId = req.user.id; 
    
     db.query("SELECT name FROM users WHERE id = ?", [userId], (err, nameResult) => {
@@ -58,14 +59,11 @@ router.post('/',authorizeRole("instructor"),(req, res) => {
             [student_id, notifId], 
             (linkErr)=>{
                if (!linkErr) {
-             const io = req.app.get("io");
-           const users = req.app.get("users");
-           console.log(users)
-          console.log(student_id)
-          const receiverSocketId = users.get(student_id);
-           console.log(receiverSocketId)
+         
+          const receiverSocketId = users.get(Number(student_id));
+       
            if (receiverSocketId) {
-            console.log(" Sending notification to", receiverSocketId);
+            console.log("Sending notification");
               io.to(receiverSocketId).emit("newNotification", {
                 id: notifId,
                 message,
@@ -74,6 +72,8 @@ router.post('/',authorizeRole("instructor"),(req, res) => {
                 read_status: 0,
               });
             }
+                res.json({ message: "Grade added successfully", id: result.insertId });
+
           }
   
             }
@@ -82,7 +82,6 @@ router.post('/',authorizeRole("instructor"),(req, res) => {
       }
     );
      });
-    res.json({ message: "Grade added successfully", id: result.insertId });
 
     })
 });
@@ -129,7 +128,8 @@ router.put('/:id',authorizeRole("instructor"), (req, res) => {
               const io = req.app.get("io");
            const users = req.app.get("users");
 
-          const receiverSocketId = users.get(student_id);
+          const receiverSocketId = users.get(Number(student_id));
+              
            if (receiverSocketId) {
               io.to(receiverSocketId).emit("newNotification", {
                 id: notifId,

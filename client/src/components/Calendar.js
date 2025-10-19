@@ -11,6 +11,11 @@ const CalendarPage = () => {
   const [events, setEvents] = useState([]);
   const user = JSON.parse(sessionStorage.getItem("user")) || {};
 
+   //Generate a consistent random pastel color
+  const getRandomPastelColor = () => {
+    const hue = Math.floor(Math.random() * 360);
+    return `hsl(${hue}, 70%, 80%)`;
+  };
  useEffect(() => {
   const fetchEvents = async () => {
     try {
@@ -26,6 +31,9 @@ const CalendarPage = () => {
           title: event.title,
           start: event.start,
           end: event.end,
+          backgroundColor: getRandomPastelColor(),
+          borderColor: "transparent",
+          textColor: "#333",
         }))
       );
     } catch (err) {
@@ -58,6 +66,9 @@ const CalendarPage = () => {
           title,
           start: arg.dateStr,
           end: arg.dateStr,
+          backgroundColor: getRandomPastelColor(),
+          borderColor: "transparent",
+          textColor: "#333",
         },
       ]);
       toast({ title: "Success", description: "Event added successfully!" });

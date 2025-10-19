@@ -150,7 +150,7 @@ io.on("connection", (socket)=>{
   });
     })
       socket.on("disconnect", () => {
-    console.log("Socket disconnected:");
+    console.log("Socket disconnected");
     for (let [userId, id] of users.entries()) {
       if (id === socket.id) users.delete(userId);
     }
@@ -159,6 +159,7 @@ io.on("connection", (socket)=>{
 
 app.set("io", io);
 app.set("users", users);
+
 // Configure Multer for Profile Picture Uploads
 const storage = multer.diskStorage({
     destination: "./uploads/",

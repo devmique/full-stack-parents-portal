@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../styles/Attendance.css'; 
 import { useToast } from "../hooks/use-toast";
+import Stack from "@mui/material/Stack";
+import Pagination from "@mui/material/Pagination";
 const Attendance = () => {
  const { toast } = useToast();
   const today =new Date().toISOString().split("T")[0];
   const user = JSON.parse(sessionStorage.getItem('user'));
   const token = sessionStorage.getItem("token");
   const [onEdit, setOnEdit] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 5; // Number of records per page
   const [attendance, setAttendance] = useState([]);
   const [newRecord, setNewRecord] = useState({
     student_id: '',
@@ -102,6 +106,16 @@ const fetchAttendance = async () => {
     }
   };
 
+  // Pagination logic
+  const indexOfLastEvent = currentPage * recordsPerPage;
+  const indexOfFirstEvent = indexOfLastEvent - recordsPerPage;
+  const currentRecords = attendance.slice(indexOfFirstEvent, indexOfLastEvent);
+
+  const totalPages = Math.ceil(attendance.length / recordsPerPage);
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
   return (
     <div className="attendance-container">
       <h2 className="attendance-title">Attendance</h2>
@@ -144,7 +158,7 @@ const fetchAttendance = async () => {
           </tr>
         </thead>
         <tbody>
-          {attendance.map((record) => (
+          {currentRecords.map((record) => (
             <tr key={record.id}>
               <td>{record.student_id}</td>
               <td>{record.student_name}</td>
@@ -187,6 +201,16 @@ const fetchAttendance = async () => {
           ))}
         </tbody>
       </table>
+      {/* Material UI Pagination */}
+                <Stack spacing={2} alignItems={"center"} sx={{ marginTop: 2 }} >
+                  <Pagination
+                    count={totalPages}
+                    page={currentPage}
+                    onChange={handlePageChange}
+                    color="primary"
+                    variant="outlined"
+                  />
+                </Stack>
     </div>
   );
 };

@@ -31,9 +31,7 @@ const CalendarPage = () => {
           title: event.title,
           start: event.start,
           end: event.end,
-          backgroundColor: getRandomPastelColor(),
-          borderColor: "transparent",
-          textColor: "#333",
+          backgroundColor: "transparent",
         }))
       );
     } catch (err) {
@@ -66,9 +64,7 @@ const CalendarPage = () => {
           title,
           start: arg.dateStr,
           end: arg.dateStr,
-          backgroundColor: getRandomPastelColor(),
-          borderColor: "transparent",
-          textColor: "#333",
+          backgroundColor: "transparent",
         },
       ]);
       toast({ title: "Success", description: "Event added successfully!" });
@@ -123,6 +119,11 @@ const CalendarPage = () => {
         eventClick={handleEventClick}
         height="auto"
         displayEventTime={false}
+        eventDidMount={(info) => {
+        info.el.style.backgroundColor = getRandomPastelColor();
+        info.el.style.borderColor = "transparent";
+        info.el.style.color = "#333";
+      }}
             />
           </div>
           </div>

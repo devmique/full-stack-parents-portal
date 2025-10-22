@@ -15,10 +15,15 @@ const Schedule = () => {
     monday: {}, tuesday: {}, wednesday: {}, thursday: {}, friday: {}, saturday: {},
   });
 
-   //Generate a random pastel color
-  const getRandomPastelColor = () => {
-    const hue = Math.floor(Math.random() * 360);
-    return `hsl(${hue}, 70%, 80%)`;
+   //Generate a consistent pastel color based on subject code 
+  const getColorFromSubject = (subjectCode) => {
+    if (!subjectCode) return "transparent";
+    let hash = 0;
+    for (let i = 0; i < subjectCode.length; i++) {
+      hash = subjectCode.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = hash % 360;
+    return `hsl(${hue}, 70%, 80%)`; // stable color for same subject
   };
   useEffect(() => {
     fetchSchedule();
@@ -161,11 +166,13 @@ const Schedule = () => {
             <tr key={row.id}>
               <td>{row.time_slot}</td>
               {days.map(day => {
+                 const subjectCode = row[day]?.subject_code;
+
                // Check if this day has any schedule content
              const hasSchedule = row[day]?.subject_code || row[day]?.subject_title || row[day]?.professor;
 
              // Assign random pastel color if cell has a schedule
-             const bgColor = hasSchedule ? getRandomPastelColor() : "transparent";
+             const bgColor = hasSchedule ? getColorFromSubject(subjectCode) : "transparent";
                 return (
                 <td key={day} style={{ backgroundColor: bgColor }}>
                   <div className="cell-code">{row[day]?.subject_code || ''}</div>

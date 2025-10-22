@@ -12,6 +12,7 @@
     background-color: #fff;
     border-right: 1px solid #ddd;
     padding: 20px;
+    overflow-y: auto;
 }
 
 .contacts-list h3 {

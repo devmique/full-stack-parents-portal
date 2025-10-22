@@ -5,6 +5,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import "../styles/Grades.css"
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 const Grades = () => {
     const { toast } = useToast(); 
   const token = sessionStorage.getItem("token");
@@ -154,7 +155,7 @@ const Grades = () => {
 
   return (
     <div className="grades-container">
-      <h2>Grades</h2>
+      <h2><SchoolOutlinedIcon className="pageIcon" fontSize='30px'/> Grades</h2>
 
       <button onClick={exportToPDF} className="export-btn">
         <PictureAsPdfOutlinedIcon/>

@@ -32,7 +32,8 @@
     outline: none;
 }
 .announcement-form input {
-width: 390px;
+    background-color: #fff;
+    width: 390px;
 }
 .announcement-form textarea {
     width: 400px;

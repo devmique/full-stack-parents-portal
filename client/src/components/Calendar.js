@@ -5,13 +5,14 @@ import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
 import '../styles/Calendar.css'
 import { useToast } from "../hooks/use-toast";
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import Cards from "./Cards";
 const CalendarPage = () => {
   const { toast } = useToast();
   const [events, setEvents] = useState([]);
   const user = JSON.parse(sessionStorage.getItem("user")) || {};
 
-   //Generate a consistent random pastel color
+   //Generate a random pastel color
   const getRandomPastelColor = () => {
     const hue = Math.floor(Math.random() * 360);
     return `hsl(${hue}, 70%, 80%)`;
@@ -108,9 +109,10 @@ const CalendarPage = () => {
         <Cards/>
        <div className="calendar-container">
        <div className="calendar-header">
-        <h2>School Calendar</h2>
        
           <div className ="calendar-card">
+       <h2> <CalendarMonthOutlinedIcon className="pageIcon" fontSize='30px'/> School Calendar</h2>
+
       <FullCalendar 
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"

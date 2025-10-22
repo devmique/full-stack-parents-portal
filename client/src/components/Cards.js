@@ -1,8 +1,8 @@
 import React,{useState, useEffect} from 'react'
-import CircularProgress from '@mui/material/CircularProgress';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import axios from "axios"
+import Skeleton from '@mui/material/Skeleton';
 
 const Cards = () => {
       const [studentlist, setStudentList] = useState(null);
@@ -36,8 +36,8 @@ const Cards = () => {
     <div className="list-container">
         {loadingCards ? (
           <>
-            <CircularProgress />
-            <CircularProgress />
+           <Skeleton variant="rounded" width={260} height={190} />
+           <Skeleton variant="rounded" width={260} height={190} />
            
           </>
         ) : (

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import "../styles/Messages.css"
 import SendIcon from '@mui/icons-material/Send'
-
+import ThreePOutlinedIcon from '@mui/icons-material/ThreePOutlined';
 import socket from "../socket";
 
 const Messages = () => {
@@ -96,7 +96,7 @@ const Messages = () => {
       <div className="contacts-list">
       
 
-        <h3>Contacts</h3>
+        <h3>Contacts <ThreePOutlinedIcon className="pageIcon"/></h3>
         {contacts.map(contact => (
           <div
             key={contact.id}

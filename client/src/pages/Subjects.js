@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useToast } from "../hooks/use-toast";
 import axios from 'axios';
 import "../styles/Subjects.css"
+import LibraryBooksOutlinedIcon from '@mui/icons-material/LibraryBooksOutlined';
 const Subjects = () => {
   const { toast } = useToast();
   const token = sessionStorage.getItem("token");
@@ -89,7 +90,7 @@ const Subjects = () => {
 
   return (
     <div className="subject-container">
-      <h2 className="subject-title">Subjects List</h2>
+      <h2 className="subject-title"><LibraryBooksOutlinedIcon className="pageIcon" fontSize='30px'/> Subjects List</h2>
 
       {user.role === 'admin' && (
         <form onSubmit={handleAddSubject} className="subject-form">

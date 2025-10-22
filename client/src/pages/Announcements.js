@@ -3,6 +3,7 @@ import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { useToast } from "../hooks/use-toast";
 import axios from 'axios';
+import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 import "../styles/Announcements.css"
 const Announcements = () => {
   const { toast } = useToast();
@@ -73,7 +74,7 @@ const handleDelete = async (id) => {
 
   return (
     <div className="announcements-container">
-      <h1 className="page-title">Announcements</h1>
+      <h1 className="page-title"><CampaignOutlinedIcon className="pageIcon" fontSize='30px'/> Announcements</h1>
 
       {isAdmin && (
         <div className="announcement-form">

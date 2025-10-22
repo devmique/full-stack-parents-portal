@@ -4,6 +4,7 @@ import '../styles/Attendance.css';
 import { useToast } from "../hooks/use-toast";
 import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
+import ChecklistOutlinedIcon from '@mui/icons-material/ChecklistOutlined';
 const Attendance = () => {
  const { toast } = useToast();
   const today =new Date().toISOString().split("T")[0];
@@ -118,7 +119,7 @@ const fetchAttendance = async () => {
   };
   return (
     <div className="attendance-container">
-      <h2 className="attendance-title">Attendance</h2>
+      <h2 className="attendance-title"><ChecklistOutlinedIcon className="pageIcon" fontSize='30px'/> Attendance</h2>
 
       {user.role === 'instructor' && (
         <div className="add-form">

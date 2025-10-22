@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useToast } from "../hooks/use-toast";
 import "../styles/Schedule.css"
+import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
 const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 
 const Schedule = () => {
@@ -14,6 +15,11 @@ const Schedule = () => {
     monday: {}, tuesday: {}, wednesday: {}, thursday: {}, friday: {}, saturday: {},
   });
 
+   //Generate a random pastel color
+  const getRandomPastelColor = () => {
+    const hue = Math.floor(Math.random() * 360);
+    return `hsl(${hue}, 70%, 80%)`;
+  };
   useEffect(() => {
     fetchSchedule();
   }, []);
@@ -88,10 +94,10 @@ const Schedule = () => {
       [day]: { ...prev[day], [field]: value }
     }));
   };
-
+  
   return (
     <div className="schedule-container">
-      <h2 className="schedule-title">Class Schedule</h2>
+      <h2 className="schedule-title"><EventNoteOutlinedIcon className="pageIcon" fontSize='30px'/> Class Schedule</h2>
 
       {user.role === 'admin' && (
         <form onSubmit={handleAdd} className="schedule-form">
@@ -154,13 +160,20 @@ const Schedule = () => {
           {schedule.map((row) => (
             <tr key={row.id}>
               <td>{row.time_slot}</td>
-              {days.map(day => (
-                <td key={day}>
+              {days.map(day => {
+               // Check if this day has any schedule content
+             const hasSchedule = row[day]?.subject_code || row[day]?.subject_title || row[day]?.professor;
+
+             // Assign random pastel color if cell has a schedule
+             const bgColor = hasSchedule ? getRandomPastelColor() : "transparent";
+                return (
+                <td key={day} style={{ backgroundColor: bgColor }}>
                   <div className="cell-code">{row[day]?.subject_code || ''}</div>
                   <div>{row[day]?.subject_title || ''}</div>
                   <div className="cell-professor">{row[day]?.professor || ''}</div>
                 </td>
-              ))}
+                );
+               })}
               {user.role === 'admin' && (
                 <td>
                   <button

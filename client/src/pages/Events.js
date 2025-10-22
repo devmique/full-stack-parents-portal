@@ -3,7 +3,7 @@ import axios from "axios";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import "../styles/Events.css";
-
+import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 const Events = () => {
   const [events, setEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,7 +46,7 @@ const Events = () => {
 
   return (
     <div className="events-container">
-      <h2>Agenda</h2>
+      <h2><CalendarTodayOutlinedIcon className="pageIcon" fontSize='30px'/> School Agenda</h2>
 
       {events.length === 0 ? (
         <p style={{ fontSize: "20px" }}>No events listed.</p>

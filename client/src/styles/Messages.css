@@ -240,22 +240,13 @@
     padding: 8px 12px;
   }
 
-   .chat-input {
-    flex-direction: column;
-    gap: 8px;
-  }
+   
 
 .chat-input input {
-    width: 100%;
-    border-radius: 8px;
-    padding: 10px;
+   height:15px;
   }
-
-  .chat-input button {
-    padding-right: 100%;
-    width: 100%;
-    border-radius: 8px;
-    height: 40px;
+  .chat-input button{
+    padding-bottom: 15px;
   }
 }
 

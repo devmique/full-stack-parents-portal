@@ -20,6 +20,7 @@ const studentlist = require("./routes/studentlist")
 const subjectlist = require("./routes/subjectlist")
 const http = require("http")
 const { Server } = require("socket.io");
+const nodemailer = require("nodemailer");
 
 const app = express();
 const server = http.createServer(app);
@@ -238,6 +239,70 @@ app.post("/help", verifyToken, (req, res) => {
 
 
 //  User Registration (Only "Parent" Can Register)
+
+//Send OTP
+app.post("/send-otp", (req, res) => {
+    const {email } = req.body;
+
+    if(!email.endsWith("gmail.com")){
+        return res.status(400).json({ error: "Please use a valid Gmail address."})
+    }
+    const otp = Math.floor(100000 + Math.random()* 900000).toString();
+    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
+
+    //save to DB
+    db.query("INSERT INTO email_verification (email, otp, expires_at) VALUES (?, ?, ?)", [email, otp, expiresAt], (err)=>{
+        if(err){
+            console.error("Database Error:", err);
+            return res.status(500).json({ error: "Internal Server Error"});
+        }
+
+        //configure Gmail transport
+        const transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth:{
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS,
+            }
+        })
+        const mailOptions = {
+            from: process.env.GMAIL_USER,
+            to: email,
+            subject: "Your OTP Code",
+            text: `Your OTP code is ${otp}. It is valid for 10 minutes.`,
+        }
+        transporter.sendMail(mailOptions,(error, info)=>{
+            if(error){
+                console.log("Error sending email:", error);
+                return res.status(500).json({ error: "Failed to send OTP email."});
+            }
+            res.json({message: "OTP sent successfully to your email."});
+        })
+})
+})
+//Verify OTP
+app.post("/verify-otp", (req, res) => {
+    const {email, otp} = req.body;
+
+    db.query("SELECT * FROM email_verification WHERE email = ? ORDER BY id DESC LIMIT 1",[email],(err, results)=>{
+        if(err){
+            console.error("Database Error:", err);
+            return res.status(500).json({ error: "Internal Server Error"});
+        }
+        if(results.length ===0){
+            return res.status(400).json({ error: "No OTP found for this email."});
+        }
+        const record = results[0];
+        if(record.otp !== otp){
+            return res.status(400).json({ error: "Invalid OTP."});
+        }
+        if(new Date(record.expiresAt)< new Date()){
+            return res.status(400).json({ error: "OTP has expired."});
+        }
+        //mark verified
+        res.json({ message: "OTP verified successfully."});
+    })
+})
 app.post("/register", (req, res) => {
     const { name, email, password, contactNumber } = req.body;
 

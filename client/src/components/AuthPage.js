@@ -13,6 +13,8 @@ const AuthPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({ name: "", email: "", password: "", contactNumber:"" }); 
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [otp, setOtp] = useState("");
   const navigate = useNavigate(); 
 
 // ✅ Prevent going back to login if user is already logged in
@@ -42,44 +44,55 @@ const AuthPage = () => {
 
   const handleSubmit = async (e) => {
   e.preventDefault();
-  setIsLoading(true)
+  setIsLoading(true);
 
   try {
-    const url = isLogin ? "http://localhost:5000/login" : "http://localhost:5000/register";
-    const updatedFormData = isLogin ? formData : { ...formData, role: "parent"};
-
-    const response = await axios.post(url, updatedFormData);
-
     if (!isLogin) {
-      //  Show success message on registration
-      toast({ title: "Registration Successful", description: "You can now log in with your credentials." });
-      setIsLogin(true); // Switch to login form after registration
-      return;
+      // REGISTER FLOW
+      if (!isOtpSent) {
+        // Step 1: Send OTP
+        await axios.post("http://localhost:5000/send-otp", { email: formData.email });
+        toast({ title: "OTP Sent", description: "Check your Gmail for the 6-digit code." });
+        setIsOtpSent(true);
+        return;
+      } else {
+        // Step 2: Verify OTP
+        await axios.post("http://localhost:5000/verify-otp", { email: formData.email, otp });
+
+        // Step 3: Register after OTP verification
+        await axios.post("http://localhost:5000/register", { ...formData, role: "parent" });
+
+        toast({ title: "Registration Successful", description: "You can now log in with your credentials." });
+        setIsLogin(true);
+        setIsOtpSent(false);
+        return;
+      }
     }
 
-    //  Process login response
-    const {id, token, name, role, email, contactNumber, profilePic } = response.data;
-    if (!name || !role) {
-      toast({ title: "Error", description: "Invalid response from server.", variant: "destructive" });
-      return;
-    }
-    // Store token and user info in sessionStorage
+    // LOGIN FLOW
+    const response = await axios.post("http://localhost:5000/login", formData);
+    const { id, token, name, role, email, contactNumber, profilePic } = response.data;
+
+    // Store in sessionStorage
     sessionStorage.setItem("token", token);
-    sessionStorage.setItem("user", JSON.stringify({id, name, role, email, contactNumber, profilePic: profilePic || "/default-profile.png" }));
+    sessionStorage.setItem(
+      "user",
+      JSON.stringify({ id, name, role, email, contactNumber, profilePic: profilePic || "/default-profile.png" })
+    );
 
-    //  Redirect based on role
-    if (role === "admin") {
-      navigate("/dashboard/admin");
-    }
-    else if( role==="instructor"){
-      navigate("/dashboard/instructor");
-    } else {
-      navigate("/dashboard/parent");
-    }
+    // Redirect based on role
+    if (role === "admin") navigate("/dashboard/admin");
+    else if (role === "instructor") navigate("/dashboard/instructor");
+    else navigate("/dashboard/parent");
+
   } catch (error) {
-    toast({ title: "Error", description: error.response?.data?.message || "An error occurred. Please try again.", variant: "destructive" });
-  } finally{
-    setIsLoading(false)
+    toast({
+      title: "Error",
+      description: error.response?.data?.message || "An error occurred. Please try again.",
+      variant: "destructive",
+    });
+  } finally {
+    setIsLoading(false);
   }
 };
 
@@ -124,6 +137,13 @@ const AuthPage = () => {
           </div>
 
           {/* Submit Button */}
+          {!isLogin && isOtpSent && (
+          <div className="input-container">
+            <i className="fas fa-key"></i>
+            <input type="text" name="otp" placeholder="Enter 6-digit OTP" value={otp} onChange={(e) => setOtp(e.target.value)} required />
+          </div>
+        )}
+
          <button className="submit" type="submit" disabled={isLoading}>
   {isLogin ? (
     isLoading ? (

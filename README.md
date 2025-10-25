@@ -80,6 +80,8 @@ Follow these steps to set up the backend:
     DB_NAME=parents_portal
     JWT_SECRET=your_jwt_secret
     PORT=5000
+    EMAIL_USER=youremail@gmail.com
+    EMAIL_PASS=yourpass
     ```
 
     Replace `your_mysql_password` and `your_jwt_secret` with your actual MySQL password and a secret key for JWT authentication.

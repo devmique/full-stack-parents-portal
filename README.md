@@ -6,7 +6,7 @@
 
 The **Parent’s Portal** is a full-stack school management platform designed to connect schools and parents. It provides an easy way for parents to stay updated with their child’s academic life while giving administrators powerful tools to manage attendance, grades, events, and communication.  
 
-## ✨ Features
+##  Features
 
 - **Role-Based Access** – Secure login system with different dashboards for Admin, Instructor and Parents.  
 - **Attendance Tracking** – Instructor can manage and update student attendance; parents can view records anytime.  
@@ -18,6 +18,8 @@ The **Parent’s Portal** is a full-stack school management platform designed to
 - **Announcements** – School-wide updates posted by Admins, visible to all parents.  
 - **PDF Export** – One-click export of grades into downloadable PDF files.  
 - **Profile Management system** – You can change your profile picture.  
+
+- **AI assistant** – you can ask AI to assist you using the portal.  
 
 ---
 
@@ -33,7 +35,8 @@ The **Parent’s Portal** is a full-stack school management platform designed to
 - Express.js
 - Multer (for profile picture uploads)
 - JSON Web Token (JWT) for authentication
-- Socket.IO (for real-time messaging)
+- Socket.IO (for real-time messaging and notification)
+- Nodemailer (for OTP verification)
 
 ### Database
 - MySQL

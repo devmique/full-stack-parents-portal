@@ -3,6 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import axios from "axios";
+import Chatbot from './Chatbot.js'
 import '../styles/Calendar.css'
 import { useToast } from "../hooks/use-toast";
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
@@ -11,7 +12,6 @@ const CalendarPage = () => {
   const { toast } = useToast();
   const [events, setEvents] = useState([]);
   const user = JSON.parse(sessionStorage.getItem("user")) || {};
-
    //Generate a random pastel color
   const getRandomPastelColor = () => {
     const hue = Math.floor(Math.random() * 360);
@@ -130,6 +130,7 @@ const CalendarPage = () => {
           </div>
           </div>
          </div>
+         <Chatbot user={user} />
     </div>
   );
 };

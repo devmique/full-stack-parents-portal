@@ -21,7 +21,7 @@ const subjectlist = require("./routes/subjectlist")
 const http = require("http")
 const { Server } = require("socket.io");
 const nodemailer = require("nodemailer");
-
+const chatbotRoute = require("./routes/chatbot.js")
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -63,8 +63,8 @@ app.use('/api/calendar',verifyToken, calendarRoutes);
 //announcements route 
 app.use('/api/announcements',verifyToken, announcementRoutes)
 
-
-
+//chatbot route
+app.use("/api/chatbot", chatbotRoute);
 
 //subjects route
 app.use('/api/subjects',verifyToken, subjectRoutes);
@@ -244,7 +244,7 @@ app.post("/help", verifyToken, (req, res) => {
 app.post("/send-otp", (req, res) => {
     const {email } = req.body;
 
-    if(!email.endsWith("gmail.com")){
+    if(!email.endsWith("@gmail.com")){
         return res.status(400).json({ error: "Please use a valid Gmail address."})
     }
     const otp = Math.floor(100000 + Math.random()* 900000).toString();
@@ -266,7 +266,7 @@ app.post("/send-otp", (req, res) => {
             }
         })
         const mailOptions = {
-            from: process.env.GMAIL_USER,
+            from: process.env.EMAIL_USER,
             to: email,
             subject: "Your OTP Code",
             text: `Your OTP code is ${otp}. It is valid for 10 minutes.`,

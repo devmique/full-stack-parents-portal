@@ -163,7 +163,10 @@ const fetchAttendance = async () => {
             <tr key={record.id}>
               <td>{record.student_id}</td>
               <td>{record.student_name}</td>
-              <td>{record.date}</td>
+              <td>
+                {new Date(record.date)
+                  .toLocaleDateString('en-CA', { timeZone: 'Asia/Manila' })}
+              </td>
               <td>{record.day_of_week}</td>
               <td>
                 {editRecordId === record.id ? (

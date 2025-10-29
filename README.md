@@ -92,7 +92,7 @@ Follow these steps to set up the backend:
 4. Start the backend server:
 
     ```bash
-    node server.js
+    npm run dev
     ```
 
     This will run the backend server on port 5000 (or any port you configured in the `.env` file).
@@ -118,7 +118,7 @@ To set up the frontend, follow these steps:
 3. Start the React frontend:
 
     ```bash
-    npm start
+    npm run dev
     ```
 
     This will start the frontend app and open it in your default web browser.

@@ -1,13 +1,10 @@
-# Ignore node_modules in both client and server
-client/node_modules/
-server/node_modules/
 
-# Ignore .env file in server
-server/.env
-
+# Ignore .env file
 .env
 
+# Ignore node_modules
 node_modules/
+
 build/
 dist/
 

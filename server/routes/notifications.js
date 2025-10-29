@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
     WHERE n.type = 'general' OR n.id IN (
       SELECT notification_id FROM user_notifications WHERE user_id = ?
     )
-    ORDER BY n.created_at DESC
+    ORDER BY n.created_at DESC LIMIT 100
   `;
    
     

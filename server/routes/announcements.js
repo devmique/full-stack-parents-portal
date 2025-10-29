@@ -30,8 +30,8 @@ router.post('/', authorizeRole("admin"), (req, res) => {
 
     const adminName = nameResult[0]?.name || "Admin";
       //Create a general notification
-      const timestamp = new Date().toLocaleString();
-      const message = `${adminName} posted a new announcement: ${title}. ${timestamp}`;
+
+      const message = `${adminName} posted a new announcement: ${title}.`;
       const type = 'general';
      
       db.query(

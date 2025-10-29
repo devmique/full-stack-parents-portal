@@ -97,12 +97,10 @@ useEffect(() => {
             <li>No new messages</li>
           ) : (
             messageNotifs
-              .slice()
-              .reverse()
               .slice(0, 100)
               .map((msg, i) => (
                 <li key={i} className="message-item">
-                  {msg.message}
+                  {msg.message} <span className="notif-time">{new Date(msg.created_at).toLocaleString()}</span>
                 </li>
               ))
           )}

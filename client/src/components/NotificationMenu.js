@@ -91,12 +91,10 @@ const NotificationMenu = ({ user }) => {
             <li>No notifications yet</li>
           ) : (
             notifications
-              .slice()
-              .reverse()
               .slice(0, 100)
               .map((notif, i) => (
                 <li key={i} className="notif-item">
-                  {notif.message}
+                  {notif.message} <span className="notif-time">{new Date(notif.created_at).toLocaleString()}</span>
                 </li>
               ))
           )}

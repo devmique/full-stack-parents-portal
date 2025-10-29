@@ -107,7 +107,7 @@ io.on("connection", (socket)=>{
       db.query("SELECT name FROM users WHERE id=?", [sender_id], (err, resName) => {
         if (err) return console.error(" Name fetch error:", err);
         const senderName = resName[0]?.name || "Someone";
-        const notifMsg = `You received a message from ${senderName}. ${new Date().toLocaleString()}`;
+        const notifMsg = `You received a message from ${senderName}.`;
         db.query(
   "INSERT INTO messagenotif (user_id, message) VALUES (?, ?)",
   [receiver_id, notifMsg],

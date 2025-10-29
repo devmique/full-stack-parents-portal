@@ -30,7 +30,7 @@ const Cards = () => {
       }
     };
     fetchData();
-  }, [studentlist, subjectlist]);
+  }, []);
 
   return (
     <div className="list-container">

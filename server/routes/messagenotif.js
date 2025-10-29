@@ -6,8 +6,7 @@ const db = require('../db');
 router.get('/', (req, res) => {
   const userId = req.query.userId;
 
-  const query = `SELECT * FROM messagenotif WHERE user_id = ? ORDER BY created_at DESC`;
-
+  const query = `SELECT * FROM messagenotif WHERE user_id = ? ORDER BY created_at DESC LIMIT 100`;
   db.query(query, [userId], (err, results) => {
     if (err) return res.status(500).json({ error: err });
     res.json(results);

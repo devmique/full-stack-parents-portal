@@ -41,8 +41,7 @@ router.post("/", authorizeRole("admin"),(req, res) => {
     const adminName = nameResult[0]?.name || "Admin";
    // ✅ Step 1: Create a general notification entry
     const type = 'general';
-    const timestamp = new Date().toLocaleString();
-    const message = `${adminName} posted a new event: "${title}" on ${date}. ${timestamp}`;
+    const message = `${adminName} posted a new event: "${title}" on ${date}.`;
 
     db.query("INSERT INTO notifications (message, type) VALUES (?, ?)", [message, type], (err2, notifResult) => {
       if (!err2) {

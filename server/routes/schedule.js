@@ -40,8 +40,8 @@ router.post('/', authorizeRole("admin"),(req, res) => {
 
     const adminName = nameResult[0]?.name || "Admin";
       // ✅ Create notification
-          const timestamp = new Date().toLocaleString();
-      const message = `${adminName} added a new schedule. ${timestamp}`;
+        
+      const message = `${adminName} added a new schedule.`;
       const type = 'general';
 
       db.query(

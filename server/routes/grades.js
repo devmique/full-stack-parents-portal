@@ -44,8 +44,7 @@ router.post('/',authorizeRole("instructor"),(req, res) => {
   
       const instructorName = nameResult[0]?.name || "Instructor";
     // notification entry
-    const timestamp = new Date().toLocaleString();
-    const message = `${instructorName} added a new grade for ${subject_title}. ${timestamp}`;
+    const message = `${instructorName} added a new grade for ${subject_title}.`;
     const type = 'personal';
 
     db.query(
@@ -110,8 +109,7 @@ router.put('/:id',authorizeRole("instructor"), (req, res) => {
   
       const instructorName = nameResult[0]?.name || "Instructor";
 // ✅ Create update notification
-    const timestamp = new Date().toLocaleString();
-    const message = `${instructorName} updated a grade for ${subject_title}. ${timestamp}`;
+    const message = `${instructorName} updated a grade for ${subject_title}.`;
     const type = 'personal';
 
     db.query(

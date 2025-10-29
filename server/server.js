@@ -248,7 +248,7 @@ app.post("/send-otp", (req, res) => {
         return res.status(400).json({ error: "Please use a valid Gmail address."})
     }
     const otp = Math.floor(100000 + Math.random()* 900000).toString();
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // OTP valid for 10 minutes
+    const expiresAt = new Date(Date.now() + 3 * 60 * 1000); // OTP valid for 3 minutes
 
     //save to DB
     db.query("INSERT INTO email_verification (email, otp, expires_at) VALUES (?, ?, ?)", [email, otp, expiresAt], (err)=>{
@@ -269,7 +269,7 @@ app.post("/send-otp", (req, res) => {
             from: process.env.EMAIL_USER,
             to: email,
             subject: "Your OTP Code",
-            text: `Your OTP code is ${otp}. It is valid for 10 minutes.`,
+            text: `Your OTP code is ${otp}. It is valid for 3 minutes.`,
         }
         transporter.sendMail(mailOptions,(error, info)=>{
             if(error){
@@ -309,6 +309,12 @@ app.post("/register", (req, res) => {
     if (!name || !email || !password || !contactNumber) {
         return res.status(400).json({ error: "All fields are required!" });
     }
+    const regex = /^(?=.*\d).{6,}$/;
+    if (!regex.test(password)) {
+    return res.status(400).json({
+      message: "Password must be at least 6 characters long and contain at least 1 number.",
+    });
+  }
 
     db.query("SELECT * FROM users WHERE email = ?", [email], (err, results) => {
         if (err) return res.status(500).json({ error: "Database error!" });

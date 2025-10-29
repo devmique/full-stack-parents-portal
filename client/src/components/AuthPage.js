@@ -41,6 +41,10 @@ const AuthPage = () => {
       [name]: value,
     }));
   };
+const validatePassword = (password) => {
+  const regex = /^(?=.*\d).{6,}$/; 
+  return regex.test(password);
+};
 
   const handleSubmit = async (e) => {
   e.preventDefault();
@@ -49,6 +53,16 @@ const AuthPage = () => {
   try {
     if (!isLogin) {
       // REGISTER FLOW
+      // ✅ Password Strength Check
+  if (!validatePassword(formData.password)) {
+    toast({
+      title: "Weak Password",
+      description: "Password must be at least 6 characters and contain at least 1 number.",
+      variant: "destructive",
+    });
+    setIsLoading(false);
+    return;
+  }
       if (!isOtpSent) {
         // Step 1: Send OTP
         await axios.post("http://localhost:5000/send-otp", { email: formData.email });

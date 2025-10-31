@@ -125,7 +125,6 @@ io.on("connection", (socket)=>{
     // Emit notification to receiver
     if (receiverSocketId) {
       io.to(receiverSocketId).emit("newMsgNotification", notifData);
-      console.log("Sent real-time message notification");
     }
 
   }

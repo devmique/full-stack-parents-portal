@@ -62,7 +62,6 @@ router.post('/',authorizeRole("instructor"),(req, res) => {
           const receiverSocketId = users.get(Number(student_id));
        
            if (receiverSocketId) {
-            console.log("Sending notification");
               io.to(receiverSocketId).emit("newNotification", {
                 id: notifId,
                 message,

@@ -43,7 +43,6 @@ const ProfileUpload = ({ onUploadSuccess }) => {
         onUploadSuccess(updatedProfilePic);
 
         toast({ title: "Success", description: "Profile picture uploaded successfully!" });
-        window.location.reload();
       }
     } catch (error) {
       console.error("Upload error:", error);

@@ -53,7 +53,7 @@ function Chatbot({ user }) {
       {open && (
         <div className="chatbot-popup">
           <div className="chatbot-header">
-            School Assistant
+            School AI Assistant
           </div>
 
           <div className="chatbot-messages">

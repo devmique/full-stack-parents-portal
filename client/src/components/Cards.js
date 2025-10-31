@@ -5,16 +5,22 @@ import axios from "axios"
 import Skeleton from '@mui/material/Skeleton';
 
 const Cards = () => {
-      const [studentlist, setStudentList] = useState(null);
+      const [studentlist, setStudentList] = useState(0);
       const [subjectlist, setSubjectList] = useState(null);
       const [loadingCards, setLoadingCards] = useState(true);
+      const user = JSON.parse(sessionStorage.getItem("user"));
 
         // ✅ Fetch student and subject lists
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const studentURL =
+          user.role === "admin" || user.role === "instructor"
+            ? "http://localhost:5000/api/studentlist/count"
+            : "http://localhost:5000/api/studentlist/count/mycourse";
+
         const [studentsRes, subjectsRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/studentlist", {
+          axios.get(studentURL, {
             headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
           }),
           axios.get("http://localhost:5000/api/subjectlist", {
@@ -45,7 +51,7 @@ const Cards = () => {
             <div className="list-card studentlist-card">
               <PeopleAltOutlinedIcon style={{ color: "#93bbfa", fontSize: "30px" }} />
               <h2>Students</h2>
-              <h1>{studentlist?.count || 0}</h1>
+              <h1>{studentlist.count || 0}</h1>
             </div>
 
             <div className="list-card subjectlist-card">

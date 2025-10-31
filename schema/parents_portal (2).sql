@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 28, 2025 at 02:24 PM
+-- Generation Time: Oct 31, 2025 at 04:25 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -38,6 +38,7 @@ CREATE TABLE `announcements` (
 -- Dumping data for table `announcements`
 --
 
+
 -- --------------------------------------------------------
 
 --
@@ -57,6 +58,7 @@ CREATE TABLE `attendance` (
 --
 
 
+
 -- --------------------------------------------------------
 
 --
@@ -74,6 +76,8 @@ CREATE TABLE `calendar_events` (
 -- Dumping data for table `calendar_events`
 --
 
+
+
 -- --------------------------------------------------------
 
 --
@@ -82,6 +86,7 @@ CREATE TABLE `calendar_events` (
 
 CREATE TABLE `courses` (
   `id` int(11) NOT NULL,
+  `course_code` varchar(100) NOT NULL,
   `course_name` varchar(100) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -146,7 +151,6 @@ CREATE TABLE `help_requests` (
 --
 
 
-
 -- --------------------------------------------------------
 
 --
@@ -164,6 +168,7 @@ CREATE TABLE `messagenotif` (
 --
 -- Dumping data for table `messagenotif`
 --
+
 
 
 -- --------------------------------------------------------
@@ -185,7 +190,6 @@ CREATE TABLE `messages` (
 --
 
 
-
 -- --------------------------------------------------------
 
 --
@@ -202,6 +206,7 @@ CREATE TABLE `notifications` (
 --
 -- Dumping data for table `notifications`
 --
+
 
 
 -- --------------------------------------------------------
@@ -225,7 +230,6 @@ CREATE TABLE `schedule` (
 -- Dumping data for table `schedule`
 --
 
-
 -- --------------------------------------------------------
 
 --
@@ -236,7 +240,7 @@ CREATE TABLE `students` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `parent_id` int(11) DEFAULT NULL,
-  `course` varchar(100) DEFAULT NULL,
+  `course_id` int(100) DEFAULT NULL,
   `year_level` int(11) DEFAULT NULL,
   `program` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -245,7 +249,9 @@ CREATE TABLE `students` (
 -- Dumping data for table `students`
 --
 
-
+INSERT INTO `students` (`id`, `name`, `parent_id`, `course_id`, `year_level`, `program`) VALUES
+(6, 'Sung sung sahur', 6, 1, NULL, NULL),
+(54, 'Ahmad', 54, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -281,18 +287,18 @@ CREATE TABLE `users` (
   `role` enum('admin','parent','instructor') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `profile_pic` varchar(255) DEFAULT NULL,
-  `contact_number` varchar(20) NOT NULL,
-  `course_id` int(11) DEFAULT NULL
+  `contact_number` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `created_at`, `profile_pic`, `contact_number`, `course_id`) VALUES
-(6, 'John Doe', 'johndoe@example.com', '$2b$10$fk4qexYR9kMoRDLfBdmw1uAwWTqv7WdtV4ZlqfdCmVyyKo267lxxi', 'parent', '2025-10-08 16:18:52', 'http://localhost:5000/uploads/1759940332060.png', '', NULL),
-(13, 'Mique', 'mique@gmail.com', '$2y$10$MrmLXbwmK2efem0ADeq.kOm9GvroS4NUx3kDEZoZd7UdF.mzTj866', 'admin', '2025-10-12 16:31:20', 'http://localhost:5000/uploads/1760286680693.jpg', '', NULL),
-(58, 'Test', 'test@test.com', '$2b$10$hRr9oazzbhvYVs6BPoudT.LwtZCb7.MpbTTY71RjtQL8ikQc26FQC', 'instructor', '2025-10-11 12:55:43', 'http://localhost:5000/uploads/1760187343532.jpg', '09', NULL),
+INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `created_at`, `profile_pic`, `contact_number`) VALUES
+(6, 'John Doe', 'johndoe@example.com', '$2b$10$fk4qexYR9kMoRDLfBdmw1uAwWTqv7WdtV4ZlqfdCmVyyKo267lxxi', 'parent', '2025-10-31 15:17:41', 'http://localhost:5000/uploads/1761923861770.jpg', ''),
+(13, 'Mique', 'mique@gmail.com', '$2y$10$MrmLXbwmK2efem0ADeq.kOm9GvroS4NUx3kDEZoZd7UdF.mzTj866', 'admin', '2025-10-12 16:31:20', 'http://localhost:5000/uploads/1760286680693.jpg', ''),
+(54, 'Johnlord Mique', 'jt@gmail.com', '$2b$10$S2ZtFQxuZTErAmOH/s1SMOyukAz6Pks8Y/67DvDaUjMccAkc4rmZi', 'parent', '2025-05-09 09:07:18', 'http://localhost:5000/uploads/1746781638391.jpg', '0951'),
+(58, 'Test', 'test@test.com', '$2b$10$hRr9oazzbhvYVs6BPoudT.LwtZCb7.MpbTTY71RjtQL8ikQc26FQC', 'instructor', '2025-10-31 15:24:13', 'http://localhost:5000/uploads/1761924253425.jpg', '09'),
 
 -- --------------------------------------------------------
 
@@ -405,8 +411,7 @@ ALTER TABLE `subjects`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `course_id` (`course_id`);
+  ADD UNIQUE KEY `email` (`email`);
 
 --
 -- Indexes for table `user_notifications`
@@ -423,19 +428,19 @@ ALTER TABLE `user_notifications`
 -- AUTO_INCREMENT for table `announcements`
 --
 ALTER TABLE `announcements`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
 
 --
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `calendar_events`
 --
 ALTER TABLE `calendar_events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
 -- AUTO_INCREMENT for table `courses`
@@ -447,13 +452,13 @@ ALTER TABLE `courses`
 -- AUTO_INCREMENT for table `email_verification`
 --
 ALTER TABLE `email_verification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `grades`
 --
 ALTER TABLE `grades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `help_requests`
@@ -465,25 +470,25 @@ ALTER TABLE `help_requests`
 -- AUTO_INCREMENT for table `messagenotif`
 --
 ALTER TABLE `messagenotif`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
 
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=207;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=212;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=472;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=481;
 
 --
 -- AUTO_INCREMENT for table `schedule`
 --
 ALTER TABLE `schedule`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT for table `students`
@@ -495,7 +500,7 @@ ALTER TABLE `students`
 -- AUTO_INCREMENT for table `subjects`
 --
 ALTER TABLE `subjects`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -507,7 +512,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `user_notifications`
 --
 ALTER TABLE `user_notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1008;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1115;
 
 --
 -- Constraints for dumped tables
@@ -537,12 +542,6 @@ ALTER TABLE `messages`
 --
 ALTER TABLE `students`
   ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `users`
---
-ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`);
 
 --
 -- Constraints for table `user_notifications`

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 31, 2025 at 04:25 PM
+-- Generation Time: Nov 02, 2025 at 06:40 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -37,6 +37,7 @@ CREATE TABLE `announcements` (
 --
 -- Dumping data for table `announcements`
 --
+
 
 
 -- --------------------------------------------------------
@@ -86,10 +87,19 @@ CREATE TABLE `calendar_events` (
 
 CREATE TABLE `courses` (
   `id` int(11) NOT NULL,
-  `course_code` varchar(100) NOT NULL,
   `course_name` varchar(100) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `courses`
+--
+
+INSERT INTO `courses` (`id`, `course_name`, `created_at`) VALUES
+(10, 'Information Technology', '2025-11-02 15:02:25'),
+(11, 'Electromechanical Technology', '2025-11-02 15:02:25'),
+(12, 'Mechanical Technology', '2025-11-02 15:02:25'),
+(13, 'Automotive Aftersales Technology', '2025-11-02 15:02:25');
 
 -- --------------------------------------------------------
 
@@ -108,7 +118,6 @@ CREATE TABLE `email_verification` (
 --
 -- Dumping data for table `email_verification`
 --
-
 
 -- --------------------------------------------------------
 
@@ -151,6 +160,7 @@ CREATE TABLE `help_requests` (
 --
 
 
+
 -- --------------------------------------------------------
 
 --
@@ -188,6 +198,7 @@ CREATE TABLE `messages` (
 --
 -- Dumping data for table `messages`
 --
+
 
 
 -- --------------------------------------------------------
@@ -230,6 +241,7 @@ CREATE TABLE `schedule` (
 -- Dumping data for table `schedule`
 --
 
+
 -- --------------------------------------------------------
 
 --
@@ -241,17 +253,17 @@ CREATE TABLE `students` (
   `name` varchar(255) NOT NULL,
   `parent_id` int(11) DEFAULT NULL,
   `course_id` int(100) DEFAULT NULL,
-  `year_level` int(11) DEFAULT NULL,
-  `program` varchar(100) DEFAULT NULL
+  `program_id` int(11) DEFAULT NULL,
+  `year_level` enum('1st Year','2nd Year','3rd Year','4th Year') DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `students`
 --
 
-INSERT INTO `students` (`id`, `name`, `parent_id`, `course_id`, `year_level`, `program`) VALUES
-(6, 'Sung sung sahur', 6, 1, NULL, NULL),
-(54, 'Ahmad', 54, NULL, NULL, NULL);
+INSERT INTO `students` (`id`, `name`, `parent_id`, `course_id`, `program_id`, `year_level`) VALUES
+(6, 'Sodikin', 6, 10, 3, '3rd Year'),
+(54, 'Ahmad', 54, 10, 1, '3rd Year');
 
 -- --------------------------------------------------------
 
@@ -270,8 +282,6 @@ CREATE TABLE `subjects` (
 --
 -- Dumping data for table `subjects`
 --
-
-
 
 -- --------------------------------------------------------
 
@@ -297,7 +307,6 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `created_at`, `profile_pic`, `contact_number`) VALUES
 (6, 'John Doe', 'johndoe@example.com', '$2b$10$fk4qexYR9kMoRDLfBdmw1uAwWTqv7WdtV4ZlqfdCmVyyKo267lxxi', 'parent', '2025-10-31 15:17:41', 'http://localhost:5000/uploads/1761923861770.jpg', ''),
 (13, 'Mique', 'mique@gmail.com', '$2y$10$MrmLXbwmK2efem0ADeq.kOm9GvroS4NUx3kDEZoZd7UdF.mzTj866', 'admin', '2025-10-12 16:31:20', 'http://localhost:5000/uploads/1760286680693.jpg', ''),
-(54, 'Johnlord Mique', 'jt@gmail.com', '$2b$10$S2ZtFQxuZTErAmOH/s1SMOyukAz6Pks8Y/67DvDaUjMccAkc4rmZi', 'parent', '2025-05-09 09:07:18', 'http://localhost:5000/uploads/1746781638391.jpg', '0951'),
 (58, 'Test', 'test@test.com', '$2b$10$hRr9oazzbhvYVs6BPoudT.LwtZCb7.MpbTTY71RjtQL8ikQc26FQC', 'instructor', '2025-10-31 15:24:13', 'http://localhost:5000/uploads/1761924253425.jpg', '09'),
 
 -- --------------------------------------------------------
@@ -398,7 +407,9 @@ ALTER TABLE `schedule`
 --
 ALTER TABLE `students`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `parent_id` (`parent_id`);
+  ADD KEY `parent_id` (`parent_id`),
+  ADD KEY `fk_student_course` (`course_id`),
+  ADD KEY `fk_student_program` (`program_id`);
 
 --
 -- Indexes for table `subjects`
@@ -446,13 +457,13 @@ ALTER TABLE `calendar_events`
 -- AUTO_INCREMENT for table `courses`
 --
 ALTER TABLE `courses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `email_verification`
 --
 ALTER TABLE `email_verification`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `grades`
@@ -541,6 +552,8 @@ ALTER TABLE `messages`
 -- Constraints for table `students`
 --
 ALTER TABLE `students`
+  ADD CONSTRAINT `fk_student_course` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`),
+  ADD CONSTRAINT `fk_student_program` FOREIGN KEY (`program_id`) REFERENCES `programs` (`id`) ON DELETE SET NULL,
   ADD CONSTRAINT `students_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --

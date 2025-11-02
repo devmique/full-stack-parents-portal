@@ -4,9 +4,36 @@ const db = require('../db');
 const { authorizeRole } = require('../middleware/authMiddleware');
 
 router.get("/count", authorizeRole("admin", "instructor"), (req, res) => {
-  db.query("SELECT COUNT(*) AS count FROM students", (err, rows) => {
-    if (err) return res.status(500).json({ error: "DB error" });
-    res.json(rows[0]);
+  const { course, program, year } = req.query;
+
+  let sql = `
+    SELECT COUNT(*) AS count
+    FROM students
+    JOIN courses ON students.course_id = courses.id
+    JOIN programs ON students.program_id = programs.id
+    WHERE 1=1
+  `;
+
+  const params = [];
+
+  if (course && course !== "All") {
+    sql += " AND courses.course_name = ?";
+    params.push(course);
+  }
+
+  if (program && program !== "All") {
+    sql += " AND programs.program_name = ?";
+    params.push(program);
+  }
+
+  if (year && year !== "All") {
+    sql += " AND students.year_level = ?";
+    params.push(year);
+  }
+
+  db.query(sql, params, (err, result) => {
+    if (err) throw err;
+    res.json(result[0]);
   });
 });
 

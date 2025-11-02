@@ -130,7 +130,7 @@ const validatePassword = (password) => {
             <>
             <div className="input-container">
               <i className="fas fa-user"></i>
-              <input type="text" name="name" placeholder="Full Name (e.g., Juan A. Dela Cruz)" onChange={handleChange} required />
+              <input type="text" name="name" placeholder="Full Name (e.g., Juan A. Cruz)" onChange={handleChange} required />
             </div>
              <div className="input-container">
              <i className="fas fa-phone"></i>

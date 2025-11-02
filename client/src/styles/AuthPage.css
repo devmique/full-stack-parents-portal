@@ -117,7 +117,7 @@ i{
     /* Space for icon */
     border: 1px solid rgb(196, 196, 198);
     border-radius: 5px;
-    font-size: 12px;
+    font-size: 14px;
     background-color: white;
     color: black;
 }
@@ -130,7 +130,7 @@ i{
     top: 50%;
     transform: translateY(-50%);
     color: gray;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 
@@ -149,9 +149,7 @@ i{
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-
- 
+    gap: 10px; 
 }
 
 .submit:hover {
@@ -175,11 +173,11 @@ form {
     max-width: 350px;
 }
 .create{
-    font-size: 12px;
+    font-size: 13px;
     color:rgba(2, 57, 152, 0.872);
 }
 .ready{
-    font-size: 12px;
+    font-size: 13px;
         color: rgba(4, 58, 152, 0.872);
 }
 input{
@@ -195,7 +193,7 @@ input{
 button {
     background: rgba(4, 71, 188, 0.872);
     color:white;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: bold;
     cursor: pointer;
     width: 100%;
@@ -230,6 +228,7 @@ button:hover {
     color: rgba(17, 81, 191, 0.872);
     border-radius: 30px;
     transition: 0.8s;
+   
 }
 .beforereg:hover {
     color: white;
@@ -263,8 +262,6 @@ button:hover {
 .input-container input{
     width: 100%;
     padding: 15px 15px 15px 30px;
-
-    font-size: 14px;
 }
 
 

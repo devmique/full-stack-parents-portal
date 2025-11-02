@@ -6,7 +6,7 @@ import Skeleton from '@mui/material/Skeleton';
 
 const Cards = () => {
       const [studentlist, setStudentList] = useState(0);
-      const [subjectlist, setSubjectList] = useState(null);
+      const [subjectlist, setSubjectList] = useState(0);
       const [loadingCards, setLoadingCards] = useState(true);
       const user = JSON.parse(sessionStorage.getItem("user"));
 

@@ -59,9 +59,8 @@ const Cards = () => {
      
       {user.role !== "parent" && (
       
-        <div className="filter-bar">
-          <SortOutlinedIcon style={{ color: "#93bbfa", fontSize: "30px" }}/>
-          <h2>Student Filter</h2>
+        <div className="filter-bar"> 
+        <h3><SortOutlinedIcon style={{ color: "#93bbfa", fontSize: "30px" }}/>Student Filter</h3>         
             <label>Program</label>
           <select onChange={(e) => setProgramFilter(e.target.value)}>
             <option value="All">All</option>

@@ -29,6 +29,8 @@ The **Parent’s Portal** is a full-stack school management platform designed to
 
 - React.js
 - Axios (for API communication)
+- FullCalendar
+- Material UI
 
 ### Backend
 - Node.js
@@ -85,7 +87,8 @@ Follow these steps to set up the backend:
     PORT=5000
     EMAIL_USER=youremail@gmail.com
     EMAIL_PASS=yourpass
-    ```
+    GEMINI_API_KEY=your_api_key
+        ```
 
     Replace `your_mysql_password` and `your_jwt_secret` with your actual MySQL password and a secret key for JWT authentication.
 
@@ -134,7 +137,7 @@ To set up the frontend, follow these steps:
     CREATE DATABASE parents_portal;
     ```
 
-3. **Import the database structure and sample data** from the provided `parents_portal.sql` file. This can be done using the **Import** tab in phpMyAdmin or by running the following command in MySQL CLI:
+3. **Import the database structure and sample data** from the provided `/schema/parents_portal.sql` file. This can be done using the **Import** tab in phpMyAdmin or by running the following command in MySQL CLI:
 
     ```bash
     mysql -u root -p parents_portal < parents_portal.sql
@@ -144,6 +147,7 @@ To set up the frontend, follow these steps:
 
 ---
 <img width="1366" height="768" alt="Screen Shot 2025-11-05 at 11 06 17 PM" src="https://github.com/user-attachments/assets/19cb1da6-d770-4f6d-ad46-feb9796c7484" />
+
 ## Author
 
 Made by **Mique Johnlord** 

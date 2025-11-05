@@ -143,7 +143,7 @@ To set up the frontend, follow these steps:
     Replace `root` with your MySQL username if it's different.
 
 ---
-![alt text](image-1.png)
+<img width="1366" height="768" alt="Screen Shot 2025-11-05 at 11 06 17 PM" src="https://github.com/user-attachments/assets/19cb1da6-d770-4f6d-ad46-feb9796c7484" />
 ## Author
 
 Made by **Mique Johnlord** 

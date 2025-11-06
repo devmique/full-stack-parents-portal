@@ -136,7 +136,7 @@ const Messages = () => {
                 value={newMessage}
                 onChange={e => setNewMessage(e.target.value)}
                 placeholder="Type your message..."
-            
+                onKeyDown={(e) => e.key === "Enter" && sendMessage()}
               />
               <button onClick={sendMessage}><SendIcon/></button>
             </div>

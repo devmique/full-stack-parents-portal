@@ -37,7 +37,7 @@ router.post('/', authorizeRole("admin"),(req, res) => {
       (err2, notifResult) => {
         if (!err2) {
           const notifId = notifResult.insertId;
-          // Link this notification to all parents
+          // Link this notification to all
           db.query(
             "INSERT INTO user_notifications (user_id, notification_id) SELECT id, ? FROM users WHERE role IN ('parent', 'instructor', 'admin')",
             [notifId],

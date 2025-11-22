@@ -64,7 +64,7 @@ const fetchAttendance = async () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchAttendance();
-      setNewRecord({ student_id: '', date: today, status: '' });
+      setNewRecord({...newRecord, date: today, status: '' });
       toast({ title: "Success", description: "Attendance record added successfully!" });
     } catch (err) {
       console.error('Add Error:', err);

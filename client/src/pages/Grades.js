@@ -65,7 +65,7 @@ const Grades = () => {
       .then(() => {
         fetchGrades();
         setNewGrade({
-          student_id: '',
+         ...newGrade,
           school_year: '',
           term: '',
           subject_code: '',

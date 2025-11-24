@@ -62,7 +62,7 @@ function App() {
           <Route path="instructor" element={<ProtectedRoute element={<InstructorDashboard />} allowedRoles={["instructor"]} />} />
           <Route path="subjects" element={<ProtectedRoute element={<Subjects />} allowedRoles={["admin", "parent", "instructor"]} />} />
           <Route path="schedule" element={<ProtectedRoute element={<Schedule />} allowedRoles={["admin", "parent", "instructor"]} />} />
-          <Route path="grades" element={<ProtectedRoute element={<Grades />} allowedRoles={["instructor", "parent"]} />} />
+          <Route path="grades" element={<ProtectedRoute element={<Grades />} allowedRoles={["instructor", "parent", 'admin']} />} />
 
           <Route path="attendance" element={<ProtectedRoute element={<Attendance />} allowedRoles={["instructor", "parent"]} />} />
           <Route path="announcements" element={<ProtectedRoute element={<Announcements />} allowedRoles={["admin", "parent", "instructor"]} />} />

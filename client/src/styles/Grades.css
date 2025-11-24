@@ -131,7 +131,52 @@
 text-decoration: underline;
     color: #a00;
 }
+.status-approved{
+background-color: #00a093;
+color: #004c45;
+}
+.status-declined{
+background-color: rgb(253, 81, 81);
+color:rgb(104, 0, 0) ;
+}
+.status-pending{
+background-color: rgb(255, 255, 129);
+color: rgb(110, 110, 0);
+}
+.stat-text{
+  font-size: 13px;
+  padding: 5px 10px;
+  border-radius: 3rem;
+  font-weight: bold
+}
+.status-buttons button:first-child {
+         background-color: #039487;
+         border: none;
+        cursor: pointer;     
+}
 
+.status-buttons button:last-child { 
+        background-color: red;
+        border: none;
+        cursor: pointer;   
+}
+
+.status-buttons{
+  display: flex;
+  gap:1rem;
+ 
+}
+.stat-btn{
+  display:flex;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+   color: white;
+   font-weight: bold;
+}
+.stat-btn:hover{
+  opacity: 0.8;
+}
 /* Tablet screens */
 @media screen and (max-width: 992px) {
   .grades-container {

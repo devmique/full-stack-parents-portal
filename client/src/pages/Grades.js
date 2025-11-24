@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useToast } from "../hooks/use-toast";
+import CheckIcon from '@mui/icons-material/Check';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import "../styles/Grades.css"
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import CloseIcon from '@mui/icons-material/Close';
 const Grades = () => {
     const { toast } = useToast(); 
   const token = sessionStorage.getItem("token");
@@ -153,14 +156,32 @@ const Grades = () => {
     doc.save("grades.pdf");
   };
 
+
+  const updateStatus = (id, newStatus) => {
+  axios.put(`http://localhost:5000/api/grades/status/${id}`,
+    { status: newStatus },
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  .then(() => {
+    fetchGrades();
+    toast({
+      title: "Grade Updated",
+      description: `Grade was ${newStatus}!`
+    });
+  })
+  .catch(err => console.error(err));
+};
+
   return (
     <div className="grades-container">
       <h2><SchoolOutlinedIcon className="pageIcon" fontSize='30px'/> Grades</h2>
-
-      <button onClick={exportToPDF} className="export-btn">
+     {user.role === 'parent' && (
+       <button onClick={exportToPDF} className="export-btn">
         <PictureAsPdfOutlinedIcon/>
         Export to PDF
       </button>
+     )}
+     
 
       {user.role === 'instructor' && (
         <div className="grade-form">
@@ -196,6 +217,10 @@ const Grades = () => {
             <th>Grade</th>
             <th>Units</th>
             {user.role === 'instructor' && <th>Action</th>}
+            {(user.role === 'admin' || user.role === 'instructor') && (
+              <th>Status</th>
+            )}
+            {user.role === 'admin' && <th>Approval</th>}
           </tr>
         </thead>
         <tbody>
@@ -209,6 +234,8 @@ const Grades = () => {
               <td>{g.subject_title}</td>
               <td>{g.grade}</td>
               <td>{g.units}</td>
+             
+
               {user.role === 'instructor' && (
                 <td>
                   <div className='action-buttons'>
@@ -217,6 +244,25 @@ const Grades = () => {
                </div>
                 </td>
               )}
+               {(user.role === 'admin' || user.role === 'instructor') && (
+               <td>
+              <span className={
+                g.status === 'approved' ? 'stat-text status-approved' :
+                g.status === 'declined' ? 'stat-text status-declined' : 'stat-text status-pending'
+              }> 
+                {g.status}
+              </span>
+            </td>
+            )}
+            {user.role === 'admin'  && g.status === 'pending' && (
+           <td>
+             <div className='status-buttons'>
+              <button className='stat-btn' onClick={() => updateStatus(g.id, 'approved')}><CheckIcon style={ {fontSize: "13px", marginRight: "5px"}}/>Approve</button>
+             <button  className='stat-btn' onClick={() => updateStatus(g.id, 'declined')}><CloseIcon style={ {fontSize: "13px", marginRight: "5px"}}/>Decline</button>
+             </div>
+           </td>
+          )}
+
             </tr>
           ))}
         </tbody>

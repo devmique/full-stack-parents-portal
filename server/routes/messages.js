@@ -8,9 +8,12 @@ router.get('/contacts', (req, res) => {
   const role = req.query.role;
  
   let query = "";
-  if (role === 'admin' || role === 'instructor') {
-    query = "SELECT id, name, email FROM users WHERE role = 'parent'";
-  } else {
+  if (role === 'admin') {
+    query = "SELECT id, name, email FROM users WHERE role = 'parent' OR role = 'instructor'";
+  } else if(role === 'instructor'){
+    query = "SELECT id, name, email FROM users WHERE role = 'parent' OR role = 'admin'";
+  }
+    else {
     query = "SELECT id, name, email FROM users WHERE role = 'admin' OR role = 'instructor'";
   }
 

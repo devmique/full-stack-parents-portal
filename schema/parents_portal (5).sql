@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 06, 2025 at 02:38 PM
+-- Generation Time: Nov 24, 2025 at 07:08 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -57,7 +57,6 @@ CREATE TABLE `attendance` (
 --
 -- Dumping data for table `attendance`
 --
-
 
 
 -- --------------------------------------------------------
@@ -132,7 +131,6 @@ CREATE TABLE `email_verification` (
 --
 
 
-
 -- --------------------------------------------------------
 
 --
@@ -147,14 +145,22 @@ CREATE TABLE `grades` (
   `subject_code` varchar(50) DEFAULT NULL,
   `subject_title` varchar(100) DEFAULT NULL,
   `grade` decimal(5,2) DEFAULT NULL,
-  `units` int(11) DEFAULT NULL
+  `units` int(11) DEFAULT NULL,
+  `status` enum('pending','approved','declined') DEFAULT 'pending'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `grades`
 --
 
-
+INSERT INTO `grades` (`id`, `student_id`, `school_year`, `term`, `subject_code`, `subject_title`, `grade`, `units`, `status`) VALUES
+(76, 6, '2', '2', '2', '2', 2.00, 2, 'approved'),
+(77, 6, '11', '11', '11', '11', 11.00, 12, 'approved'),
+(78, 54, '1', '1', '1', '1', 1.00, 2, 'approved'),
+(79, 54, '1', '1', '1', '1', 1.00, 1, 'declined'),
+(80, 54, '1', '1', '1', '1', 1.00, 1, 'approved'),
+(81, 6, '1', '1', '1', '1', 1.00, 1, 'approved'),
+(82, 6, '1', '1', '1', '1', 1.00, 1, 'declined');
 
 -- --------------------------------------------------------
 
@@ -212,6 +218,7 @@ CREATE TABLE `messages` (
 --
 -- Dumping data for table `messages`
 --
+
 
 
 -- --------------------------------------------------------
@@ -276,6 +283,7 @@ CREATE TABLE `schedule_events` (
 --
 
 
+
 -- --------------------------------------------------------
 
 --
@@ -297,7 +305,7 @@ CREATE TABLE `students` (
 
 INSERT INTO `students` (`id`, `name`, `parent_id`, `course_id`, `program_id`, `year_level`) VALUES
 (6, 'Sodikin', 6, 10, 3, '3rd Year'),
-
+(54, 'Ahmad', 54, 10, 1, '3rd Year');
 
 -- --------------------------------------------------------
 
@@ -317,7 +325,8 @@ CREATE TABLE `subjects` (
 -- Dumping data for table `subjects`
 --
 
-
+INSERT INTO `subjects` (`id`, `subject_code`, `subject_title`, `term`, `units`) VALUES
+(67, '111', 'Programming', 1, 3);
 
 -- --------------------------------------------------------
 
@@ -343,6 +352,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `created_at`, `profile_pic`, `contact_number`) VALUES
 (6, 'John Doe', 'johndoe@example.com', '$2b$10$fk4qexYR9kMoRDLfBdmw1uAwWTqv7WdtV4ZlqfdCmVyyKo267lxxi', 'parent', '2025-10-31 15:17:41', 'http://localhost:5000/uploads/1761923861770.jpg', ''),
 (13, 'Mique', 'mique@gmail.com', '$2y$10$MrmLXbwmK2efem0ADeq.kOm9GvroS4NUx3kDEZoZd7UdF.mzTj866', 'admin', '2025-11-06 09:52:34', 'http://localhost:5000/uploads/1762422754215.jpg', ''),
+(54, 'Johnlord Mique', 'jt@gmail.com', '$2b$10$S2ZtFQxuZTErAmOH/s1SMOyukAz6Pks8Y/67DvDaUjMccAkc4rmZi', 'parent', '2025-05-09 09:07:18', 'http://localhost:5000/uploads/1746781638391.jpg', '0951'),
 (58, 'Test', 'test@test.com', '$2b$10$hRr9oazzbhvYVs6BPoudT.LwtZCb7.MpbTTY71RjtQL8ikQc26FQC', 'instructor', '2025-10-31 15:24:13', 'http://localhost:5000/uploads/1761924253425.jpg', '09'),
 
 -- --------------------------------------------------------
@@ -497,13 +507,13 @@ ALTER TABLE `announcements`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT for table `calendar_events`
 --
 ALTER TABLE `calendar_events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
 
 --
 -- AUTO_INCREMENT for table `courses`
@@ -527,7 +537,7 @@ ALTER TABLE `email_verification`
 -- AUTO_INCREMENT for table `grades`
 --
 ALTER TABLE `grades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `help_requests`
@@ -539,19 +549,19 @@ ALTER TABLE `help_requests`
 -- AUTO_INCREMENT for table `messagenotif`
 --
 ALTER TABLE `messagenotif`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=162;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=163;
 
 --
 -- AUTO_INCREMENT for table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=214;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=215;
 
 --
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=495;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=567;
 
 --
 -- AUTO_INCREMENT for table `programs`
@@ -563,7 +573,7 @@ ALTER TABLE `programs`
 -- AUTO_INCREMENT for table `schedule_events`
 --
 ALTER TABLE `schedule_events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `students`
@@ -587,7 +597,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `user_notifications`
 --
 ALTER TABLE `user_notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1297;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1866;
 
 --
 -- Constraints for dumped tables

@@ -132,18 +132,19 @@ text-decoration: underline;
     color: #a00;
 }
 .status-approved{
-background-color: #00a093;
-color: #004c45;
+background-color: #7dc1bb;
+color: #00776d;
 }
 .status-declined{
-background-color: rgb(253, 81, 81);
-color:rgb(104, 0, 0) ;
+background-color: rgb(255, 116, 116);
+color:rgb(131, 0, 0) ;
 }
 .status-pending{
-background-color: rgb(255, 255, 129);
-color: rgb(110, 110, 0);
+background-color: rgb(255, 255, 159);
+color: rgb(156, 156, 0);
 }
 .stat-text{
+  display: flex;
   font-size: 13px;
   padding: 5px 10px;
   border-radius: 3rem;

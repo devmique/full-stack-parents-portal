@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useToast } from "../hooks/use-toast";
 import CheckIcon from '@mui/icons-material/Check';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
-import jsPDF from 'jspdf';
+import AccessTimeFilledIcon from '@mui/icons-material/AccessTimeFilled';import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import "../styles/Grades.css"
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
@@ -250,7 +251,18 @@ const Grades = () => {
                 g.status === 'approved' ? 'stat-text status-approved' :
                 g.status === 'declined' ? 'stat-text status-declined' : 'stat-text status-pending'
               }> 
-                {g.status}
+               {g.status === "approved" && (
+                <CheckCircleIcon style={{  fontSize: 15, marginRight: 5 }} />
+              )}
+
+              {g.status === "declined" && (
+                <CancelIcon style={{  fontSize: 15, marginRight: 5 }} />
+              )}
+              
+              {g.status === "pending" && (              
+                 <AccessTimeFilledIcon style={{ fontSize: 15, marginRight: 5 }} />
+              )}
+              {g.status}
               </span>
             </td>
             )}

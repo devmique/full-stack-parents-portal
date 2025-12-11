@@ -1,7 +1,7 @@
-const express = require('express');
-const router = express.Router();
-const db = require('../db');
+import express from "express";
+import db from "../db.js";
 
+const router = express.Router();
 // GET notifications for a specific user
 router.get('/', (req, res) => {
   const userId = req.query.userId;
@@ -33,4 +33,4 @@ router.put('/mark-all-read', (req, res) => {
 });
 
 
-module.exports = router;
+export default router

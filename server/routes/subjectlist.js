@@ -1,6 +1,7 @@
-const express = require('express');
+import express from "express";
+import db from "../db.js";
+
 const router = express.Router();
-const db = require('../db');
 
 router.get("/", (req, res) => {
   db.query("SELECT COUNT(*) AS count FROM subjects;", (err, results) => {
@@ -11,4 +12,4 @@ router.get("/", (req, res) => {
   });
 });
 
-module.exports = router;
+export default router

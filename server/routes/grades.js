@@ -1,7 +1,8 @@
-const express = require('express');
+import express from "express";
+import db from "../db.js";
+import { authorizeRole } from "../middleware/authMiddleware.js";
+
 const router = express.Router();
-const db = require('../db');
-const { authorizeRole } = require('../middleware/authMiddleware');
 // Get all grades
 router.get('/', (req, res) => {
   const studentId = req.query.student_id; 
@@ -158,4 +159,4 @@ router.delete('/:id', authorizeRole("instructor"),(req, res) => {
   });
 });
 
-module.exports = router;
+export default router;

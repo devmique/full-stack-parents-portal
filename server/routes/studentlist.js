@@ -1,7 +1,8 @@
-const express = require('express');
+import express from "express";
+import db from "../db.js";
+import { authorizeRole } from "../middleware/authMiddleware.js";
+
 const router = express.Router();
-const db = require('../db');
-const { authorizeRole } = require('../middleware/authMiddleware');
 
 router.get("/count", authorizeRole("admin", "instructor"), (req, res) => {
   const { course, program, year } = req.query;
@@ -63,7 +64,7 @@ router.get("/count/mycourse", authorizeRole("parent"), (req, res) => {
 
 
 
-module.exports = router;
+export default router
 
 
 

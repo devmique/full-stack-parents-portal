@@ -1,27 +1,32 @@
-require("dotenv").config();
-const { verifyToken } = require("./middleware/authMiddleware");
-const express = require("express");
-const mysql = require("mysql");
-const bcrypt = require("bcryptjs");
-const cors = require("cors");
-const jwt = require("jsonwebtoken");
-const multer = require("multer");
-const path = require("path");
-const messageRoutes = require('./routes/messages')
-const announcementRoutes = require('./routes/announcements')
-const subjectRoutes = require('./routes/subjects');
-const scheduleRoutes = require('./routes/schedule');
-const gradesRoute = require('./routes/grades')
-const calendarRoutes = require('./routes/calendar');
-const attendanceRoutes = require('./routes/attendance');
-const notificationRoutes = require('./routes/notifications');
-const messagenotifRoutes = require('./routes/messagenotif');
-const studentlist = require("./routes/studentlist")
-const subjectlist = require("./routes/subjectlist")
-const http = require("http")
-const { Server } = require("socket.io");
-const nodemailer = require("nodemailer");
-const chatbotRoute = require("./routes/chatbot.js")
+import dotenv from "dotenv";
+dotenv.config();
+
+import express from "express";
+import db from "./db.js";
+import bcrypt from "bcryptjs";
+import cors from "cors";
+import jwt from "jsonwebtoken";
+import multer from "multer";
+import path from "path";
+import http from "http";
+import nodemailer from "nodemailer";
+import { Server } from "socket.io";
+
+import { verifyToken } from "./middleware/authMiddleware.js";
+
+import messageRoutes from "./routes/messages.js";
+import announcementRoutes from "./routes/announcements.js";
+import subjectRoutes from "./routes/subjects.js";
+import scheduleRoutes from "./routes/schedule.js";
+import gradesRoute from "./routes/grades.js";
+import calendarRoutes from "./routes/calendar.js";
+import attendanceRoutes from "./routes/attendance.js";
+import notificationRoutes from "./routes/notifications.js";
+import messagenotifRoutes from "./routes/messagenotif.js";
+import studentlist from "./routes/studentlist.js";
+import subjectlist from "./routes/subjectlist.js";
+import chatbotRoute from "./routes/chatbot.js";
+
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -36,13 +41,6 @@ app.use(cors());
 app.use('/api/messages',verifyToken, messageRoutes)
 
 // Database Connection
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-});
-
 db.connect((err) => {
     if (err) {
         console.error(" Database connection failed:", err);

@@ -1,6 +1,7 @@
-const express = require('express');
+import express from "express";
+import db from "../db.js";
+
 const router = express.Router();
-const db = require('../db');
 
 // Get latest notifications
 router.get('/', (req, res) => {
@@ -51,4 +52,4 @@ router.put('/mark-all-read', (req, res) => {
     res.sendStatus(200);
   });
 });
-module.exports = router;
+export default router

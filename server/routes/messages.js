@@ -1,6 +1,7 @@
-const express = require('express');
+import express from "express";
+import db from "../db.js";
+
 const router = express.Router();
-const db = require('../db'); 
 
 // GET contacts 
 router.get('/contacts', (req, res) => {
@@ -41,4 +42,4 @@ router.get('/conversation', (req, res) => {
   });
 });
 
-module.exports = router;
+export default router

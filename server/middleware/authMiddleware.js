@@ -1,7 +1,7 @@
 
-const jwt = require('jsonwebtoken');
+import jwt from "jsonwebtoken";
 //Middleware to verify JWT
-const verifyToken = (req, res, next)=>{
+export const verifyToken = (req, res, next)=>{
    const authHeader = req.headers.authorization;
 
    if(!authHeader || !authHeader.startsWith("Bearer")){
@@ -20,7 +20,7 @@ const verifyToken = (req, res, next)=>{
 }
 
 //Middleware for role-based access control
-const authorizeRole = (...allowedRoles) => {
+export const authorizeRole = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user) {
       return res.status(401).json({ error: "Unauthorized - no user context" });
@@ -34,4 +34,3 @@ const authorizeRole = (...allowedRoles) => {
   };
 };
 
-module.exports = { verifyToken, authorizeRole };

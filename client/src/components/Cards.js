@@ -2,7 +2,8 @@ import React,{useState, useEffect} from 'react'
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import ListAltOutlinedIcon from '@mui/icons-material/ListAltOutlined';
 import axios from "axios"
-import SortOutlinedIcon from '@mui/icons-material/SortOutlined';import Skeleton from '@mui/material/Skeleton';
+import SortOutlinedIcon from '@mui/icons-material/SortOutlined';
+import Skeleton from '@mui/material/Skeleton';
 import '../styles/ Cards.css'
 const Cards = () => {
       const [studentlist, setStudentList] = useState(0);

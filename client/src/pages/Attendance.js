@@ -29,7 +29,7 @@ const Attendance = () => {
 const fetchAttendance = async () => {
   try {
     const res = await axios.get('http://localhost:5000/api/attendance', {
-      params: user.role === 'parent' ? { student_id: user.id } : {},
+     
       headers: { Authorization: `Bearer ${token}` }
     });
     setAttendance(res.data);
@@ -92,9 +92,8 @@ const fetchAttendance = async () => {
 
   const handleUpdate = async (id) => {
     try {
-      const student_id = user.id;
-  
-      await axios.put(`http://localhost:5000/api/attendance/${id}`, { status: editStatus, student_id },{
+     
+      await axios.put(`http://localhost:5000/api/attendance/${id}`, { status: editStatus },{
         headers: { Authorization: `Bearer ${token}` }
       });
       setEditRecordId(null);

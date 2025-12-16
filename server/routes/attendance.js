@@ -4,26 +4,32 @@ import { authorizeRole } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 // Get all attendance records
-router.get('/', (req, res) => {
-  const studentId = req.query.student_id; 
-  const query = studentId
-    ? `
-      SELECT attendance.*, students.name AS student_name 
-      FROM attendance 
-      JOIN students ON attendance.student_id = students.id 
-      WHERE attendance.student_id = ?
-    `
-    : `
-      SELECT attendance.*, students.name AS student_name 
-      FROM attendance 
-      JOIN students ON attendance.student_id = students.id
-    `;
+  router.get('/', (req, res) => {
+  const { role, id: userId } = req.user;
+  let query = `
+    SELECT 
+      attendance.*,
+      students.name AS student_name
+    FROM attendance
+    JOIN students ON attendance.student_id = students.id
+  `;
 
-  db.query(query, studentId ? [studentId] : [], (err, results) => {
-    if (err) return res.status(500).json({ error: "Database error" });
+  const params = [];
+
+ if (role === 'parent') {
+    query += ` WHERE students.parent_id = ?`;
+    params.push(userId);
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Database error" });
+    }
     res.json(results);
   });
 });
+
 
 // Add a new attendance record
 router.post('/', authorizeRole("instructor"),(req, res) => {

@@ -26,15 +26,15 @@ const Grades = () => {
   });
   const [editGrade, setEditGrade] = useState(null); 
 
-  const fetchGrades = () => {
-    axios
-      .get('http://localhost:5000/api/grades', {
-        params: user.role === 'parent' ? { student_id: user.id } : {},
-        headers: { Authorization: `Bearer ${token}` }
-      })
-      .then(res => setGrades(res.data))
-      .catch(err => console.error(err));
-  };
+const fetchGrades = () => {
+  axios.get(
+    'http://localhost:5000/api/grades',
+    { headers: { Authorization: `Bearer ${token}` } }
+  )
+  .then(res => setGrades(res.data))
+  .catch(err => console.error(err));
+};
+
 
   useEffect(() => {
     fetchGrades();

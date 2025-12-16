@@ -5,22 +5,32 @@ import { authorizeRole } from "../middleware/authMiddleware.js";
 const router = express.Router();
 // Get all grades
 router.get('/', (req, res) => {
-  const studentId = req.query.student_id; 
+  const { role, id: userId } = req.user;
 
-  const query = studentId
-    ? `SELECT grades.*, students.name AS student_name 
-       FROM grades 
-       JOIN students ON grades.student_id = students.id 
-       WHERE grades.student_id = ? AND grades.status = 'approved'`
-    : `SELECT grades.*, students.name AS student_name 
-       FROM grades 
-       JOIN students ON grades.student_id = students.id`;
+  let query = `
+    SELECT 
+      grades.*,
+      students.name AS student_name
+    FROM grades
+    JOIN students ON grades.student_id = students.id
+  `;
 
-  db.query(query, studentId ? [studentId] : [], (err, results) => {
-    if (err) return res.status(500).json({ error: "Database error" });
+  const params = [];
+
+  if (role === 'parent') {
+    query += ` WHERE students.parent_id = ?`;
+    params.push(userId);
+  }
+
+  db.query(query, params, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Database error" });
+    }
     res.json(results);
   });
 });
+
 
 // Add a new grade
 router.post('/',authorizeRole("instructor"),(req, res) => {
@@ -129,7 +139,7 @@ router.put('/status/:id', authorizeRole("admin"), (req, res) => {
 
 // Update an existing grade
 router.put('/:id',authorizeRole("instructor"), (req, res) => {
-  const { student_id, school_year, term, subject_code, subject_title, grade, units } = req.body;
+  const { school_year, term, subject_code, subject_title, grade, units } = req.body;
   const gradeId = req.params.id;
 
   if (!school_year || !term || !subject_code || !subject_title || !grade || !units) {

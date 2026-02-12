@@ -11,6 +11,7 @@ import path from "path";
 import http from "http";
 import nodemailer from "nodemailer";
 import { Server } from "socket.io";
+import redisClient, {connectRedis} from "./redis/redisClient.js";
 
 import { verifyToken } from "./middleware/authMiddleware.js";
 
@@ -387,10 +388,12 @@ app.post("/login", (req, res) => {
     });
 });
 
+// connect redis 
+await connectRedis();
 
 //  Start Server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {
-    console.log(` Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
 });
 

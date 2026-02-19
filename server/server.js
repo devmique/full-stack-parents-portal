@@ -12,7 +12,7 @@ import http from "http";
 import nodemailer from "nodemailer";
 import { Server } from "socket.io";
 import redisClient, {connectRedis} from "./redis/redisClient.js";
-
+import loginLimiter from "./middleware/loginLimiter.js";
 import { verifyToken } from "./middleware/authMiddleware.js";
 
 import messageRoutes from "./routes/messages.js";
@@ -344,7 +344,7 @@ app.post("/register", (req, res) => {
 });
 
 //  User Login 
-app.post("/login", (req, res) => {
+app.post("/login", loginLimiter, (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
@@ -389,8 +389,8 @@ app.post("/login", (req, res) => {
 });
 
 // connect redis 
-await connectRedis();
-
+/* await connectRedis();
+ */
 //  Start Server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => {

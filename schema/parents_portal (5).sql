@@ -353,7 +353,7 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`, `role`, `created_at`, `p
 (6, 'John Doe', 'johndoe@example.com', '$2b$10$fk4qexYR9kMoRDLfBdmw1uAwWTqv7WdtV4ZlqfdCmVyyKo267lxxi', 'parent', '2025-10-31 15:17:41', 'http://localhost:5000/uploads/1761923861770.jpg', ''),
 (13, 'Mique', 'mique@gmail.com', '$2y$10$MrmLXbwmK2efem0ADeq.kOm9GvroS4NUx3kDEZoZd7UdF.mzTj866', 'admin', '2025-11-06 09:52:34', 'http://localhost:5000/uploads/1762422754215.jpg', ''),
 (54, 'Johnlord Mique', 'jt@gmail.com', '$2b$10$S2ZtFQxuZTErAmOH/s1SMOyukAz6Pks8Y/67DvDaUjMccAkc4rmZi', 'parent', '2025-05-09 09:07:18', 'http://localhost:5000/uploads/1746781638391.jpg', '0951'),
-(58, 'Test', 'test@test.com', '$2b$10$hRr9oazzbhvYVs6BPoudT.LwtZCb7.MpbTTY71RjtQL8ikQc26FQC', 'instructor', '2025-10-31 15:24:13', 'http://localhost:5000/uploads/1761924253425.jpg', '09'),
+(58, 'Test', 'test@test.com', '$2b$10$hRr9oazzbhvYVs6BPoudT.LwtZCb7.MpbTTY71RjtQL8ikQc26FQC', 'instructor', '2025-10-31 15:24:13', 'http://localhost:5000/uploads/1761924253425.jpg', '09');
 
 -- --------------------------------------------------------
 

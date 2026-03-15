@@ -178,6 +178,20 @@ color: rgb(173, 173, 0);
 .stat-btn:hover{
   opacity: 0.8;
 }
+
+.grades-search{
+  margin: 15px 0;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.grades-search input{
+  padding: 8px 12px;
+  width: 250px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
 /* Tablet screens */
 @media screen and (max-width: 992px) {
   .grades-container {

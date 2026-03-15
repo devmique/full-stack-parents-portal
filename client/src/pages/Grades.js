@@ -26,6 +26,14 @@ const Grades = () => {
   });
   const [editGrade, setEditGrade] = useState(null); 
 
+  const [searchTerm, setSearchTerm] = useState("");
+
+  //filter grades based on search term matching student name or ID
+  const filteredGrades = grades.filter((g) =>
+  g.student_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  g.student_id?.toString().includes(searchTerm)
+);
+
 const fetchGrades = () => {
   axios.get(
     'http://localhost:5000/api/grades',
@@ -183,6 +191,16 @@ const fetchGrades = () => {
       </button>
      )}
      
+  {(user.role === "admin" || user.role === "instructor") && (
+  <div className="grades-search">
+    <input
+      type="text"
+      placeholder="Search student by name or ID..."
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+    />
+  </div>
+)}
 
       {user.role === 'instructor' && (
         <div className="grade-form">
@@ -225,7 +243,7 @@ const fetchGrades = () => {
           </tr>
         </thead>
         <tbody>
-          {grades.map((g) => (
+          {filteredGrades.map((g) => (
             <tr key={g.id}>
               <td>{g.student_id}</td>
               <td>{g.student_name}</td>
